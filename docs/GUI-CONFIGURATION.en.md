@@ -28,12 +28,6 @@ menus:
           en_US:
             - '{default}'
             - '&8View your own orders.'
-    switch:
-      slot: 8
-      material: PAINTING
-      name:
-        zh_CN: '&6切换界面'
-        en_US: '&6Choose interface'
 ```
 
 This example uses the legacy home control at slot `32`, so it explicitly selects `gui.home-layout: legacy`. Merge it into the existing `gui` and `menus` sections; do not add duplicate root keys. Omitted settings keep their existing defaults. Page settings customize existing entries; they do not create trading buttons.
@@ -48,13 +42,11 @@ This example uses the legacy home control at slot `32`, so it explicitly selects
 | `buttons.<source-slot>.material` | Vanilla item icon for a functional control |
 | `buttons.<source-slot>.name` | Control name, as text or a bilingual text map |
 | `buttons.<source-slot>.lore` | Additional help, as a text list or a bilingual list map |
-| `switch.slot` | Final physical slot for the automatic interface switch, default `8` |
-| `switch.material` | Vanilla icon for the automatic interface switch |
-| `switch.name` / `switch.lore` | Switch name and help, using the same text formats as buttons |
+| `switch.*` | Read for legacy compatibility; no automatic top-right interface switch is added |
 
 Unknown configuration fields are rejected. `command`, `action`, scripts, and expressions are not configuration features. Each text entry is limited to `512` characters; each Lore list is limited to `64` lines. Material names must exist on the current server.
 
-The automatic switch appears only on applicable pages and layouts. If its physical slot already contains a product or control, it is omitted rather than replacing that entry. Compact home uses slot `8` for claims, so its default switch is omitted. Open the player-head profile entry or use `/km ui` to change interfaces. `switch.slot` uses final physical coordinates, while `buttons` uses source coordinates.
+Interface selection remains available through `profile` and `/km ui`. Existing `menus.<page>.switch` settings remain readable, but no longer inject a button into a page; updating does not require removing those settings.
 
 ## Source slots and layouts
 
@@ -62,7 +54,7 @@ Menus contain `54` slots numbered `0` through `53`, left to right and top to bot
 
 `buttons`, `slots`, and `icons` use the page's **source slots**. The default new layout moves list content from source `0..35` to physical `9..44` and moves filters into the top row. Lists retain their default `36` product entries.
 
-New installations default to compact home: three market entrances in the center, with profile, claims, wallet and my orders in the four corners. Continue through “My orders” to create a listing, or use `/km create`.
+New installations default to compact home: three market entrances in the center, with profile, claims, wallet and my orders in the four corners. “Create / edit draft” on home opens the wizard directly and continues the current draft. Each market and “My orders” list retains the same entrance; `/km create` opens the same flow. Published prices, conditions and fee rules are fixed; cancel and create a new order to change them.
 
 | Compact `home` source / default physical slot | Control |
 | --- | --- |
@@ -72,6 +64,7 @@ New installations default to compact home: three market entrances in the center,
 | `20` | Fixed-price market |
 | `22` | Buy-order market |
 | `24` | Auction market |
+| `31` | Create / edit draft, opening the publishing wizard directly |
 | `45` | Wallet |
 | `53` | My orders, with the actual open-order count and publishing guidance |
 
@@ -111,7 +104,7 @@ Failed overview queries display “unavailable”; unknown counts are not replac
 | `47` | `1` | Search |
 | `50` | `2` | Sort |
 | `51` | `3` | Clear filters |
-| `52` | `4` | Pagination indicator |
+| `52` | `4` | Create / edit draft, with paging retained in Lore |
 | `48` | `7` | Refresh |
 | `45` | `45` | Previous page, when available |
 | `49` | `49` | Back |
@@ -121,7 +114,7 @@ To change additional help on the first list item, use `buttons.'0'`, not its vis
 
 Placement changes must form a permutation. When moving one slot, also specify where the displaced slot goes. Moving `10` to `12` while leaving the original `12` unchanged is invalid. `buttons.slot` and the existing `slots` map share one placement mechanism; avoid defining the same source placement twice.
 
-The list's `gui.vanilla.layout` rules are unchanged: changing titles, icons, names, Lore, decoration, or `switch` does not change its layout. Changing `slots` or `buttons.slot` selects the compatibility layout under `auto`; explicitly selecting `warm` rejects candidates that conflict with custom placement. In the compatibility layout, source slots are physical slots, with no automatic list remapping. Home is also controlled by `gui.home-layout`; a text-only edit that leaves list layout unchanged can still cause `auto` to retain legacy home.
+The list's `gui.vanilla.layout` rules are unchanged: changing titles, icons, names, Lore or decoration does not change its layout. Changing `slots` or `buttons.slot` selects the compatibility layout under `auto`; explicitly selecting `warm` rejects candidates that conflict with custom placement. In the compatibility layout, source slots are physical slots, with no automatic list remapping. Home is also controlled by `gui.home-layout`; a text-only edit that leaves list layout unchanged can still cause `auto` to retain legacy home.
 
 ## Example one: customize a home button
 
