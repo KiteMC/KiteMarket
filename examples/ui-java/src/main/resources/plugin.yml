@@ -1,0 +1,7 @@
+name: KiteMarketUiExample
+version: '${version}'
+main: com.kitemc.examples.ui.InventoryProviderExample
+api-version: '1.16'
+depend: [KiteMarket, ItemsAdder]
+folia-supported: false
+description: Community ItemsAdder v4 provider using real KiteMarket pages and protected host actions.

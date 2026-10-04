@@ -1,0 +1,9 @@
+.gradle/
+**/build/
+.idea/
+*.iml
+codex-work/
+.env
+CODEX_PROJECT_MEMORY.md
+**/*.pem
+**/*.key

@@ -1,0 +1,15 @@
+# Freely reusable minimal example (MIT License), not official commercial artwork.
+info:
+  namespace: km_example
+font_images:
+  market:
+    path: gui/market
+    suggest_in_command: false
+    y_position: 13
+    scale_ratio: 222
+items:
+  book_button:
+    name: Book button
+    material: PAPER
+    graphics:
+      texture: items/book_button

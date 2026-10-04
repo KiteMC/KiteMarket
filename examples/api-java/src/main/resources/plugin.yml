@@ -1,0 +1,7 @@
+name: KiteMarketApiExample
+version: ${version}
+main: com.kitemc.examples.api.MarketApiExample
+api-version: '1.16'
+depend: [KiteMarket]
+folia-supported: true
+description: MIT example of safe asynchronous read-only KiteMarket integrations.

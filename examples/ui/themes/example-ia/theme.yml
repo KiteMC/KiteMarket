@@ -1,0 +1,16 @@
+# Community theme; does not require the official Market Stall DLC.
+# Copy as plugins/KiteMarket/themes/example-ia.yml.
+schema: 1
+id: example-ia
+backend: itemsadder
+provider: kitemarket.itemsadder
+# Inherit the node's registered pack identity. For a separate pack, add the
+# actual lowercase SHA-1 and UUID as pack-sha1 / pack-id; empty strings fail validation.
+requires: {}
+resources:
+  font-image: km_example:market
+config:
+  title-offset: 8
+  texture-offset: -8
+pages:
+  '*': {}

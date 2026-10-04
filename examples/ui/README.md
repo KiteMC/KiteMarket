@@ -1,0 +1,131 @@
+# 自由界面主题示例 / Community UI themes
+
+这些示例展示 KiteMarket 的通用主题描述格式。第三方开发者可以自由创建、修改、分发或销售自己的界面，**不需要购买 KiteMC 的 Market Stall DLC**。示例代码与示例极简图片采用本目录的 MIT License；该许可不包含另售的官方美术或闭源主插件。
+
+These examples describe KiteMarket themes. Third-party developers may create, modify, distribute, or sell their own interfaces without buying the official Market Stall DLC. The example code and minimal example image use this directory's MIT License; it does not license commercial artwork or the closed-source base plugin.
+
+## 目录与使用
+
+- `themes/example-ia/theme.yml`：ItemsAdder 自有字体示例，使用 `kitemarket.itemsadder` 内置提供者，不走官方 DLC 安装入口。
+- `themes/example-ia/itemsadder/`：独立 `km_example` 字体配置和原创白框 PNG，复制到 `plugins/ItemsAdder/contents/km_example/`。
+- `themes/example-germ/theme.yml`、`themes/example-dragon/theme.yml`：保留的历史声明，已停止官方接入，不属于当前安装示例。
+
+当前路线为原版 GUI＋ItemsAdder v4。下述安装步骤只适用于 IA；萌芽和龙核历史声明不计入交付，不要求开发者安装它们。
+
+将所需 `theme.yml` 以唯一文件名复制到 `plugins/KiteMarket/themes/`，例如 `example-ia.yml`。本地主题 ID 使用自有名称，不能使用官方保留 ID `official.market-stall`；`market-stall` 是官方主题命令兼容别名。自有 ItemsAdder 资源使用自己的命名空间，示例为 `km_example`。
+
+The sample files belong in `plugins/KiteMarket/themes/` under distinct names. Use your own theme ID and resource namespace. `official.market-stall` is reserved; `market-stall` remains its command alias.
+
+## ItemsAdder 示例
+
+1. 安装合法且匹配目标服务器版本的 ItemsAdder v4，复制示例 `itemsadder/` 内容到 `contents/km_example/`。
+2. 按实际 ItemsAdder 文档手动执行 `/iareload`、`/iazip` 并下发合并后的资源包；不覆盖其他命名空间。
+3. 示例的 `requires: {}` 继承节点登记的资源包身份；如果主题另用一个包，添加实际资源包的小写 SHA-1 和 Minecraft 下发 UUID 为 `requires.pack-sha1`、`requires.pack-id`。不要写空字符串，这会导致候选校验失败。重建后的内容摘要变化必须对应新的实际下发 UUID。
+4. 用 `/km reload` 校验加载声明及配置，再选择 `/km ui itemsadder example-ia`；也可从界面设置中的主题列表选择。第三方主题不需要官方主题权益；仍需正常主插件与正确资源包。
+
+This example uses a transparent 176×222 image with a plain white frame, not official commercial artwork. It demonstrates referencing your own registered font image. It is a development example rather than live ItemsAdder certification.
+
+图源可重新生成：
+
+```powershell
+python examples/ui/generate_ia_background.py
+```
+
+## 格式与页面覆盖
+
+```yaml
+schema: 1
+id: example-ia
+backend: itemsadder
+provider: kitemarket.itemsadder
+requires: {}
+resources:
+  font-image: km_example:market
+config:
+  title-offset: 8
+  texture-offset: -8
+pages:
+  '*': {}
+```
+
+`pages.'*'` 是默认页面定义，覆盖全部共用页面；具体页面可以覆盖 `font-image`、`title-offset` 和 `texture-offset`。金额、真实物品和动作由服务器提供，主题配置不能改写账本逻辑。
+
+结果页可使用 `state-font-images`，以服务器给出的 `result.status` 选择背景；没有状态映射时使用本页背景。运行字段为 `SUCCESS`、`PENDING`、`FAILED`、`UNCONFIRMED`；它们是呈现状态，不是账本操作状态。下例是最小声明，换成新图片前应先将该图片注册到实际资源包中：
+
+```yaml
+pages:
+  '*': {}
+  result:
+    state-font-images:
+      SUCCESS: km_example:market
+```
+
+State backgrounds are optional. `state-font-images` selects a registered font image using the server's `result.status`; a missing status mapping uses the page background. This declaration cannot change transaction results.
+
+当前 34 个 `menus` 页面键为；这是 `UiPage.key()`，不全部等于主题 `pages` 使用的 `UiPage.template()`：
+
+`home`、`browse`、`browse-filters`、`order`、`editor`、`number`、`materials`、`durability`、`text-condition`、`enchantments`、`enchantment-range`、`preview`、`supply-preview`、`confirm`、`details`、`insufficient`、`wallet`、`wallet-currency`、`assets`、`history`、`receipt`、`admin`、`admin-player`、`admin-wallet`、`admin-assets`、`admin-orders`、`admin-player-history`、`resolve-source`、`doctor`、`inspect`、`evidence`、`ui`、`themes`、`result`。
+
+主题按模板 ID 配置。有别名的页面如下，其余模板 ID 与页面键相同：
+
+| 页面键／场景 | `pages` 模板 ID |
+| --- | --- |
+| `order` | `detail` |
+| `assets` | `claims` |
+| `supply-preview` | `supply` |
+| `wallet-currency` | `wallet` |
+| `receipt` | `history` |
+| `evidence` | `inspect` |
+| `resolve-source` | `resolve` |
+| `browse` 查看我的订单 | `orders` |
+| `editor` 第1、2步 | `wizard-type`、`wizard-item` |
+| `editor` 第3步收购／出售／竞拍 | `wizard-terms`、`wizard-sale-terms`、`wizard-auction-terms` |
+| `confirm` 发布确认 | `wizard-confirm` |
+
+例如供货背景应配置 `pages.supply.font-image`，而原版供货样式用 `menus.supply-preview`。精确模板存在时不会与 `'*'` 合并，请补齐该模板所需字段。
+
+Theme `pages` entries use `UiPage.template()`, while vanilla `menus` entries use
+`UiPage.key()`. The table gives the aliases. For example, the supply theme uses
+`pages.supply`, not `pages.supply-preview`; its vanilla configuration still uses
+`menus.supply-preview`. An exact template replaces `'*'` rather than merging with it.
+
+Omitted per-theme pack fields inherit the node's registered identity. If using a separate pack, register its actual lowercase SHA-1 and sent UUID; empty strings are invalid. Changed content requires a new actual sent UUID. `/km reload` validates the catalog before activating it, and the interface settings include a theme list.
+
+`provider` 为实际已注册提供者的稳定 ID。通用 `theme.yml` 只声明数据与呈现器绑定，本身不创建原生 SDK 桥接；历史 Germ/Dragon 文件省略该字段，不能直接运行。
+
+`provider` names an actually registered implementation. Declaring a GUI name does not create an SDK bridge. The retained Germ/DragonCore files are historical declarations outside the current vanilla + IA delivery scope.
+
+## 注册真实提供者
+
+公开模块为 `market-ui-api`，发行名 `KiteMarket-UI-API`，Java 11、独立 MIT 授权。用 `compileOnly` 引用，`plugin.yml` 声明依赖 KiteMarket；不把第二份 SDK 打进适配插件。完整 [`ui-java` 示例插件](../ui-java/README.md) 使用 Java 21／真实 IA v4 API，注册 `example.itemsadder`，可以接管自有 `example-ia-java` 主题的实际市场页面；不需要官方 DLC，沿用相同 `km_example` 白框资源。
+
+在自己的插件中，先实现 `com.kitemc.market.api.ui.UiProvider`，再注册：
+
+```java
+KiteMarketUiApi api =
+    getServer().getServicesManager().load(KiteMarketUiApi.class);
+if (api == null) throw new IllegalStateException("KiteMarket UI API unavailable");
+AutoCloseable registration = api.register(this, myProvider);
+```
+
+保存句柄并在 `onDisable` 关闭。`myProvider` 必须是真实实现，不能用上面尚未认证的原生声明当作实现。显示使用 `UiPage`／`UiTheme` 的快照；返回用户操作仅调用 `UiCallbacks.action(token)`、`input(raw)`、`closed()`。`UiPage.token()/pageVersion()` 和 `UiPrompt.token()` 描述服务端页面／字段身份；`UiPage.actions()` 及 `open` 的动作映射提供不透明动作 token，不自行生成、跨页面复用或据此直接扣物／扣款。实际安全校验仍由绑定回调执行。完整合同在 [`market-ui-api/README.md`](../../market-ui-api/README.md)。
+
+IA 提供者可在玩家调度上下文调用 `api.itemsAdderUnavailable(player, page, theme)` 复用主插件观察的实际字体与客户端资源包状态；`null` 才表示就绪，其余为回退原因。这是只读检查，不做官方 DLC 或交易授权。实际资源事件发生后调用 `api.changed(owner)` 通知重新检查；不能用通知冒充加载成功。
+
+使用 `TexturedInventoryWrapper` 时，填充 `getInternal()` 返回的受保护库存并登记新 holder／回调后，调用 IA 公开 `showInventory(player)` 呈现字体标题；仅用 Bukkit 打开内部库存会显示占位标题。完整安装和生命周期实现见上述 Java 示例。
+
+Load `KiteMarketUiApi` through Bukkit's ServicesManager, register your actual `UiProvider`, and close the registration handle on disable. Use only the bound opaque callbacks for interactions. The host retains session, permission, inventory, and transaction validation; registration is independent from official DLC.
+
+The Java 21 [IA example](../ui-java/README.md) is a real `TexturedInventoryWrapper` adapter for `example-ia-java`, sharing this reusable `km_example` resource. It uses the Java 11 public SDK, compile-only vendor API, current-view action callbacks and validated chat input. It can render actual market pages without an official DLC. Use `api.itemsAdderUnavailable` for the host's observed font/pack readiness and notify genuine resource events with `api.changed(owner)`. Neither method grants transaction authority.
+
+Fill the protected inventory from `TexturedInventoryWrapper.getInternal()`, register its new holder and callbacks, then call the public `showInventory(player)` for IA's font title. Opening only the internal inventory through Bukkit leaves the placeholder title. The Java example includes installation and lifecycle handling.
+
+## 历史原生平台声明
+
+Germ 的 `gui-name` 用作桥接配置，名称对应官方 `GermGuiScreen.getGermGuiScreen(guiName)`；实际 GUI 和资源仍由目标 Germ 构件安装。公开 JavaDoc证明这个方法存在，**不证明 1.21.11 或 Folia 支持**。
+
+DragonCore 的 `gui-name` 只是界面配置的名称约定。现有一手文档可以确认客户端 `.yml` 界面、容器槽位和 `CustomPacketEvent`，没有核实目标现代 Java API。示例不包含猜测的打开方法或反射调用，不是原生桥接完成品。
+
+2026-10-03 核查用户提供的客户端与服务端均绑定 1.12.2 后，官方接入已停止；基础插件仍从 1.16.5 起，不为这些文件降级。详见[本轮构件报告](https://kitemc.com/docs/kitemarket/compatibility/)。通用 SDK 和第三方自由开发能力保留。
+
+Official Germ/DragonCore integration was discontinued on October 3, 2026 after the provided components were found to target 1.12.2. These historical declarations are not installable examples or release gates. KiteMarket retains its >=1.16.5 base scope and independent developer SDK.

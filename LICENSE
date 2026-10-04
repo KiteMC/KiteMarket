@@ -1,0 +1,3 @@
+Copyright (c) 2026 KiteMC.
+
+The market-api and market-ui-api modules and MIT-noticed examples have their own MIT licenses. See each component's LICENSE or LICENSE.txt. MIT applies only to those components, not to the closed-source KiteMarket runtime JAR, private implementation, or unrelated commercial assets. Documentation and product branding remain copyright KiteMC; unmodified branding may be used to identify or link to KiteMarket.

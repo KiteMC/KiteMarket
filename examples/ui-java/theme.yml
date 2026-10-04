@@ -1,0 +1,20 @@
+# MIT community theme; manually copy to plugins/KiteMarket/themes/example-ia-java.yml.
+# The freely reusable font resource is in ../ui/themes/example-ia/itemsadder/.
+schema: 1
+id: example-ia-java
+backend: itemsadder
+provider: example.itemsadder
+requires: {}
+resources:
+  font-image: km_example:market
+  # This MIT item is registered by the accompanying km_example resource config.
+  item-icons:
+    BOOK: km_example:book_button
+config:
+  title-offset: 8
+  texture-offset: -8
+pages:
+  '*':
+    # Optional: quoted physical slots override item-icons, only for non-subject entries.
+    # slot-icons: {'49': 'my_theme:back_button'}
+    slot-icons: {}
