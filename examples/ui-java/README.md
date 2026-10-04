@@ -6,14 +6,14 @@
 
 ## 构建
 
-使用 Java 21 或更新的 JDK。从 KiteMarket 项目根目录执行：
+在本机安装 JDK 21；公开 SDK 根构建明确选择 Java 21 工具链，SDK 产物仍为 Java 11，本 IA 示例为 Java 21。下载公开 `KiteMC/KiteMarket` 仓库后，在其根目录用当前 wrapper 执行：
 
 ```powershell
 .\gradlew.bat :market-ui-api:jar
-.\gradlew.bat -p examples/ui-java jar
+.\gradlew.bat -p examples/ui-java "-PuiApiJar=$PWD/market-ui-api/build/libs/KiteMarket-UI-API-1.0.0.jar" developerBundle
 ```
 
-成品为 `build/libs/kitemarket-ui-example-1.0.0.jar`。`developerBundle` 任务生成 `build/distributions/KiteMarket-IA-Example-1.0.0.zip`，内含 JAR、`theme.yml`、`itemsadder/` 白框资源、双语 README、MIT License、源码及构建文件，不含厂商实现、第二份 SDK 或核心代码。解包后的独立源码构建使用 `-PuiApiJar=<绝对SDK路径>`。
+示例目录中的成品为 `build/libs/kitemarket-ui-example-1.0.0.jar`。本地 `developerBundle` 任务生成 `build/distributions/KiteMarket-IA-Example-1.0.0.zip`；公开发行时统一合并为 `KiteMarket-Examples-1.0.0.zip`，本例位于 `ui-java/`。内含 JAR、`theme.yml`、`itemsadder/` 白框资源、双语 README、MIT License、源码及构建文件，不含厂商实现、第二份 SDK 或核心代码。独立解包后在 `ui-java/` 使用自己的 wrapper 或 Gradle 9.6.1，传入 `-PuiApiJar=<绝对SDK路径>`。
 
 也可传入 `-PuiApiJar=C:/absolute/path/KiteMarket-UI-API.jar`。SDK、Paper API、ItemsAdder 公共 API 都是 `compileOnly`，不会打进示例包。公共编译依赖固定为 `beer.devs:itemsadder-api:4.0.18-beta-10`，与主插件一致；实际运行必须使用合法且匹配服务器的 ItemsAdder v4。Java 21 厂商适配代码在 `ItemsAdderProvider.java`，公开 SDK 仍为独立 Java 11 模块。
 
@@ -29,7 +29,7 @@
 
 主题 `provider: example.itemsadder` 选择本 Java 适配器。配置示例 `example-ia` 使用内置 `kitemarket.itemsadder`，两者可以同时安装，复用同一极简字体资源。`pages.'*'` 覆盖全部共用页面；可以增添逐页字体和偏移，实际槽位、输入、报价与提交逻辑保持由主插件决定。
 
-自定义按钮使用真实 IA 物品注册：可选 `resources.item-icons` 将原版 `Material` 名映射到自有 IA ID，例如本包 `BOOK: km_example:book_button`；可选 `pages.<template>.slot-icons` 使用带引号的物理槽位 `'0'`～`'53'` 覆盖该页映射，例如 `'49': 'my_theme:back_button'`。精确页面配置存在时不与 `'*'` 合并。本包附带原创16×16 MIT书本图标，按IA4.0.16／MC1.21.11的现代 `material: PAPER`＋`graphics.texture: items/book_button` 注册；须随资源安装重建，不假设其他自有ID已注册。可用 `python examples/ui/generate_ia_background.py --icons-only` 从可编辑绘图代码再生成图标。`UiItemIcons.resolve(page, theme)` 仅返回当前页已存在的功能条目，真实 `subject()` 商品永不替换；渲染后保留原显示名称、Lore、数量和服务端动作。缺少已登记的图标时返回 `IA_RESOURCES_PENDING` 并回退原版；图标工具不检查或授予官方 DLC。
+自定义按钮使用真实 IA 物品注册：可选 `resources.item-icons` 将原版 `Material` 名映射到自有 IA ID，例如本包 `BOOK: km_example:book_button`；可选 `pages.<template>.slot-icons` 使用带引号的物理槽位 `'0'`～`'53'` 覆盖该页映射，例如 `'49': 'my_theme:back_button'`。精确页面配置存在时不与 `'*'` 合并。本包附带原创16×16 MIT书本图标，按IA4.0.16／MC1.21.11的现代 `material: PAPER`＋`graphics.texture: items/book_button` 注册；须随资源安装重建，不假设其他自有ID已注册。可在公开仓库根目录用 `python examples/ui/generate_ia_background.py --icons-only` 从可编辑绘图代码再生成图标。`UiItemIcons.resolve(page, theme)` 仅返回当前页已存在的功能条目，真实 `subject()` 商品永不替换；渲染后保留原显示名称、Lore、数量和服务端动作。缺少已登记的图标时返回 `IA_RESOURCES_PENDING` 并回退原版；图标工具不检查或授予官方 DLC。
 
 `/km ui itemsadder example-ia-java` 只选择主题；正常点击真实市场的发布、购买、供货或竞价确认会执行玩家请求的实际操作。开发时使用隔离角色和自有测试订单。
 
@@ -50,7 +50,7 @@
 
 This working example uses its own [MIT License](LICENSE). You may modify, distribute or sell it; the license does not include the proprietary market core or official commercial artwork. Its own `km_example` white-frame font does not require an official Market Stall DLC.
 
-Build the host SDK first, then run the host wrapper with `-p examples/ui-java jar`, using JDK 21 or newer. The output is `build/libs/kitemarket-ui-example-1.0.0.jar`. The `developerBundle` task also produces `build/distributions/KiteMarket-IA-Example-1.0.0.zip`, containing the JAR, `theme.yml`, `itemsadder/` white-frame resource, bilingual README, MIT license, source and build files. To rebuild the extracted standalone source, pass `-PuiApiJar=<absolute path>`. Paper, the host SDK and `beer.devs:itemsadder-api:4.0.18-beta-10` remain compile-only; no vendor implementation or second SDK is bundled. This Java 21 vendor adapter is separate from the Java 11 public SDK. The example does not support Folia or Java 11 Legacy servers.
+Install JDK 21 locally; the public SDK root build selects its Java 21 toolchain. SDK artifacts target Java 11 while this IA adapter targets Java 21. From the public `KiteMC/KiteMarket` checkout root, build the SDK first and run the current wrapper with `-p examples/ui-java -PuiApiJar=<absolute SDK path> developerBundle`. The example output is `build/libs/kitemarket-ui-example-1.0.0.jar`. Its local bundle is `build/distributions/KiteMarket-IA-Example-1.0.0.zip`; public release assets combine both examples in `KiteMarket-Examples-1.0.0.zip`, with this one under `ui-java/`. The bundle contains the JAR, `theme.yml`, `itemsadder/` white-frame resource, bilingual README, MIT license, source and build files. Standalone extractions may use their own wrapper or Gradle 9.6.1 from `ui-java/`, passing `-PuiApiJar=<absolute path>`. Paper, the host SDK and `beer.devs:itemsadder-api:4.0.18-beta-10` remain compile-only; no vendor implementation or second SDK is bundled. The example does not support Folia or Java 11 Legacy servers.
 
 Install a compatible legitimate ItemsAdder v4 and a KiteMarket version shipping `itemsAdderUnavailable`. Install the example JAR, copy `theme.yml` to `plugins/KiteMarket/themes/example-ia-java.yml`, and copy the bundle's `itemsadder/` (or the sibling source example's resources) to `plugins/ItemsAdder/contents/km_example/`. Preserve other namespaces. Rebuild and send the actual merged pack using the installed IA instructions; register its lowercase SHA-1 and sent UUID in `gui.itemsadder.pack-sha1`/`pack-id`, or in the theme's `requires`. Changed content requires a new actual sent UUID.
 
@@ -58,7 +58,7 @@ Restart normally to load the Java provider, validate the theme using `/km reload
 
 The `example.itemsadder` provider renders real market pages using `TexturedInventoryWrapper`. It receives real detached items, amounts and host-generated opaque actions; it never invents balances, items or successful transactions. Real confirmation buttons perform the requested transaction through KiteMarket, so use an isolated character and test orders during development.
 
-Optional `resources.item-icons` maps vanilla `Material` names to your own registered IA item IDs, such as this bundle's `BOOK: km_example:book_button`. Optional `pages.<template>.slot-icons` uses quoted physical slots `'0'` to `'53'` to override that page, for example `'49': 'my_theme:back_button'`. An exact page does not merge with `'*'`. The bundle includes an original 16×16 MIT book icon, registered using modern `material: PAPER` and `graphics.texture: items/book_button` for IA4.0.16/MC1.21.11. Install and rebuild this resource; no unrelated IDs are assumed to exist. The editable drawing code can regenerate it using `python examples/ui/generate_ia_background.py --icons-only`. `UiItemIcons.resolve(page, theme)` returns only existing functional entries; real `subject()` items are never replaced. The custom icon retains the original display name, Lore, amount and host action. Missing registered icons return `IA_RESOURCES_PENDING` and fall back to vanilla. Resolving icon metadata neither checks nor grants an official DLC entitlement.
+Optional `resources.item-icons` maps vanilla `Material` names to your own registered IA item IDs, such as this bundle's `BOOK: km_example:book_button`. Optional `pages.<template>.slot-icons` uses quoted physical slots `'0'` to `'53'` to override that page, for example `'49': 'my_theme:back_button'`. An exact page does not merge with `'*'`. The bundle includes an original 16×16 MIT book icon, registered using modern `material: PAPER` and `graphics.texture: items/book_button` for IA4.0.16/MC1.21.11. Install and rebuild this resource; no unrelated IDs are assumed to exist. From the public checkout root, the editable drawing code can regenerate it using `python examples/ui/generate_ia_background.py --icons-only`. `UiItemIcons.resolve(page, theme)` returns only existing functional entries; real `subject()` items are never replaced. The custom icon retains the original display name, Lore, amount and host action. Missing registered icons return `IA_RESOURCES_PENDING` and fall back to vanilla. Resolving icon metadata neither checks nor grants an official DLC entitlement.
 
 The adapter clones the original subject, retains its names/enchantments and original Lore components, and appends only the host's styled help text. Appended lines default to gray without inherited italics while preserving explicit host colors, bold and italics. It protects the whole inventory against clicks, dragging and item-moving shortcuts; only ordinary current-view left/right clicks can queue host actions. The next tick checks the exact current holder again and dispatches each token at most once. It fills the protected inventory returned by `getInternal()`, registers the new holder with all tokens and callbacks, then calls IA's public `showInventory(player)` to display the font title. Opening only the internal inventory through Bukkit leaves IA's placeholder title. Old closes and queued clicks cannot control a replacement page.
 

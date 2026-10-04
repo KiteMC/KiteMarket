@@ -16,7 +16,7 @@ Planned price: **CNY 128 / USD 19.99, lifetime purchase**. One license covers on
 
 ## Developer build / 开发者构建
 
-Use JDK 21 or newer. SDK bytecode stays compatible with Java 11.
+Install JDK 21 locally: this checkout's Gradle toolchain selects Java 21. SDK artifacts still target Java 11; the IA example targets Java 21. / 请在本机安装 JDK 21，公开构建会选择 Java 21 工具链；SDK 产物仍为 Java 11，IA 示例为 Java 21。
 
 ```powershell
 .\gradlew.bat :market-api:jar :market-ui-api:jar
