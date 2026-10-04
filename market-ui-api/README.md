@@ -1,8 +1,8 @@
 # KiteMarket UI SDK
 
-Java 11 的公开界面 SDK，MIT 授权仅覆盖本模块。当前官方接入方向为 ItemsAdder v4；开发者可自由制作、分发或销售自己的主题，无需官方 DLC。`GERM`／`DRAGONCORE` 枚举保留旧声明与扩展兼容，但这两条官方接入路线已停止，不属于兼容承诺。版本依据见[构件核查](https://kitemc.com/docs/kitemarket/compatibility/)。
+Java 11 的公开界面 SDK，MIT 授权仅覆盖本模块。内置适配支持 ItemsAdder v4；开发者可自由制作、分发或销售自有主题，无需额外的 KiteMC 主题授权。`GERM`／`DRAGONCORE` 仅保留为旧声明与扩展标识，不提供内置适配或兼容承诺。实际验证范围见[兼容说明](https://kitemc.com/docs/kitemarket/compatibility/)。
 
-2026-10-04 已取消官方 IA 主题和 DLC 开发；公开 SDK、配置模板、Java 示例、资源包状态检查及自有物品图标能力继续保留。已有私人图源和签名发行不属于本模块 MIT 授权，也不进入开发者示例。
+SDK、配置示例、Java 示例和配套 MIT 素材位于公开 [KiteMC/KiteMarket](https://github.com/KiteMC/KiteMarket) 仓库；已发布开发包从 [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases) 获取。基础插件不内置 IA 主题，使用自有或第三方资源即可接入。
 
 ## 使用
 
@@ -23,7 +23,11 @@ IA 提供者在玩家调度上下文使用 `api.itemsAdderUnavailable(player, pa
 
 可选图标绑定通过 `UiItemIcons.resolve(page, theme)` 读取：`resources.item-icons` 将Material名称映射到自有IA物品ID，`pages.<template>.slot-icons` 用字符串物理槽位0—53覆盖。返回只读映射，只包含已有的非真实标的条目；`subject()`非空时始终保留商品。精确模板存在则只用该页，否则使用 `*`，不合并两页。`validate(theme)`仅校验声明，不创建物品或检查权益。呈现器仍需检查资源包和图标注册，克隆厂商物品后保留服务器提供的数量／名称／Lore；缺失注册资源应返回原因并回退。
 
-主题 `pages` 按 `UiPage.template()` 选择，原版 `menus` 则按 `UiPage.key()` 配置，两者有明确别名。例如供货的 key 为 `supply-preview`、模板为 `supply`；订单详情为 `order`→`detail`，领取箱为 `assets`→`claims`。发布向导使用 `wizard-*` 模板。完整别名和34页清单见[配置主题示例](../examples/ui/README.md)，不要直接把全部 `menus` 键当成主题模板 ID。
+主题 `pages` 按 `UiPage.template()` 选择，原版 `menus` 则按 `UiPage.key()` 配置，两者有明确别名。例如供货的 key 为 `supply-preview`、模板为 `supply`；订单详情为 `order`→`detail`，领取箱为 `assets`→`claims`。发布向导使用 `wizard-*` 模板。个人页 key／模板同为 `profile`，`pages.'*'` 自动覆盖。完整别名和35页清单见[配置主题示例](https://github.com/KiteMC/KiteMarket/tree/main/examples/ui)，不要直接把全部 `menus` 键当成主题模板 ID。
+
+默认精简首页将三类市场放在中央，四角为个人页、领取箱、钱包和我的挂单；个人页提供界面选择、待核对、历史及按权限管理。SDK 条目的槽位是最终物理槽位，不是原版配置的源槽位。`gui.home-layout: auto` 遇到已有 `menus.home` 块时保留旧首页，主题应按当前快照呈现，不假定所有安装使用精简布局。
+
+输入范围与金额由主插件计算：收购受钱包可用预算限制，出售与竞拍受实际物品限制，充提受外部余额、钱包及已知后端容量限制。直接显示 `UiPrompt` 范围与服务端数据，不把查询失败当作零或无限。确认前核心重查，变化时保留草稿并刷新。附魔列表以 `search.query` 表达当前搜索；筛选、分页与输入都使用已登记动作。默认操作编号在收据按需查看、复制，审计及已有 SDK 数据保持可查询；这不增加公开交易或恢复接口。
 
 ## 数据与回调
 
@@ -63,13 +67,15 @@ void close(Player player);
 
 `update()` 默认调用 `open()` 打开新视图。原生界面提供者可以覆写它，在当前窗口中替换页面；每次必须一起替换页面身份、全部动作令牌和 `UiCallbacks`，包括当前窗口的关闭回调。只换文字／物品而保留旧回调会使新页面动作被拒绝。主插件先建立新代次再更新，旧窗口迟到的关闭事件不能关闭新页面。原生输入窗口的有效取消通知会返回此前页面；过期窗口不能取消新的输入字段。
 
-完整的 [Java IA 示例](../examples/ui-java/README.md) 使用真实 ItemsAdder v4 `TexturedInventoryWrapper` 与市场页面、已登记动作和聊天输入回退。示例适配插件使用 Java 21／厂商 `compileOnly` 依赖；本 SDK 继续是 Java 11，基础 Legacy JAR 不加载此示例。它包含真实服务注册、整窗点击／拖拽保护、旧库存关闭处理和生命周期卸载；安装 `example-ia-java` 的自有白框资源后可以操作真实市场，无需官方 DLC。源码与构建不等于游戏客户端认证，实际验证组合以发布报告为准。仅需配置即可使用的示例在 [examples/ui](../examples/ui/README.md)。
+完整的 [Java IA 示例](https://github.com/KiteMC/KiteMarket/tree/main/examples/ui-java) 使用 ItemsAdder v4 `TexturedInventoryWrapper` 与市场页面、已登记动作和聊天输入回退。示例适配插件使用 Java 21／厂商 `compileOnly` 依赖；本 SDK 继续是 Java 11，基础 Legacy JAR 不加载此示例。它包含服务注册、整窗点击／拖拽保护、旧库存关闭处理和生命周期卸载；安装 `example-ia-java` 的自有白框资源后可以操作真实市场，无需额外主题授权。实际支持组合见[兼容说明](https://kitemc.com/docs/kitemarket/compatibility/)。只需配置的示例位于公开仓库 [examples/ui](https://github.com/KiteMC/KiteMarket/tree/main/examples/ui)。
 
 IA 库存适配先填充 `TexturedInventoryWrapper.getInternal()` 返回的受保护库存，登记新页面 holder、动作及回调，再调用公开 `showInventory(player)` 呈现字体标题。仅通过 Bukkit 打开内部库存会显示 IA 占位标题。示例保留此顺序，避免旧页关闭事件清除新页；不要为了更换背景绕过现有库存保护。
 
 ## English
 
-This Java 11 SDK exposes a shared presentation interface; the current official adapter target is ItemsAdder v4. Developers may use, distribute or sell their own themes without an official DLC. The MIT license covers this module only. `GERM` and `DRAGONCORE` remain as legacy declaration and extension identifiers; their official integration has been discontinued and they are not compatibility promises. See the [artifact report](https://kitemc.com/docs/kitemarket/compatibility/).
+This Java 11 SDK exposes a shared presentation interface with a built-in ItemsAdder v4 adapter. Developers may use, distribute or sell their own themes without a separate KiteMC theme license. The MIT license covers this module only. `GERM` and `DRAGONCORE` remain as legacy declaration and extension identifiers, with no built-in adapter or compatibility promise. See the [compatibility guide](https://kitemc.com/en/docs/kitemarket/compatibility/).
+
+SDK source, configuration examples, Java examples and their MIT resources are in the public [KiteMC/KiteMarket](https://github.com/KiteMC/KiteMarket) repository. Published packages are distributed through [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases). The base plugin does not bundle an IA theme; supply your own or a third party's resources.
 
 Use the SDK as a `compileOnly` dependency and load `KiteMarketUiApi` through Bukkit's `ServicesManager`. Never bundle a second runtime copy. Register an enabled owning plugin, retain the returned handle and close it on disable. Closing is idempotent; owner disable automatically removes its providers.
 
@@ -81,7 +87,11 @@ An IA provider can call `api.itemsAdderUnavailable(player, page, theme)` in the 
 
 Theme `pages` uses `UiPage.template()`; vanilla `menus` uses `UiPage.key()`.
 Aliases include `supply-preview`→`supply`, `order`→`detail`, and `assets`→`claims`.
-The publishing wizard uses `wizard-*` templates. See the [configuration example](../examples/ui/README.md) for the complete page and alias list.
+The publishing wizard uses `wizard-*` templates. The profile's page and template ID are both `profile`, covered automatically by `pages.'*'`. See the [configuration example](https://github.com/KiteMC/KiteMarket/tree/main/examples/ui) for the complete 35-page and alias list.
+
+Compact home places the three markets in the center with profile, claims, wallet and my orders in the corners. The profile exposes interface selection, review, history and permission-dependent administration. SDK slots are final physical positions, not vanilla source slots. Existing `menus.home` blocks retain legacy home under `gui.home-layout: auto`; render the current snapshot rather than assuming one fixed layout.
+
+Use the host's prompt ranges and values: buy quantities depend on available wallet budgets, sales and auctions on actual items, and transfers on external balance, wallet capacity and known receiving limits. Failed quotes are neither zero nor unlimited. The host checks again before confirmation and retains drafts when limits change. `search.query` carries enchantment search; use registered search and paging actions. Receipts show and copy operation IDs on request, while audit and SDK IDs remain queryable. These presentation rules add no transaction or recovery authority.
 
 Pages, items, prompts and nested theme declarations are detached snapshots. Return interactions only through the host's opaque action and input callbacks. Page identities are descriptive; the host's bound callback still validates session, version, permissions and inventory. The SDK exposes no general transaction or asset mutation interface.
 
@@ -91,6 +101,6 @@ Native prompt support is optional; return `false` for KiteMarket's built-in text
 
 On host disable, callbacks are revoked before views close. Paper closes owned views immediately on its main thread. Folia closes only where the current thread already owns the player; disabled-plugin tasks are not a cleanup guarantee, and global-thread inventory access is forbidden. Forced live hot-unload on Folia is unsupported; stop and restart the server normally. Native providers must also clean up their own views in a valid player context. This lifecycle rule is not Folia runtime certification.
 
-The [standalone Java IA example](../examples/ui-java/README.md) uses the real ItemsAdder v4 `TexturedInventoryWrapper`, live market page snapshots, bound actions and the host's chat-input fallback. Its Java 21 adapter and compile-only vendor dependency are separate from this Java 11 SDK and the host's Legacy artifact. Install its own `example-ia-java` theme and reusable white-frame resource to use real market pages without an official DLC. It protects the whole inventory view, rejects replaced views and cleans up on disable. Source and compilation alone do not certify client compatibility; consult the actual fixed-combination verification report.
+The [standalone Java IA example](https://github.com/KiteMC/KiteMarket/tree/main/examples/ui-java) uses ItemsAdder v4 `TexturedInventoryWrapper`, live market page snapshots, bound actions and the host's chat-input fallback. Its Java 21 adapter and compile-only vendor dependency are separate from this Java 11 SDK and the host's Legacy artifact. Install its own `example-ia-java` theme and reusable white-frame resource to use real market pages without a separate theme license. It protects the whole inventory view, rejects replaced views and cleans up on disable. See the [compatibility guide](https://kitemc.com/en/docs/kitemarket/compatibility/) for supported combinations.
 
 For IA inventories, fill the protected inventory returned by `TexturedInventoryWrapper.getInternal()`, register the replacement holder, actions and callbacks, then call the public `showInventory(player)` to display the font title. Opening only the internal inventory through Bukkit leaves IA's placeholder title. The example retains this order so a previous view's close cannot clear the replacement; background rendering must retain inventory protection.

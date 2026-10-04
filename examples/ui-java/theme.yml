@@ -14,6 +14,7 @@ config:
   title-offset: 8
   texture-offset: -8
 pages:
+  # Covers all shared pages, including profile; exact templates replace this default.
   '*':
     # Optional: quoted physical slots override item-icons, only for non-subject entries.
     # slot-icons: {'49': 'my_theme:back_button'}

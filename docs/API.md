@@ -1,10 +1,10 @@
 # 只读市场 API
 
-适用接口：KiteMarket 1.0.0。SDK 使用 Java 11、MIT 许可证，核心实现不公开。接口通过 Bukkit `ServicesManager` 提供，不依赖闭源 `market-core`。本轮为发布候选准备，正式运行包以随后获准发布的 Release 为准。
+适用接口：KiteMarket 1.0.0。SDK 使用 Java 11、MIT 许可证，核心实现不公开。接口通过 Bukkit `ServicesManager` 提供，不依赖闭源 `market-core`。
 
 ## 获取 SDK
 
-从公开仓库 `KiteMC/KiteMarket` 的对应版本 Release 下载：
+接口源码与示例位于公开仓库 [KiteMC/KiteMarket](https://github.com/KiteMC/KiteMarket)。已发布的 SDK、运行包及配置包统一从 [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases) 获取；没有发行文件时，可先阅读公开源码。选择与主插件版本匹配的 SDK：
 
 | 文件 | 用途 |
 | --- | --- |

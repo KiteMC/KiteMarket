@@ -7,6 +7,8 @@ Run `/km reload` after editing, then reopen the page. Reload validates a candida
 ## Configuration structure
 
 ```yaml
+gui:
+  home-layout: legacy
 menus:
   home:
     title:
@@ -34,7 +36,7 @@ menus:
         en_US: '&6Choose interface'
 ```
 
-Merge examples into the existing `menus` section; do not add a duplicate root key. Omitted settings keep their existing defaults. Page settings customize existing entries; they do not create trading buttons.
+This example uses the legacy home control at slot `32`, so it explicitly selects `gui.home-layout: legacy`. Merge it into the existing `gui` and `menus` sections; do not add duplicate root keys. Omitted settings keep their existing defaults. Page settings customize existing entries; they do not create trading buttons.
 
 | Field | Type and meaning |
 | --- | --- |
@@ -52,7 +54,7 @@ Merge examples into the existing `menus` section; do not add a duplicate root ke
 
 Unknown configuration fields are rejected. `command`, `action`, scripts, and expressions are not configuration features. Each text entry is limited to `512` characters; each Lore list is limited to `64` lines. Material names must exist on the current server.
 
-The automatic switch appears only on applicable pages and layouts. If its physical slot already contains a product or control, it is omitted rather than replacing that entry. `/km ui` remains available. `switch.slot` uses final physical coordinates, while `buttons` uses source coordinates.
+The automatic switch appears only on applicable pages and layouts. If its physical slot already contains a product or control, it is omitted rather than replacing that entry. Compact home uses slot `8` for claims, so its default switch is omitted. Open the player-head profile entry or use `/km ui` to change interfaces. `switch.slot` uses final physical coordinates, while `buttons` uses source coordinates.
 
 ## Source slots and layouts
 
@@ -60,7 +62,36 @@ Menus contain `54` slots numbered `0` through `53`, left to right and top to bot
 
 `buttons`, `slots`, and `icons` use the page's **source slots**. The default new layout moves list content from source `0..35` to physical `9..44` and moves filters into the top row. Lists retain their default `36` product entries.
 
-| `home` source slot | Control |
+New installations default to compact home: three market entrances in the center, with profile, claims, wallet and my orders in the four corners. Continue through “My orders” to create a listing, or use `/km create`.
+
+| Compact `home` source / default physical slot | Control |
+| --- | --- |
+| `0` | The player's own head opens their profile; shows the actual review count |
+| `4` | Greeting and guidance, with no click action |
+| `8` | Claims, with the actual number of claimable asset entries |
+| `20` | Fixed-price market |
+| `22` | Buy-order market |
+| `24` | Auction market |
+| `45` | Wallet |
+| `53` | My orders, with the actual open-order count and publishing guidance |
+
+| `profile` source / default physical slot | Control |
+| --- | --- |
+| `20` | Interface selection |
+| `22` | Operations requiring review |
+| `24` | History |
+| `31` | Administration, subject to permission |
+| `49` | Back |
+
+Failed overview queries display “unavailable”; unknown counts are not replaced with zero. The review list reuses the `history` configuration page. The profile page key and IA template ID are both `profile`.
+
+`gui.home-layout` is separate from the list layout:
+
+- `auto`: selects compact home only with the warm layout, no custom legacy `gui.home-slots`, and no `menus.home` block. Any existing `menus.home` block, even a title-only edit, retains legacy home so old button settings keep their meaning.
+- `compact`: explicitly selects compact home. Configure `menus.home` using the new source slots above; old `10/12/32/34` controls are not migrated automatically.
+- `legacy`: explicitly selects the old home with `gui.home-slots`. Its default controls follow; existing custom `gui.home-slots` take precedence.
+
+| Legacy `home` default source slot | Control |
 | --- | --- |
 | `10` | Fixed-price market |
 | `12` | Buy-order market |
@@ -70,7 +101,7 @@ Menus contain `54` slots numbered `0` through `53`, left to right and top to bot
 | `30` | Claims |
 | `32` | My orders |
 | `34` | History |
-| `40` | Operations requiring review |
+| `40` | Operations requiring review, shown only with the warm layout |
 | `49` | Administration, subject to permission |
 
 | `browse` source slot | Default physical slot in the new layout | Control |
@@ -90,17 +121,19 @@ To change additional help on the first list item, use `buttons.'0'`, not its vis
 
 Placement changes must form a permutation. When moving one slot, also specify where the displaced slot goes. Moving `10` to `12` while leaving the original `12` unchanged is invalid. `buttons.slot` and the existing `slots` map share one placement mechanism; avoid defining the same source placement twice.
 
-Changing titles, icons, names, Lore, decoration, or `switch` does not select the legacy layout. Changing `slots` or `buttons.slot` uses the existing layout compatibility mechanism: `gui.vanilla.layout: auto` selects the compatibility layout; explicitly selecting `warm` rejects candidates that conflict with custom placement. In the compatibility layout, source slots are physical slots, with no automatic list remapping.
+The list's `gui.vanilla.layout` rules are unchanged: changing titles, icons, names, Lore, decoration, or `switch` does not change its layout. Changing `slots` or `buttons.slot` selects the compatibility layout under `auto`; explicitly selecting `warm` rejects candidates that conflict with custom placement. In the compatibility layout, source slots are physical slots, with no automatic list remapping. Home is also controlled by `gui.home-layout`; a text-only edit that leaves list layout unchanged can still cause `auto` to retain legacy home.
 
 ## Example one: customize a home button
 
-This example keeps the control's location and action, changes “My orders” to a name tag, retains the existing order reminder, and adds colored help.
+This example explicitly selects compact home and customizes “My orders” at slot `53`. Its location, action and existing reminder are retained, with colored help added. When merging it into an existing configuration, check for home buttons that still use legacy source slots.
 
 ```yaml
+gui:
+  home-layout: compact
 menus:
   home:
     buttons:
-      '32':
+      '53':
         material: NAME_TAG
         name:
           zh_CN: '&6我的挂单'
@@ -118,10 +151,11 @@ menus:
 
 ## Example two: exchange two controls
 
-This example fully swaps the fixed-price and buy-order entries. Each source control keeps its own action and icon.
+This example explicitly selects legacy home and fully swaps the fixed-price and buy-order entries. Each source control keeps its own action and icon. Compact home uses source slots `20` and `22` instead; do not reuse the old numbers for it.
 
 ```yaml
 gui:
+  home-layout: legacy
   vanilla:
     layout: auto
 menus:
@@ -136,6 +170,8 @@ menus:
 The existing placement syntax remains supported. Choose either form:
 
 ```yaml
+gui:
+  home-layout: legacy
 menus:
   home:
     slots:
@@ -176,9 +212,31 @@ Common read-only fields:
 | `supply-preview` | `supply.requested`, `supply.selected`, `supply.missing`, `supply.gross`, `supply.tax`, `supply.net` |
 | `wallet-currency` | `wallet.currency`, `wallet.available`, `wallet.frozen` |
 | `number` | `number.kind`, `number.currency`, `number.value`, `number.minimum`, `number.maximum` |
+| `enchantments` | `search.query` |
 | `result` | `result.status`, `result.code`, `operation.id`; a missing operation ID displays `—` |
 
 Numeric fields contain raw server values: money uses the currency's smallest unit, time may be a timestamp, and enums may contain internal names. Prefer `{default}` to preserve formatted money, translated labels, and explanations of where assets go. Do not present unformatted numeric fields as display amounts.
+
+## Quantity, amounts and records
+
+`number.maximum` is the current usable limit, rather than always the configured order quantity:
+
+| Operation | Limit |
+| --- | --- |
+| Create buy order | Minimum of the configured quantity, per-operation currency maximum / unit price, and available wallet balance / unit price |
+| Create fixed-price sale | Minimum of the configured quantity, currency maximum / unit price, and actual inventory quantity matching the held sample exactly |
+| Create auction | Minimum of the configured quantity and the held stack's actual amount; the starting price is for the whole lot |
+| Supply | Minimum of the remaining order quantity and selected matching items |
+| Deposit | Minimum of external available balance, per-operation currency maximum, and remaining integer capacity after available and frozen wallet funds |
+| Withdraw | Minimum of available wallet funds, per-operation currency maximum, and the backend's known receiving capacity |
+
+These are page quotes. Related items and balances are checked again when applying a quantity, opening confirmation and submitting. Changed limits produce a notice and refresh instead of silently using an old limit. Publishing drafts are retained; insufficient buy-order budgets offer a deposit entry. Amounts must respect currency precision, and external balances are not rounded up.
+
+The currency wallet shows the external economy balance. An unavailable gateway or failed balance query explains the problem and disables that currency's transfers without displaying a false zero. Existing market funds remain usable under the base license rules. Unknown backend receiving capacity does not mean unlimited capacity; the economy plugin may still reject a final transfer. A read-only balance quote is not evidence that an external effect completed.
+
+Default confirmations, results and personal-history summaries do not display long operation IDs directly. The receipt's “View operation ID” action shows the ID in chat with a copy action. `/km inspect <operationId>`, audit data and SDK IDs remain available. A theme can display the existing `operation.id` field when needed; preserve clear results and asset destinations.
+
+Enchantment conditions support search by Chinese or English label, short key or full namespaced ID, with filtering before pagination. Clearing search restores all enchantments; paging and returning retain the draft query. Real enchanted books show the selected level range.
 
 ## Real-item protection
 
@@ -188,11 +246,12 @@ Real items can be relocated and their additional market help can be customized. 
 
 ## All configurable pages
 
-Keys below `menus` are page IDs, not translation keys, window titles, or IA template aliases.
+There are currently `35` configuration pages. Keys below `menus` are page IDs, not translation keys, window titles, or IA template aliases.
 
 | Page ID | Purpose |
 | --- | --- |
 | `home` | Market home |
+| `profile` | Player profile: interface, review, history and administration entries |
 | `browse` | Market lists and my orders |
 | `browse-filters` | Search and filters |
 | `order` | Order details |

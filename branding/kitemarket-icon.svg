@@ -1,48 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="1024" height="1024" shape-rendering="crispEdges" role="img" aria-label="KiteMarket market stall">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1024" height="1024" role="img" aria-label="KiteMarket market stall">
   <title>KiteMarket market stall</title>
-  <desc>An original pixel market stall with a moss-green cloth awning, a wooden counter and a gold exchange sign. Transparent background.</desc>
-  <!-- Dark, stepped silhouette keeps the stall readable at small sizes. -->
-  <path fill="#283d32" d="M18 4h28v4h8v4h4v8h4v10h-4v4H6v-4H2V20h4v-8h4V8h8z"/>
-  <path fill="#5c7949" d="M18 8h28v4h8v8h4v6H6v-6h4v-8h8z"/>
-  <path fill="#86a462" d="M18 8h8v4h-4v8h-4v6H8v-6h4v-8h6z"/>
-  <path fill="#b1bc7a" d="M28 8h8v18H24v-6h2v-8h2z"/>
-  <path fill="#86a462" d="M38 8h8v4h6v8h4v6H42v-6h-2v-8h-2z"/>
-  <rect x="18" y="8" width="28" height="2" fill="#d2d7a3"/>
-  <rect x="6" y="24" width="52" height="4" fill="#344e38"/>
-  <rect x="6" y="28" width="10" height="4" fill="#7f9c59"/>
-  <rect x="16" y="28" width="10" height="4" fill="#b1bc7a"/>
-  <rect x="26" y="28" width="12" height="4" fill="#7f9c59"/>
-  <rect x="38" y="28" width="10" height="4" fill="#b1bc7a"/>
-  <rect x="48" y="28" width="10" height="4" fill="#7f9c59"/>
-  <!-- Posts and feet. -->
-  <rect x="6" y="34" width="8" height="24" fill="#4b3028"/>
-  <rect x="8" y="34" width="4" height="24" fill="#ac7847"/>
-  <rect x="8" y="34" width="2" height="24" fill="#d9a269"/>
-  <rect x="50" y="34" width="8" height="24" fill="#4b3028"/>
-  <rect x="52" y="34" width="4" height="24" fill="#ac7847"/>
-  <rect x="52" y="34" width="2" height="24" fill="#d9a269"/>
-  <rect x="4" y="56" width="12" height="4" fill="#4b3028"/>
-  <rect x="48" y="56" width="12" height="4" fill="#4b3028"/>
-  <!-- Small crate and paper packet are part of the stall, not UI artwork. -->
-  <rect x="16" y="36" width="10" height="8" fill="#4b3028"/>
-  <rect x="18" y="38" width="6" height="6" fill="#d49c5e"/>
-  <rect x="18" y="40" width="6" height="2" fill="#91603a"/>
-  <rect x="42" y="38" width="6" height="6" fill="#e8d6ae"/>
-  <rect x="44" y="38" width="2" height="6" fill="#bda875"/>
-  <!-- Counter. -->
-  <rect x="12" y="42" width="40" height="16" fill="#4b3028"/>
-  <rect x="14" y="46" width="36" height="10" fill="#ac7847"/>
-  <rect x="14" y="46" width="36" height="2" fill="#d9a269"/>
-  <rect x="14" y="52" width="36" height="2" fill="#805132"/>
-  <rect x="24" y="48" width="2" height="8" fill="#805132"/>
-  <rect x="38" y="48" width="2" height="8" fill="#805132"/>
-  <rect x="10" y="42" width="44" height="4" fill="#4b3028"/>
-  <rect x="12" y="42" width="40" height="2" fill="#e0ab70"/>
-  <!-- Hanging gold trading plate with two opposed arrows, no lettering. -->
-  <rect x="30" y="30" width="4" height="4" fill="#4b3028"/>
-  <path fill="#614324" d="M28 32h8v2h4v12h-4v2h-8v-2h-4V34h4z"/>
-  <path fill="#e0a739" d="M28 34h8v2h2v8h-2v2h-8v-2h-2v-8h2z"/>
-  <rect x="28" y="34" width="8" height="2" fill="#ffe3a0"/>
-  <rect x="26" y="36" width="2" height="8" fill="#f4c864"/>
-  <path fill="#72502b" d="M29 37h5v-1h2v3h-2v-1h-5zM30 41h5v1h-5v1h-2v-3h2z"/>
+  <desc>An original white market stall and exchange arrows on a rounded violet gradient tile. Transparent outer corners.</desc>
+  <defs>
+    <linearGradient id="marketViolet" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A78BFA"/>
+      <stop offset="50%" stop-color="#7C3AED"/>
+      <stop offset="100%" stop-color="#6366F1"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="108" fill="url(#marketViolet)"/>
+  <!-- A simple silhouette shares the rounded, white-symbol family of KiteMC icons. -->
+  <g fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M128 214 L154 138 H358 L384 214 V230 Q384 262 352 262 Q320 262 320 230 Q320 262 288 262 Q256 262 256 230 Q256 262 224 262 Q192 262 192 230 Q192 262 160 262 Q128 262 128 230 Z"/>
+    <path d="M128 214 H384"/>
+    <path d="M152 276 V386 M360 276 V386 M128 386 H384"/>
+    <g stroke-width="16">
+      <path d="M208 300 H292 M282 290 L292 300 L282 310"/>
+      <path d="M304 346 H220 M230 336 L220 346 L230 356"/>
+    </g>
+  </g>
 </svg>

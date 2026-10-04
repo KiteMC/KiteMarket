@@ -1,4 +1,4 @@
-# Community theme; does not require the official Market Stall DLC.
+# Community theme; no separate KiteMC theme license is required.
 # Copy as plugins/KiteMarket/themes/example-ia.yml.
 schema: 1
 id: example-ia
@@ -13,4 +13,5 @@ config:
   title-offset: 8
   texture-offset: -8
 pages:
+  # Covers all shared pages, including profile; exact templates replace this default.
   '*': {}

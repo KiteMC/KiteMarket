@@ -6,8 +6,9 @@ Independent Java 11 SDK, MIT licensed; no closed implementation dependency.
 
 - [中文快速开始](../docs/API.md)
 - [English quick start](../docs/API.en.md)
-- [Runnable example](../examples/api-java/README.md)
+- [Runnable example](https://github.com/KiteMC/KiteMarket/tree/main/examples/api-java)
+- [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases)
 
 Use the SDK as `compileOnly`. Do not bundle, shade, or relocate it. Load `KiteMarketApi` from Bukkit `ServicesManager`; database readiness may register the service later. Never block server/entity threads waiting for a query.
 
-Third-party themes require no official DLC. This API has no general minting, inventory mutation, confirmation bypass, or transaction write methods. SDK publication does not imply the runtime candidate is formally released.
+This API has no general minting, inventory mutation, confirmation bypass, or transaction write methods. Use an SDK version matching the installed KiteMarket host. Published SDKs, examples, configuration packages and runtime JARs are distributed through GitHub Releases.

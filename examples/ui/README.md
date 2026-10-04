@@ -1,16 +1,15 @@
 # 自由界面主题示例 / Community UI themes
 
-这些示例展示 KiteMarket 的通用主题描述格式。第三方开发者可以自由创建、修改、分发或销售自己的界面，**不需要购买 KiteMC 的 Market Stall DLC**。示例代码与示例极简图片采用本目录的 MIT License；该许可不包含另售的官方美术或闭源主插件。
+这些示例展示 KiteMarket 的通用主题描述格式。第三方开发者可以自由创建、修改、分发或销售自有界面，**无需额外的 KiteMC 主题授权**。示例代码与配套极简图片采用本目录的 MIT License；该许可不适用于闭源主插件或其他未标明 MIT 的素材。
 
-These examples describe KiteMarket themes. Third-party developers may create, modify, distribute, or sell their own interfaces without buying the official Market Stall DLC. The example code and minimal example image use this directory's MIT License; it does not license commercial artwork or the closed-source base plugin.
+These examples describe KiteMarket themes. Third-party developers may create, modify, distribute, or sell their own interfaces without a separate KiteMC theme license. The example code and minimal images use this directory's MIT License; it does not apply to the closed-source base plugin or unrelated artwork.
 
 ## 目录与使用
 
-- `themes/example-ia/theme.yml`：ItemsAdder 自有字体示例，使用 `kitemarket.itemsadder` 内置提供者，不走官方 DLC 安装入口。
+- `themes/example-ia/theme.yml`：ItemsAdder 自有字体示例，使用 `kitemarket.itemsadder` 内置提供者。
 - `themes/example-ia/itemsadder/`：独立 `km_example` 字体配置和原创白框 PNG，复制到 `plugins/ItemsAdder/contents/km_example/`。
-- `themes/example-germ/theme.yml`、`themes/example-dragon/theme.yml`：保留的历史声明，已停止官方接入，不属于当前安装示例。
 
-当前路线为原版 GUI＋ItemsAdder v4。下述安装步骤只适用于 IA；萌芽和龙核历史声明不计入交付，不要求开发者安装它们。
+示例使用 ItemsAdder v4；资源缺失或玩家未成功加载资源包时回退完整原版 GUI。
 
 将所需 `theme.yml` 以唯一文件名复制到 `plugins/KiteMarket/themes/`，例如 `example-ia.yml`。本地主题 ID 使用自有名称，不能使用官方保留 ID `official.market-stall`；`market-stall` 是官方主题命令兼容别名。自有 ItemsAdder 资源使用自己的命名空间，示例为 `km_example`。
 
@@ -23,9 +22,9 @@ The sample files belong in `plugins/KiteMarket/themes/` under distinct names. Us
 3. 示例的 `requires: {}` 继承节点登记的资源包身份；如果主题另用一个包，添加实际资源包的小写 SHA-1 和 Minecraft 下发 UUID 为 `requires.pack-sha1`、`requires.pack-id`。不要写空字符串，这会导致候选校验失败。重建后的内容摘要变化必须对应新的实际下发 UUID。
 4. 用 `/km reload` 校验加载声明及配置，再选择 `/km ui itemsadder example-ia`；也可从界面设置中的主题列表选择。第三方主题不需要官方主题权益；仍需正常主插件与正确资源包。
 
-This example uses a transparent 176×222 image with a plain white frame, not official commercial artwork. It demonstrates referencing your own registered font image. It is a development example rather than live ItemsAdder certification.
+This example uses a transparent 176×222 image with a plain white frame. It demonstrates referencing your own registered font image. Check the [compatibility guide](https://kitemc.com/en/docs/kitemarket/compatibility/) for supported runtime combinations.
 
-图源可重新生成：
+在公开 `KiteMC/KiteMarket` 仓库根目录重新生成图源：
 
 ```powershell
 python examples/ui/generate_ia_background.py
@@ -48,7 +47,7 @@ pages:
   '*': {}
 ```
 
-`pages.'*'` 是默认页面定义，覆盖全部共用页面；具体页面可以覆盖 `font-image`、`title-offset` 和 `texture-offset`。金额、真实物品和动作由服务器提供，主题配置不能改写账本逻辑。
+`pages.'*'` 是默认页面定义，覆盖全部35个共用页面，包括个人页 `profile`；具体页面可以覆盖 `font-image`、`title-offset` 和 `texture-offset`。金额、真实物品和动作由服务器提供，主题配置不能改写账本逻辑。
 
 结果页可使用 `state-font-images`，以服务器给出的 `result.status` 选择背景；没有状态映射时使用本页背景。运行字段为 `SUCCESS`、`PENDING`、`FAILED`、`UNCONFIRMED`；它们是呈现状态，不是账本操作状态。下例是最小声明，换成新图片前应先将该图片注册到实际资源包中：
 
@@ -62,9 +61,11 @@ pages:
 
 State backgrounds are optional. `state-font-images` selects a registered font image using the server's `result.status`; a missing status mapping uses the page background. This declaration cannot change transaction results.
 
-当前 34 个 `menus` 页面键为；这是 `UiPage.key()`，不全部等于主题 `pages` 使用的 `UiPage.template()`：
+当前 35 个 `menus` 页面键如下；这是 `UiPage.key()`，不全部等于主题 `pages` 使用的 `UiPage.template()`：
 
-`home`、`browse`、`browse-filters`、`order`、`editor`、`number`、`materials`、`durability`、`text-condition`、`enchantments`、`enchantment-range`、`preview`、`supply-preview`、`confirm`、`details`、`insufficient`、`wallet`、`wallet-currency`、`assets`、`history`、`receipt`、`admin`、`admin-player`、`admin-wallet`、`admin-assets`、`admin-orders`、`admin-player-history`、`resolve-source`、`doctor`、`inspect`、`evidence`、`ui`、`themes`、`result`。
+`home`、`profile`、`browse`、`browse-filters`、`order`、`editor`、`number`、`materials`、`durability`、`text-condition`、`enchantments`、`enchantment-range`、`preview`、`supply-preview`、`confirm`、`details`、`insufficient`、`wallet`、`wallet-currency`、`assets`、`history`、`receipt`、`admin`、`admin-player`、`admin-wallet`、`admin-assets`、`admin-orders`、`admin-player-history`、`resolve-source`、`doctor`、`inspect`、`evidence`、`ui`、`themes`、`result`。
+
+`profile` 页面键与模板 ID 同名。默认精简首页用玩家头颅打开它，汇集界面、待核对、历史和按权限管理；待核对列表仍使用 `history`。已有 `menus.home` 块在 `gui.home-layout: auto` 下保留旧首页，第三方主题应使用服务器本次给出的条目及物理槽位。示例的通配模板同时兼容两套首页，不新增虚构的入口或动作。
 
 主题按模板 ID 配置。有别名的页面如下，其余模板 ID 与页面键相同：
 
@@ -89,11 +90,17 @@ Theme `pages` entries use `UiPage.template()`, while vanilla `menus` entries use
 `pages.supply`, not `pages.supply-preview`; its vanilla configuration still uses
 `menus.supply-preview`. An exact template replaces `'*'` rather than merging with it.
 
+There are 35 current page keys, including `profile` with an identical template ID. The wildcard covers it automatically. Compact home opens the profile from the player's head; existing `menus.home` settings retain legacy home under `gui.home-layout: auto`. Render the supplied physical slots and registered actions so both layouts work.
+
+数量、金额、外部余额及失败原因都使用快照或输入提示中的服务端值；不要把未知余额显示为零，或给玩家高于服务端范围的“最大值”。附魔搜索和分页沿用已登记动作，草稿由主插件保留；操作编号按收据动作请求查看、复制，不自行新增核对或交易入口。
+
+Use host snapshot/prompt values for quantities, amounts, external balances and errors. Unknown balances are not zero and maximum controls must respect host limits. Use registered enchantment-search, paging and receipt actions; the host retains drafts and transaction checks.
+
 Omitted per-theme pack fields inherit the node's registered identity. If using a separate pack, register its actual lowercase SHA-1 and sent UUID; empty strings are invalid. Changed content requires a new actual sent UUID. `/km reload` validates the catalog before activating it, and the interface settings include a theme list.
 
-`provider` 为实际已注册提供者的稳定 ID。通用 `theme.yml` 只声明数据与呈现器绑定，本身不创建原生 SDK 桥接；历史 Germ/Dragon 文件省略该字段，不能直接运行。
+`provider` 为实际已注册提供者的稳定 ID。`theme.yml` 声明数据与呈现器绑定，所引用的提供者必须已安装并注册。
 
-`provider` names an actually registered implementation. Declaring a GUI name does not create an SDK bridge. The retained Germ/DragonCore files are historical declarations outside the current vanilla + IA delivery scope.
+`provider` names an installed, registered implementation. A theme declaration supplies data; the provider supplies rendering.
 
 ## 注册真实提供者
 
@@ -108,7 +115,7 @@ if (api == null) throw new IllegalStateException("KiteMarket UI API unavailable"
 AutoCloseable registration = api.register(this, myProvider);
 ```
 
-保存句柄并在 `onDisable` 关闭。`myProvider` 必须是真实实现，不能用上面尚未认证的原生声明当作实现。显示使用 `UiPage`／`UiTheme` 的快照；返回用户操作仅调用 `UiCallbacks.action(token)`、`input(raw)`、`closed()`。`UiPage.token()/pageVersion()` 和 `UiPrompt.token()` 描述服务端页面／字段身份；`UiPage.actions()` 及 `open` 的动作映射提供不透明动作 token，不自行生成、跨页面复用或据此直接扣物／扣款。实际安全校验仍由绑定回调执行。完整合同在 [`market-ui-api/README.md`](../../market-ui-api/README.md)。
+保存句柄并在 `onDisable` 关闭。`myProvider` 实现 `UiProvider`，显示使用 `UiPage`／`UiTheme` 的快照；返回用户操作仅调用 `UiCallbacks.action(token)`、`input(raw)`、`closed()`。`UiPage.token()/pageVersion()` 和 `UiPrompt.token()` 描述服务端页面／字段身份；`UiPage.actions()` 及 `open` 的动作映射提供不透明动作 token，不自行生成、跨页面复用或据此直接扣物／扣款。实际安全校验仍由绑定回调执行。完整合同见[公开 UI SDK](https://github.com/KiteMC/KiteMarket/tree/main/market-ui-api)。
 
 IA 提供者可在玩家调度上下文调用 `api.itemsAdderUnavailable(player, page, theme)` 复用主插件观察的实际字体与客户端资源包状态；`null` 才表示就绪，其余为回退原因。这是只读检查，不做官方 DLC 或交易授权。实际资源事件发生后调用 `api.changed(owner)` 通知重新检查；不能用通知冒充加载成功。
 
@@ -120,12 +127,8 @@ The Java 21 [IA example](../ui-java/README.md) is a real `TexturedInventoryWrapp
 
 Fill the protected inventory from `TexturedInventoryWrapper.getInternal()`, register its new holder and callbacks, then call the public `showInventory(player)` for IA's font title. Opening only the internal inventory through Bukkit leaves the placeholder title. The Java example includes installation and lifecycle handling.
 
-## 历史原生平台声明
+## 获取开发包
 
-Germ 的 `gui-name` 用作桥接配置，名称对应官方 `GermGuiScreen.getGermGuiScreen(guiName)`；实际 GUI 和资源仍由目标 Germ 构件安装。公开 JavaDoc证明这个方法存在，**不证明 1.21.11 或 Folia 支持**。
+配置示例与 Java 示例源码位于公开 [KiteMC/KiteMarket](https://github.com/KiteMC/KiteMarket) 仓库。已发布 SDK、源码／Javadoc、`KiteMarket-Examples-1.0.0.zip` 和双语配置包统一通过 [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases) 下载。
 
-DragonCore 的 `gui-name` 只是界面配置的名称约定。现有一手文档可以确认客户端 `.yml` 界面、容器槽位和 `CustomPacketEvent`，没有核实目标现代 Java API。示例不包含猜测的打开方法或反射调用，不是原生桥接完成品。
-
-2026-10-03 核查用户提供的客户端与服务端均绑定 1.12.2 后，官方接入已停止；基础插件仍从 1.16.5 起，不为这些文件降级。详见[本轮构件报告](https://kitemc.com/docs/kitemarket/compatibility/)。通用 SDK 和第三方自由开发能力保留。
-
-Official Germ/DragonCore integration was discontinued on October 3, 2026 after the provided components were found to target 1.12.2. These historical declarations are not installable examples or release gates. KiteMarket retains its >=1.16.5 base scope and independent developer SDK.
+Configuration and Java example source is in the public [KiteMC/KiteMarket](https://github.com/KiteMC/KiteMarket) repository. Published SDKs, sources/Javadoc, `KiteMarket-Examples-1.0.0.zip` and bilingual configuration packages are distributed through [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases).

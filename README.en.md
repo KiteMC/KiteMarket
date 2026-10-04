@@ -1,10 +1,10 @@
 # KiteMarket
 
-A complete Minecraft market with advanced buy orders, fixed-price listings and public auctions. It includes the vanilla GUI, wallet, claims, history, and administration. Optional ItemsAdder v4 support lets developers build and sell their own interfaces without an official DLC.
+A complete Minecraft market with advanced buy orders, fixed-price listings and public auctions. It includes the vanilla GUI, wallet, claims, history, and administration. Optional ItemsAdder v4 support lets developers build and sell their own interfaces without a separate KiteMC theme license.
 
-**Runtime release is currently on hold while plugin details are being refined.** This public repository provides SDK source, examples, documentation and issue tracking. A runtime JAR or a published 1.0.0 release is not implied by these sources.
+This repository provides SDK source, examples, documentation and issue tracking. **Runtime version 1.0.0 has not been released yet.** Published runtime JARs, SDKs, sources/Javadoc, examples and language/configuration packages are distributed through [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases).
 
-Planned price: **CNY 128 / USD 19.99, lifetime purchase**. One license covers one independent market network with unlimited nodes. Base plugin updates are included; support is provided during active maintenance, without a promise of perpetual maintenance. Economy plugins, ItemsAdder and third-party resources are separate. Launch sales will use KiteMC's own site only, without an early discount.
+Planned price: **CNY 128 / USD 19.99, lifetime purchase**. One license covers one independent market network with unlimited nodes. Base plugin updates are included; support is provided during active maintenance, without a promise of perpetual maintenance. Economy plugins, ItemsAdder and third-party resources are separate.
 
 - [English](README.en.md) / [中文](README.md)
 - [Website](https://kitemc.com/docs/kitemarket/) / [English docs](https://kitemc.com/en/docs/kitemarket/)
@@ -28,6 +28,6 @@ SDK dependencies must be **compileOnly**. Never bundle, shade or relocate either
 
 ## License / 许可
 
-MIT applies only to the SDK modules and explicitly licensed examples. The closed-source runtime JAR is proprietary; MIT does not grant runtime redistribution or publication of its source. No official IA theme/DLC or private theme material is included. / MIT 仅覆盖 SDK 与标明许可的示例，不适用于闭源运行 JAR。本仓库没有官方 IA DLC 或私人商业素材。
+MIT applies only to the SDK modules and explicitly licensed examples. The closed-source runtime JAR is proprietary; MIT does not grant runtime redistribution or publication of its source. / MIT 仅覆盖 SDK 与标明许可的示例，不适用于闭源运行 JAR。
 
 Minecraft compatibility targets start at 1.16.5. Target ranges are separate from tested combinations; consult the website for actual evidence. Legacy SDK identifiers for Germ and DragonCore are compatibility declarations only, not official support.

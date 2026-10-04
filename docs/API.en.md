@@ -1,10 +1,10 @@
 # Read-only market API
 
-Interface version: KiteMarket 1.0.0. The SDK targets Java 11 and is MIT licensed; the implementation remains closed source. Bukkit's `ServicesManager` supplies the service without exposing `market-core`. This work prepares a release candidate; production runtime downloads become available only after the separate release approval.
+Interface version: KiteMarket 1.0.0. The SDK targets Java 11 and is MIT licensed; the implementation remains closed source. Bukkit's `ServicesManager` supplies the service without exposing `market-core`.
 
 ## Get the SDK
 
-Download these assets from the matching release of the public `KiteMC/KiteMarket` repository:
+Interface source and examples are available in the public [KiteMC/KiteMarket](https://github.com/KiteMC/KiteMarket) repository. Published SDKs, runtime JARs and configuration packages are distributed through [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases); when no assets have been published, the public source remains available. Choose SDK assets matching the installed host version:
 
 | File | Purpose |
 | --- | --- |
