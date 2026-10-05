@@ -1,22 +1,40 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1024" height="1024" role="img" aria-label="KiteMarket market stall">
-  <title>KiteMarket market stall</title>
-  <desc>An original white market stall and exchange arrows on a rounded violet gradient tile. Transparent outer corners.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1024" height="1024" role="img" aria-labelledby="title desc">
+  <title id="title">KiteMarket market stall</title>
+  <desc id="desc">An original market stall with a kite and exchange mark on a rounded violet gradient tile.</desc>
   <defs>
     <linearGradient id="marketViolet" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#A78BFA"/>
-      <stop offset="50%" stop-color="#7C3AED"/>
-      <stop offset="100%" stop-color="#6366F1"/>
+      <stop offset="0%" stop-color="#C4B5FD"/>
+      <stop offset="42%" stop-color="#7C3AED"/>
+      <stop offset="100%" stop-color="#3730A3"/>
+    </linearGradient>
+    <linearGradient id="coinGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
     </linearGradient>
   </defs>
-  <rect width="512" height="512" rx="108" fill="url(#marketViolet)"/>
-  <!-- A simple silhouette shares the rounded, white-symbol family of KiteMC icons. -->
-  <g fill="none" stroke="#FFFFFF" stroke-width="30" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M128 214 L154 138 H358 L384 214 V230 Q384 262 352 262 Q320 262 320 230 Q320 262 288 262 Q256 262 256 230 Q256 262 224 262 Q192 262 192 230 Q192 262 160 262 Q128 262 128 230 Z"/>
-    <path d="M128 214 H384"/>
-    <path d="M152 276 V386 M360 276 V386 M128 386 H384"/>
-    <g stroke-width="16">
-      <path d="M208 300 H292 M282 290 L292 300 L282 310"/>
-      <path d="M304 346 H220 M230 336 L220 346 L230 356"/>
-    </g>
+  <rect width="512" height="512" rx="112" fill="url(#marketViolet)"/>
+
+  <!-- A soft kite silhouette makes the mark distinct without adding small details. -->
+  <g fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" opacity=".25">
+    <path stroke-width="14" d="M256 56 328 126 256 198 184 126Z"/>
+    <path stroke-width="10" d="M256 198c2 35 22 47 44 62"/>
+    <path stroke-width="12" d="m300 260 16 2-8 14"/>
+  </g>
+
+  <!-- Stall canopy and counter. -->
+  <g stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round">
+    <path fill="#FFFFFF" stroke-width="14" d="M86 236 116 146h280l30 90Z"/>
+    <path fill="#7C3AED" stroke="none" d="M144 146h52l-26 90h-54Z"/>
+    <path fill="#7C3AED" stroke="none" d="M248 146h52l26 90h-52Z"/>
+    <path fill="#FFFFFF" stroke-width="14" d="M86 236h340v24c0 29-23 52-52 52s-52-23-52-52c0 29-23 52-52 52s-52-23-52-52c0 29-23 52-52 52s-52-23-52-52c0 29-23 52-52 52s-52-23-52-52Z"/>
+    <path fill="#FFFFFF" stroke-width="18" d="M122 312v102h268V312"/>
+    <path fill="#FFFFFF" stroke-width="18" d="M96 414h320"/>
+  </g>
+
+  <!-- Exchange coin, kept large enough for small icon sizes. -->
+  <circle cx="256" cy="354" r="58" fill="url(#coinGold)" stroke="#FFFFFF" stroke-width="12"/>
+  <g fill="none" stroke="#FFFFFF" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M224 342h64m-16-16 16 16-16 16"/>
+    <path d="M288 366h-64m16-16-16 16 16 16"/>
   </g>
 </svg>

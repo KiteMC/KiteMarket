@@ -1,13 +1,13 @@
-"""Export this editable SVG as antialiased PNGs using Python 3 and Pillow.
+"""Export the editable KiteMarket SVG geometry as antialiased PNGs.
 
 Run: python branding/export-icon.py
-The limited SVG vocabulary uses a diagonal gradient, a rounded rectangle and
-absolute M/L/H/V/Q/Z paths. No fonts, external artwork or native SVG runtime.
+
+The SVG remains the editable source. Pillow draws the same deliberately
+simple geometry so the repository can ship deterministic 1024/512/128 PNG
+exports without requiring a native SVG renderer.
 """
 
 from pathlib import Path
-import re
-import xml.etree.ElementTree as ET
 
 from PIL import Image, ImageColor, ImageDraw
 
@@ -16,136 +16,100 @@ CANVAS = 512
 SCALE = 4
 
 
-def paths(data):
-    """Flatten the icon's absolute paths, preserving separate subpaths."""
-    tokens = re.findall(r"[A-Za-z]|-?\d+(?:\.\d+)?", data)
-    points = []
-    position = (0, 0)
-    index = 0
-    while index < len(tokens):
-        command = tokens[index]
-        index += 1
-        if command == "M":
-            if points:
-                yield points
-            position = (float(tokens[index]), float(tokens[index + 1]))
-            points = [position]
-            index += 2
-        elif command == "L":
-            position = (float(tokens[index]), float(tokens[index + 1]))
-            points.append(position)
-            index += 2
-        elif command == "H":
-            position = (float(tokens[index]), position[1])
-            points.append(position)
-            index += 1
-        elif command == "V":
-            position = (position[0], float(tokens[index]))
-            points.append(position)
-            index += 1
-        elif command == "Q":
-            control = (float(tokens[index]), float(tokens[index + 1]))
-            end = (float(tokens[index + 2]), float(tokens[index + 3]))
-            start = position
-            for step in range(1, 65):
-                t = step / 64
-                points.append(tuple(
-                    (1 - t) ** 2 * start[axis]
-                    + 2 * (1 - t) * t * control[axis]
-                    + t ** 2 * end[axis]
-                    for axis in (0, 1)
-                ))
-            position = end
-            index += 4
-        elif command == "Z":
-            points.append(points[0])
-            yield points
-            points = []
-        else:
-            raise ValueError(f"Unsupported path command {command}")
-    if points:
-        yield points
+def lerp(a: tuple[int, int, int], b: tuple[int, int, int], ratio: float):
+    return tuple(round(x + (y - x) * ratio) for x, y in zip(a, b))
 
 
-def gradient_image(element, size):
-    if tuple(element.get(key) for key in ("x1", "y1", "x2", "y2")) != (
-        "0%", "0%", "100%", "100%"
-    ):
-        raise ValueError("Only a full diagonal gradient is supported")
-    stops = [
-        (float(stop.attrib["offset"].rstrip("%")) / 100,
-         ImageColor.getrgb(stop.attrib["stop-color"]))
-        for stop in element
-    ]
-    if not stops or stops[0][0] != 0 or stops[-1][0] != 1:
-        raise ValueError("Gradient stops must span 0% to 100%")
+def diagonal_gradient(size: int):
+    start = ImageColor.getrgb("#C4B5FD")
+    middle = ImageColor.getrgb("#7C3AED")
+    end = ImageColor.getrgb("#3730A3")
     image = Image.new("RGBA", (size, size))
-    draw = ImageDraw.Draw(image)
-    for diagonal in range(2 * size - 1):
-        t = diagonal / (2 * (size - 1))
-        left, right = next(
-            (a, b) for a, b in zip(stops, stops[1:]) if a[0] <= t <= b[0]
-        )
-        ratio = (t - left[0]) / (right[0] - left[0])
-        color = tuple(round(a + (b - a) * ratio) for a, b in zip(left[1], right[1]))
-        if diagonal < size:
-            line = ((diagonal, 0), (0, diagonal))
-        else:
-            line = ((size - 1, diagonal - size + 1), (diagonal - size + 1, size - 1))
-        draw.line(line, fill=color + (255,))
+    pixels = image.load()
+    for y in range(size):
+        for x in range(size):
+            ratio = (x + y) / (2 * (size - 1))
+            color = lerp(start, middle, ratio / 0.42) if ratio < 0.42 else lerp(
+                middle, end, (ratio - 0.42) / 0.58
+            )
+            pixels[x, y] = (*color, 255)
     return image
 
 
-def draw_elements(image, elements, gradients, inherited=None):
-    for element in elements:
-        style = dict(inherited or {}) | element.attrib
-        tag = element.tag.rsplit("}", 1)[-1]
-        if tag in ("title", "desc", "defs"):
-            continue
-        if tag == "g":
-            draw_elements(image, element, gradients, style)
-        elif tag == "rect":
-            if (element.get("width"), element.get("height")) != ("512", "512"):
-                raise ValueError("The background must cover the 512px canvas")
-            gradient_id = style["fill"].removeprefix("url(#").removesuffix(")")
-            background = gradient_image(gradients[gradient_id], image.width)
-            mask = Image.new("L", image.size)
-            ImageDraw.Draw(mask).rounded_rectangle(
-                (0, 0, image.width - 1, image.height - 1),
-                radius=float(element.attrib["rx"]) * SCALE, fill=255,
-            )
-            image.paste(background, mask=mask)
-        elif tag == "path":
-            if style.get("fill") != "none" or any(
-                style.get(key) != "round" for key in ("stroke-linecap", "stroke-linejoin")
-            ):
-                raise ValueError("Icon paths require round strokes and no fill")
-            painter = ImageDraw.Draw(image)
-            color = ImageColor.getrgb(style["stroke"]) + (255,)
-            width = round(float(style["stroke-width"]) * SCALE)
-            radius = width / 2
-            for points in paths(element.attrib["d"]):
-                scaled = [(x * SCALE, y * SCALE) for x, y in points]
-                painter.line(scaled, fill=color, width=width, joint="curve")
-                for x, y in scaled:
-                    painter.ellipse(
-                        (x - radius, y - radius, x + radius, y + radius), fill=color,
-                    )
-        else:
-            raise ValueError(f"Unsupported SVG element {tag}")
+def point(value: float):
+    return round(value * SCALE)
+
+
+def line(draw, coordinates, fill, width):
+    draw.line(
+        [(point(x), point(y)) for x, y in coordinates],
+        fill=fill,
+        width=point(width),
+        joint="curve",
+    )
+
+
+def draw_icon():
+    size = CANVAS * SCALE
+    image = diagonal_gradient(size)
+    draw = ImageDraw.Draw(image, "RGBA")
+    white = (255, 255, 255, 255)
+    violet = (124, 58, 237, 255)
+    gold = (245, 158, 11, 255)
+
+    # Soft kite silhouette.
+    kite = [(256, 56), (328, 126), (256, 198), (184, 126)]
+    line(draw, kite + [kite[0]], (255, 255, 255, 82), 14)
+    line(draw, [(256, 198), (258, 233), (300, 260)], (255, 255, 255, 82), 10)
+    line(draw, [(300, 260), (316, 262)], (255, 255, 255, 82), 10)
+    line(draw, [(316, 262), (308, 276)], (255, 255, 255, 82), 10)
+
+    # Canopy.
+    line(draw, [(86, 236), (116, 146), (396, 146), (426, 236)], white, 14)
+    draw.polygon(
+        [(144 * SCALE, 146 * SCALE), (196 * SCALE, 146 * SCALE),
+         (170 * SCALE, 236 * SCALE), (118 * SCALE, 236 * SCALE)],
+        fill=violet,
+    )
+    draw.polygon(
+        [(248 * SCALE, 146 * SCALE), (300 * SCALE, 146 * SCALE),
+         (326 * SCALE, 236 * SCALE), (274 * SCALE, 236 * SCALE)],
+        fill=violet,
+    )
+    line(draw, [(86, 236), (426, 236)], white, 14)
+    for center in (138, 218, 298, 378):
+        draw.arc(
+            (
+                point(center - 52),
+                point(184),
+                point(center + 52),
+                point(288),
+            ),
+            0,
+            180,
+            fill=white,
+            width=point(14),
+        )
+    line(draw, [(122, 312), (122, 414), (390, 414), (390, 312)], white, 18)
+    line(draw, [(96, 414), (416, 414)], white, 18)
+
+    # Exchange coin.
+    draw.ellipse(
+        (point(198), point(296), point(314), point(412)),
+        fill=gold,
+        outline=white,
+        width=point(12),
+    )
+    line(draw, [(224, 342), (288, 342)], white, 11)
+    line(draw, [(272, 326), (288, 342), (272, 358)], white, 11)
+    line(draw, [(288, 366), (224, 366)], white, 11)
+    line(draw, [(240, 350), (224, 366), (240, 382)], white, 11)
+
+    return image
 
 
 def export():
-    source = ET.parse(ROOT / "kitemarket-icon.svg").getroot()
-    if source.attrib.get("viewBox") != "0 0 512 512":
-        raise ValueError("Icon viewBox must be 0 0 512 512")
-    gradients = {
-        element.attrib["id"]: element
-        for element in source.iter()
-        if element.tag.rsplit("}", 1)[-1] == "linearGradient"
-    }
-    image = Image.new("RGBA", (CANVAS * SCALE, CANVAS * SCALE))
-    draw_elements(image, source, gradients)
+    image = draw_icon()
     for size in (1024, 512, 128):
         destination = ROOT / f"kitemarket-icon-{size}.png"
         image.resize((size, size), Image.Resampling.LANCZOS).save(destination)
