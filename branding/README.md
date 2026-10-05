@@ -1,9 +1,10 @@
 # KiteMarket product icon
 
-Original artwork: a white market-stall silhouette, a kite outline and a gold
-exchange coin on a rounded violet-gradient tile. The rounded corners, large
-silhouette and generous spacing belong to the same visual family as the ArcPass
-and VerifyMC icons. No lettering, third-party artwork or theme assets.
+Original artwork: a bold white price-tag silhouette with a gold exchange coin
+on a violet-to-pink gradient tile. The simple tag, coin and bidirectional arrows
+stay readable at small sizes and share the rounded, high-contrast visual family
+of the ArcPass and VerifyMC icons. No lettering, third-party artwork or theme
+assets.
 
 - Editable source: `kitemarket-icon.svg` (512 × 512 vector canvas).
 - RGBA exports: `kitemarket-icon-{1024,512,128}.png`, with transparent outer

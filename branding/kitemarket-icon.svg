@@ -1,40 +1,43 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1024" height="1024" role="img" aria-labelledby="title desc">
-  <title id="title">KiteMarket market stall</title>
-  <desc id="desc">An original market stall with a kite and exchange mark on a rounded violet gradient tile.</desc>
+  <title id="title">KiteMarket product icon</title>
+  <desc id="desc">A bold white price tag with a gold exchange coin on a violet and pink gradient tile.</desc>
   <defs>
-    <linearGradient id="marketViolet" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#C4B5FD"/>
-      <stop offset="42%" stop-color="#7C3AED"/>
-      <stop offset="100%" stop-color="#3730A3"/>
-    </linearGradient>
+    <radialGradient id="marketGlow" cx="17%" cy="12%" r="118%">
+      <stop offset="0%" stop-color="#B9A4FF"/>
+      <stop offset="43%" stop-color="#7C3AED"/>
+      <stop offset="100%" stop-color="#BE185D"/>
+    </radialGradient>
     <linearGradient id="coinGold" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#FDE68A"/>
-      <stop offset="100%" stop-color="#F59E0B"/>
+      <stop offset="45%" stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#D97706"/>
     </linearGradient>
+    <filter id="symbolShadow" x="-30%" y="-30%" width="160%" height="180%">
+      <feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#4C1D95" flood-opacity=".34"/>
+    </filter>
   </defs>
-  <rect width="512" height="512" rx="112" fill="url(#marketViolet)"/>
 
-  <!-- A soft kite silhouette makes the mark distinct without adding small details. -->
-  <g fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" opacity=".25">
-    <path stroke-width="14" d="M256 56 328 126 256 198 184 126Z"/>
-    <path stroke-width="10" d="M256 198c2 35 22 47 44 62"/>
-    <path stroke-width="12" d="m300 260 16 2-8 14"/>
-  </g>
+  <rect width="512" height="512" rx="112" fill="url(#marketGlow)"/>
+  <rect x="22" y="22" width="468" height="468" rx="94" fill="none" stroke="#FFFFFF" stroke-opacity=".14" stroke-width="4"/>
+  <ellipse cx="132" cy="78" rx="150" ry="92" fill="#FFFFFF" fill-opacity=".08"/>
 
-  <!-- Stall canopy and counter. -->
-  <g stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round">
-    <path fill="#FFFFFF" stroke-width="14" d="M86 236 116 146h280l30 90Z"/>
-    <path fill="#7C3AED" stroke="none" d="M144 146h52l-26 90h-54Z"/>
-    <path fill="#7C3AED" stroke="none" d="M248 146h52l26 90h-52Z"/>
-    <path fill="#FFFFFF" stroke-width="14" d="M86 236h340v24c0 29-23 52-52 52s-52-23-52-52c0 29-23 52-52 52s-52-23-52-52c0 29-23 52-52 52s-52-23-52-52c0 29-23 52-52 52s-52-23-52-52Z"/>
-    <path fill="#FFFFFF" stroke-width="18" d="M122 312v102h268V312"/>
-    <path fill="#FFFFFF" stroke-width="18" d="M96 414h320"/>
-  </g>
+  <g transform="rotate(-6 256 256)" filter="url(#symbolShadow)">
+    <!-- Price-tag silhouette. The large, open shape remains readable at 128px. -->
+    <path d="M116 118H306L408 220V382H116Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="8" stroke-linejoin="round"/>
+    <path d="M142 148H294L376 230V352H142Z" fill="#6D28D9" stroke="#5B21B6" stroke-width="4" stroke-linejoin="round"/>
 
-  <!-- Exchange coin, kept large enough for small icon sizes. -->
-  <circle cx="256" cy="354" r="58" fill="url(#coinGold)" stroke="#FFFFFF" stroke-width="12"/>
-  <g fill="none" stroke="#FFFFFF" stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M224 342h64m-16-16 16 16-16 16"/>
-    <path d="M288 366h-64m16-16-16 16 16 16"/>
+    <!-- Tag hole and a small highlight make the silhouette feel like a product mark. -->
+    <circle cx="165" cy="165" r="18" fill="#4C1D95" stroke="#FFFFFF" stroke-width="8"/>
+    <circle cx="165" cy="165" r="5" fill="#FDE68A"/>
+
+    <!-- Exchange coin. -->
+    <circle cx="256" cy="278" r="78" fill="url(#coinGold)" stroke="#FFFFFF" stroke-width="12"/>
+    <circle cx="256" cy="278" r="61" fill="none" stroke="#FFFFFF" stroke-opacity=".32" stroke-width="4"/>
+    <g fill="none" stroke="#5B21B6" stroke-width="13" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M211 262H299"/>
+      <path d="m277 240 22 22-22 22"/>
+      <path d="M301 298H213"/>
+      <path d="m235 276-22 22 22 22"/>
+    </g>
   </g>
 </svg>

@@ -1,114 +1,150 @@
-"""Export the editable KiteMarket SVG geometry as antialiased PNGs.
+"""Export the editable KiteMarket product icon as antialiased PNGs.
 
 Run: python branding/export-icon.py
 
-The SVG remains the editable source. Pillow draws the same deliberately
-simple geometry so the repository can ship deterministic 1024/512/128 PNG
-exports without requiring a native SVG renderer.
+The SVG is the editable source. Pillow mirrors its intentionally bold
+geometry so the repository can ship deterministic 1024/512/128 RGBA exports
+without requiring a native SVG renderer.
 """
 
+from __future__ import annotations
+
+import math
 from pathlib import Path
 
-from PIL import Image, ImageColor, ImageDraw
+from PIL import Image, ImageColor, ImageDraw, ImageFilter
 
 ROOT = Path(__file__).resolve().parent
-CANVAS = 512
+BASE = 512
 SCALE = 4
 
 
 def lerp(a: tuple[int, int, int], b: tuple[int, int, int], ratio: float):
+    ratio = max(0.0, min(1.0, ratio))
     return tuple(round(x + (y - x) * ratio) for x, y in zip(a, b))
 
 
-def diagonal_gradient(size: int):
-    start = ImageColor.getrgb("#C4B5FD")
-    middle = ImageColor.getrgb("#7C3AED")
-    end = ImageColor.getrgb("#3730A3")
+def background(size: int) -> Image.Image:
+    """Build the violet/pink radial gradient used by the SVG source."""
     image = Image.new("RGBA", (size, size))
     pixels = image.load()
+    start = ImageColor.getrgb("#B9A4FF")
+    middle = ImageColor.getrgb("#7C3AED")
+    end = ImageColor.getrgb("#BE185D")
+    cx, cy = size * 0.17, size * 0.12
+    max_distance = math.hypot(size * 0.83, size * 0.88)
     for y in range(size):
         for x in range(size):
-            ratio = (x + y) / (2 * (size - 1))
-            color = lerp(start, middle, ratio / 0.42) if ratio < 0.42 else lerp(
-                middle, end, (ratio - 0.42) / 0.58
-            )
+            distance = math.hypot(x - cx, y - cy) / max_distance
+            if distance < 0.43:
+                color = lerp(start, middle, distance / 0.43)
+            else:
+                color = lerp(middle, end, (distance - 0.43) / 0.57)
             pixels[x, y] = (*color, 255)
+
+    mask = Image.new("L", (size, size), 0)
+    ImageDraw.Draw(mask).rounded_rectangle(
+        (0, 0, size - 1, size - 1), radius=112 * SCALE, fill=255
+    )
+    image.putalpha(mask)
     return image
 
 
-def point(value: float):
+def p(value: float) -> int:
     return round(value * SCALE)
 
 
-def line(draw, coordinates, fill, width):
-    draw.line(
-        [(point(x), point(y)) for x, y in coordinates],
-        fill=fill,
-        width=point(width),
+def draw_icon() -> Image.Image:
+    size = BASE * SCALE
+    image = background(size)
+    overlay = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(overlay, "RGBA")
+
+    draw.rounded_rectangle(
+        (p(22), p(22), p(490), p(490)),
+        radius=p(94),
+        outline=(255, 255, 255, 36),
+        width=p(4),
+    )
+    draw.ellipse((p(-18), p(-14), p(282), p(170)), fill=(255, 255, 255, 20))
+
+    symbol = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    sd = ImageDraw.Draw(symbol, "RGBA")
+    white = (255, 255, 255, 255)
+    deep_violet = (109, 40, 217, 255)
+    inner_violet = (91, 33, 182, 255)
+    dark_violet = (76, 29, 149, 255)
+    gold = (251, 191, 36, 255)
+    gold_light = (253, 230, 138, 255)
+
+    outer = [
+        (p(116), p(118)),
+        (p(306), p(118)),
+        (p(408), p(220)),
+        (p(408), p(382)),
+        (p(116), p(382)),
+    ]
+    sd.polygon(outer, fill=white)
+    sd.line(outer + [outer[0]], fill=white, width=p(8), joint="curve")
+
+    inner = [
+        (p(142), p(148)),
+        (p(294), p(148)),
+        (p(376), p(230)),
+        (p(376), p(352)),
+        (p(142), p(352)),
+    ]
+    sd.polygon(inner, fill=deep_violet)
+    sd.line(inner + [inner[0]], fill=inner_violet, width=p(4), joint="curve")
+
+    sd.ellipse(
+        (p(147), p(147), p(183), p(183)),
+        fill=dark_violet,
+        outline=white,
+        width=p(8),
+    )
+    sd.ellipse((p(160), p(160), p(170), p(170)), fill=gold_light)
+
+    sd.ellipse(
+        (p(178), p(200), p(334), p(356)),
+        fill=gold,
+        outline=white,
+        width=p(12),
+    )
+    sd.ellipse(
+        (p(195), p(217), p(317), p(339)),
+        outline=(255, 255, 255, 82),
+        width=p(4),
+    )
+
+    arrow_color = inner_violet
+    sd.line([(p(211), p(262)), (p(299), p(262))], fill=arrow_color, width=p(13))
+    sd.line(
+        [(p(277), p(240)), (p(299), p(262)), (p(277), p(284))],
+        fill=arrow_color,
+        width=p(13),
+        joint="curve",
+    )
+    sd.line([(p(301), p(298)), (p(213), p(298))], fill=arrow_color, width=p(13))
+    sd.line(
+        [(p(235), p(276)), (p(213), p(298)), (p(235), p(320))],
+        fill=arrow_color,
+        width=p(13),
         joint="curve",
     )
 
-
-def draw_icon():
-    size = CANVAS * SCALE
-    image = diagonal_gradient(size)
-    draw = ImageDraw.Draw(image, "RGBA")
-    white = (255, 255, 255, 255)
-    violet = (124, 58, 237, 255)
-    gold = (245, 158, 11, 255)
-
-    # Soft kite silhouette.
-    kite = [(256, 56), (328, 126), (256, 198), (184, 126)]
-    line(draw, kite + [kite[0]], (255, 255, 255, 82), 14)
-    line(draw, [(256, 198), (258, 233), (300, 260)], (255, 255, 255, 82), 10)
-    line(draw, [(300, 260), (316, 262)], (255, 255, 255, 82), 10)
-    line(draw, [(316, 262), (308, 276)], (255, 255, 255, 82), 10)
-
-    # Canopy.
-    line(draw, [(86, 236), (116, 146), (396, 146), (426, 236)], white, 14)
-    draw.polygon(
-        [(144 * SCALE, 146 * SCALE), (196 * SCALE, 146 * SCALE),
-         (170 * SCALE, 236 * SCALE), (118 * SCALE, 236 * SCALE)],
-        fill=violet,
-    )
-    draw.polygon(
-        [(248 * SCALE, 146 * SCALE), (300 * SCALE, 146 * SCALE),
-         (326 * SCALE, 236 * SCALE), (274 * SCALE, 236 * SCALE)],
-        fill=violet,
-    )
-    line(draw, [(86, 236), (426, 236)], white, 14)
-    for center in (138, 218, 298, 378):
-        draw.arc(
-            (
-                point(center - 52),
-                point(184),
-                point(center + 52),
-                point(288),
-            ),
-            0,
-            180,
-            fill=white,
-            width=point(14),
-        )
-    line(draw, [(122, 312), (122, 414), (390, 414), (390, 312)], white, 18)
-    line(draw, [(96, 414), (416, 414)], white, 18)
-
-    # Exchange coin.
-    draw.ellipse(
-        (point(198), point(296), point(314), point(412)),
-        fill=gold,
-        outline=white,
-        width=point(12),
-    )
-    line(draw, [(224, 342), (288, 342)], white, 11)
-    line(draw, [(272, 326), (288, 342), (272, 358)], white, 11)
-    line(draw, [(288, 366), (224, 366)], white, 11)
-    line(draw, [(240, 350), (224, 366), (240, 382)], white, 11)
-
+    symbol = symbol.rotate(6, resample=Image.Resampling.BICUBIC, center=(p(256), p(256)))
+    shadow_alpha = symbol.getchannel("A").filter(ImageFilter.GaussianBlur(p(10)))
+    shadow_alpha = shadow_alpha.point(lambda alpha: round(alpha * 0.34))
+    shadow = Image.new("RGBA", (size, size), (76, 29, 149, 0))
+    shadow.putalpha(shadow_alpha)
+    overlay.alpha_composite(shadow, (0, p(12)))
+    overlay.alpha_composite(symbol)
+    image.alpha_composite(overlay)
     return image
 
 
-def export():
+def export() -> None:
     image = draw_icon()
     for size in (1024, 512, 128):
         destination = ROOT / f"kitemarket-icon-{size}.png"
