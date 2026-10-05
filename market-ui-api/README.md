@@ -4,6 +4,8 @@ Java 11 的公开界面 SDK，MIT 授权仅覆盖本模块。内置适配支持 
 
 SDK、配置示例、Java 示例和配套 MIT 素材位于公开 [KiteMC/KiteMarket](https://github.com/KiteMC/KiteMarket) 仓库；已发布开发包从 [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases) 获取。基础插件不内置 IA 主题，使用自有或第三方资源即可接入。
 
+Maven 坐标为 `com.kitemc:kitemarket-ui-api:1.0.0`，通过 GitHub Packages 提供；公开 Maven 包也需要认证。详见 [Packages 配置](../docs/GITHUB-PACKAGES.md)，仍使用 `compileOnly`，不能打包 SDK。
+
 ## 使用
 
 适配插件将 `KiteMarket-UI-API` 作为 `compileOnly` 依赖，并在 `plugin.yml` 声明依赖 KiteMarket。不要把 SDK 再打包到适配插件中；由 KiteMarket 提供唯一运行时接口，防止不同 ClassLoader 产生同名类型。
@@ -81,6 +83,8 @@ IA 库存适配先填充 `TexturedInventoryWrapper.getInternal()` 返回的受�
 This Java 11 SDK exposes a shared presentation interface with a built-in ItemsAdder v4 adapter. Developers may use, distribute or sell their own themes without a separate KiteMC theme license. The MIT license covers this module only. `GERM` and `DRAGONCORE` remain as legacy declaration and extension identifiers, with no built-in adapter or compatibility promise. See the [compatibility guide](https://kitemc.com/en/docs/kitemarket/compatibility/).
 
 SDK source, configuration examples, Java examples and their MIT resources are in the public [KiteMC/KiteMarket](https://github.com/KiteMC/KiteMarket) repository. Published packages are distributed through [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases). The base plugin does not bundle an IA theme; supply your own or a third party's resources.
+
+Maven coordinates: `com.kitemc:kitemarket-ui-api:1.0.0`, available from GitHub Packages. Public Maven packages also require authentication; see the [Packages guide](../docs/GITHUB-PACKAGES.en.md). Continue using `compileOnly`, never a bundled SDK copy.
 
 Use the SDK as a `compileOnly` dependency and load `KiteMarketUiApi` through Bukkit's `ServicesManager`. Never bundle a second runtime copy. Register an enabled owning plugin, retain the returned handle and close it on disable. Closing is idempotent; owner disable automatically removes its providers.
 

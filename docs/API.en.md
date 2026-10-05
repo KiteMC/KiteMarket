@@ -16,6 +16,8 @@ Interface source and examples are available in the public [KiteMC/KiteMarket](ht
 
 Use `compileOnly`. Never bundle, shade, or relocate either SDK. The main plugin supplies one runtime copy; duplicate interface classes can prevent service discovery.
 
+GitHub Packages also provides `com.kitemc:kitemarket-api:1.0.0`. Public Maven packages still require GitHub authentication; see the [Packages guide](GITHUB-PACKAGES.en.md) for Gradle, Maven and Actions configuration. Direct Release file dependencies below remain available without Maven registry authentication.
+
 ```kotlin
 dependencies {
     compileOnly(files("libs/KiteMarket-API-1.0.0.jar"))

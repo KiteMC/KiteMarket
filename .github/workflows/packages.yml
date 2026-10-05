@@ -1,0 +1,72 @@
+name: Publish SDKs to GitHub Packages
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing public SDK tag (for example v1.0.0)"
+        required: true
+        default: v1.0.0
+        type: string
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: sdk-packages-${{ github.event.release.tag_name || inputs.tag }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: github.repository == 'KiteMC/KiteMarket' && (github.event_name == 'workflow_dispatch' || !github.event.release.prerelease)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Select tagged source
+        id: version
+        env:
+          SDK_TAG: ${{ github.event.release.tag_name || inputs.tag }}
+        run: |
+          python - <<'PY'
+          import os, re
+          tag = os.environ["SDK_TAG"]
+          if not re.fullmatch(r"v\d+\.\d+\.\d+", tag):
+              raise SystemExit("Use a stable public SDK tag such as v1.0.0.")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as output:
+              output.write(f"tag={tag}\nversion={tag[1:]}\n")
+          PY
+      - uses: actions/checkout@v4
+        with:
+          ref: refs/tags/${{ steps.version.outputs.tag }}
+          persist-credentials: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Build SDKs and metadata
+        run: |
+          chmod +x gradlew
+          ./gradlew :market-api:jar :market-api:sourcesJar :market-api:javadocJar :market-api:generatePomFileForSdkPublication :market-ui-api:jar :market-ui-api:sourcesJar :market-ui-api:javadocJar :market-ui-api:generatePomFileForSdkPublication --no-daemon --console=plain
+      - name: Verify public boundaries and immutable package versions
+        id: plan
+        env:
+          SDK_VERSION: ${{ steps.version.outputs.version }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python tools/verify-sdk-packages.py --version "$SDK_VERSION" --remote-plan
+      - name: Publish market API
+        if: steps.plan.outputs.market_api == 'publish'
+        env:
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew :market-api:publishSdkPublicationToGitHubPackagesRepository --no-daemon --console=plain
+      - name: Publish UI API
+        if: steps.plan.outputs.market_ui_api == 'publish'
+        env:
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: ./gradlew :market-ui-api:publishSdkPublicationToGitHubPackagesRepository --no-daemon --console=plain

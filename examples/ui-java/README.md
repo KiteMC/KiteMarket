@@ -6,6 +6,8 @@
 
 ## 构建
 
+自己的项目可用 `compileOnly("com.kitemc:kitemarket-ui-api:1.0.0")`，仓库和认证配置见 [GitHub Packages 指南](../../docs/GITHUB-PACKAGES.md)。本示例默认保持本地 SDK 文件方式，独立解包时无需 Maven 仓库认证。
+
 在本机安装 JDK 21；公开 SDK 根构建明确选择 Java 21 工具链，SDK 产物仍为 Java 11，本 IA 示例为 Java 21。下载公开 `KiteMC/KiteMarket` 仓库后，在其根目录用当前 wrapper 执行：
 
 ```powershell
@@ -52,6 +54,8 @@
 ## English
 
 This working example uses its own [MIT License](LICENSE). You may modify, distribute or sell it; the license does not apply to the closed-source host or unrelated artwork. Its own `km_example` white-frame font requires no separate KiteMC theme license.
+
+Your own integration can use `compileOnly("com.kitemc:kitemarket-ui-api:1.0.0")`; see the [GitHub Packages guide](../../docs/GITHUB-PACKAGES.en.md) for authentication. The example retains a local SDK file for standalone builds without Maven registry authentication.
 
 Install JDK 21 locally; the public SDK root build selects its Java 21 toolchain. SDK artifacts target Java 11 while this IA adapter targets Java 21. From the public `KiteMC/KiteMarket` checkout root, build the SDK first and run the current wrapper with `-p examples/ui-java -PuiApiJar=<absolute SDK path> developerBundle`. The example output is `build/libs/kitemarket-ui-example-1.0.0.jar`. Its local bundle is `build/distributions/KiteMarket-IA-Example-1.0.0.zip`; public release assets combine both examples in `KiteMarket-Examples-1.0.0.zip`, with this one under `ui-java/`. The bundle contains the JAR, `theme.yml`, `itemsadder/` white-frame resource, bilingual README, MIT license, source and build files. Standalone extractions may use their own wrapper or Gradle 9.6.1 from `ui-java/`, passing `-PuiApiJar=<absolute path>`. Paper, the host SDK and `beer.devs:itemsadder-api:4.0.18-beta-10` remain compile-only; no vendor implementation or second SDK is bundled. The example does not support Folia or Java 11 Legacy servers.
 

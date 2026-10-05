@@ -16,6 +16,8 @@
 
 第三方插件只需 `compileOnly`，不要打包、shade 或重定位 SDK。运行时主插件提供唯一一套接口类；打包副本可能使 `ServicesManager` 无法识别服务。
 
+也可通过 GitHub Packages 引用 `com.kitemc:kitemarket-api:1.0.0`。公开 Maven 包同样需要 GitHub 认证；Gradle、Maven 和 Actions 配置见 [Packages 指南](GITHUB-PACKAGES.md)。下面保留不需要 Maven 仓库认证的 Release 文件引用方式。
+
 ```kotlin
 dependencies {
     compileOnly(files("libs/KiteMarket-API-1.0.0.jar"))

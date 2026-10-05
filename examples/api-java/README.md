@@ -2,6 +2,8 @@
 
 本示例与市场 API 使用 MIT 许可证，支持 Java 11。核心插件继续闭源。示例只读取并记录结果，没有辅助玩家命令，不扣钱或发物。
 
+自己的项目也可用 `compileOnly("com.kitemc:kitemarket-api:1.0.0")`；认证和仓库配置见 [GitHub Packages 指南](../../docs/GITHUB-PACKAGES.md)。本示例默认保持本地 SDK 文件方式，便于独立解包和无 Maven 认证构建。
+
 1. 从正式 Release 下载 `KiteMarket-API-1.0.0.jar`。放进自己的 `libs/`，作为 `compileOnly` 依赖；不要打包、shade 或重定位 SDK。
 2. 示例可直接使用组合发行包 `KiteMarket-Examples-1.0.0.zip` 中的 `api-java/kitemarket-api-example-1.0.0.jar`，与 KiteMarket 一起放进 `plugins/`。
 3. 需要重新构建时，先在本机安装 JDK 21；公开根构建选择 Java 21 工具链，SDK 和本 API 示例仍输出 Java 11 字节码。在公开 `KiteMC/KiteMarket` 仓库根目录使用当前 wrapper：

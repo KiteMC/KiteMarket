@@ -2,6 +2,8 @@
 
 This example and the market SDK are MIT licensed and target Java 11. The core plugin remains closed source. The example reads and logs snapshots; it adds no player command and never changes money or inventories.
 
+Your own project can use `compileOnly("com.kitemc:kitemarket-api:1.0.0")`; see the [GitHub Packages guide](../../docs/GITHUB-PACKAGES.en.md) for registry authentication. This example retains a local SDK file by default for standalone extraction and builds without Maven registry authentication.
+
 1. Download `KiteMarket-API-1.0.0.jar` from the release and use it as a `compileOnly` dependency in your own `libs/` directory. Do not bundle, shade, or relocate the SDK.
 2. Extract `api-java/kitemarket-api-example-1.0.0.jar` from `KiteMarket-Examples-1.0.0.zip` and install it beside KiteMarket in `plugins/`.
 3. Install JDK 21 locally; the public root build selects its Java 21 toolchain. Both SDKs and this API example still target Java 11. Run the current wrapper from the public `KiteMC/KiteMarket` repository root:
