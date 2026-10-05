@@ -200,8 +200,8 @@ Common read-only fields:
 | --- | --- |
 | All pages | `ui.preference`, `ui.requested`, `ui.actual`, `ui.theme-requested`, `ui.theme-actual`, `ui.availability` |
 | `browse` | `filter.search`, `filter.currency`, `filter.material`, `filter.sort`, `pagination.offset`, `pagination.limit`, `pagination.has-next` |
-| `editor` | `wizard.step`, `draft.type`, `draft.currency`, `draft.quantity`, `draft.price`, `draft.duration`, `draft.rule.mode` |
-| `order`, `supply-preview` | `order.id`, `order.currency`, `order.quantity`, `order.remaining`, `order.unit-price`, `order.tax-bps` |
+| `editor` | `wizard.step`, `draft.type`, `draft.currency`, `draft.quantity`, `draft.price`, `draft.minimum-purchase-quantity`, `draft.duration`, `draft.rule.mode` |
+| `order`, `supply-preview` | `order.id`, `order.currency`, `order.quantity`, `order.remaining`, `order.unit-price`, `order.minimum-purchase-quantity` (sales), `order.tax-bps` |
 | `supply-preview` | `supply.requested`, `supply.selected`, `supply.missing`, `supply.gross`, `supply.tax`, `supply.net` |
 | `wallet-currency` | `wallet.currency`, `wallet.available`, `wallet.frozen` |
 | `number` | `number.kind`, `number.currency`, `number.value`, `number.minimum`, `number.maximum` |
@@ -217,13 +217,23 @@ Numeric fields contain raw server values: money uses the currency's smallest uni
 | Operation | Limit |
 | --- | --- |
 | Create buy order | Minimum of the configured quantity, per-operation currency maximum / unit price, and available wallet balance / unit price |
-| Create fixed-price sale | Minimum of the configured quantity, currency maximum / unit price, and actual inventory quantity matching the held sample exactly |
+| Create fixed-price sale | Minimum of the configured quantity, per-operation currency maximum / unit price, and actual inventory quantity matching the held sample exactly |
 | Create auction | Minimum of the configured quantity and the held stack's actual amount; the starting price is for the whole lot |
 | Supply | Minimum of the remaining order quantity and selected matching items |
 | Deposit | Minimum of external available balance, per-operation currency maximum, and remaining integer capacity after available and frozen wallet funds |
 | Withdraw | Minimum of available wallet funds, per-operation currency maximum, and the backend's known receiving capacity |
 
 These are page quotes. Related items and balances are checked again when applying a quantity, opening confirmation and submitting. Changed limits produce a notice and refresh instead of silently using an old limit. Publishing drafts are retained; insufficient buy-order budgets offer a deposit entry. Amounts must respect currency precision, and external balances are not rounded up.
+
+Fixed-price listings use a per-item unit price and support partial purchases. Buy orders retain partial fulfillment at a unit price; auction starting prices apply to the entire lot. The sale minimum defaults to 1 and can be set from 1 to the listed quantity on the terms page. When the remainder is smaller than the minimum, it must all be purchased together. Default listing Lore separates information from action guidance. Quantity is one value; details show total and traded quantities independently, without remaining/total fractions. Auction quantities always represent the entire lot. Count badges display 1..99; exact Lore quantity remains authoritative above 99, without changing actual asset or claim stacking limits.
+
+The sale terms page's minimum control uses `editor` source slot 16 with `IRON_NUGGET` by default. Configure its item, name, Lore and position like other functional controls; appearance changes cannot raise the server's range of 1 to the listed quantity.
+
+The purchase preview total is the unit price multiplied by the selected quantity. Retain host-formatted quotes and minimum-quantity explanations rather than increasing input limits independently. Missing fields still show `—`; prefer `{default}` for formatted quotes.
+
+Listing information distinguishes creation, expiry and an updating countdown. Dates use `yyyy年MM月dd日 HH:mm:ss` in Chinese and `yyyy-MM-dd HH:mm:ss` in English, in the server's time zone. Remaining time uses whole hours above one hour, whole minutes above one minute, then seconds; positive fractional seconds round up to avoid showing zero early. Language keys `order-*` supply the defaults, and `menus` still supports `{default}` or custom Lore.
+
+Currency labels use a shared/bilingual `currencies.<id>.display-name`, then each language file's `currency-names.<id>`, then the internal ID when no label exists. IDs are not appended to labels. Language-name edits support `/km reload`; changes under `currencies` require restart. Labels do not change currency identity, precision, wallets or quotes. Insufficient inventory space leaves items in claims until the player makes room, and visual counts do not change stacking limits.
 
 The currency wallet shows the external economy balance. An unavailable gateway or failed balance query explains the problem and disables that currency's transfers without displaying a false zero. Existing market funds remain usable under the base license rules. Unknown backend receiving capacity does not mean unlimited capacity; the economy plugin may still reject a final transfer. A read-only balance quote is not evidence that an external effect completed.
 

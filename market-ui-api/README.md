@@ -29,6 +29,8 @@ IA 提供者在玩家调度上下文使用 `api.itemsAdderUnavailable(player, pa
 
 输入范围与金额由主插件计算：收购受钱包可用预算限制，出售与竞拍受实际物品限制，充提受外部余额、钱包及已知后端容量限制。直接显示 `UiPrompt` 范围与服务端数据，不把查询失败当作零或无限。确认前核心重查，变化时保留草稿并刷新。附魔列表以 `search.query` 表达当前搜索；筛选、分页与输入都使用已登记动作。默认操作编号在收据按需查看、复制，审计及已有 SDK 数据保持可查询；这不增加公开交易或恢复接口。
 
+一口价按每件单价部分购买，每单最低购买量默认1、发布时可在1至发布数量之间设置；余量不足最低量时只能买完全部余量。收购按单价分批供货，拍卖起价是整标总价。直接呈现服务端金额、输入范围与商品说明。数量、总量与已成交量独立显示，商品原属性保留；倒计时只更新展示，不能延长订单或替代最终校验。
+
 ## 数据与回调
 
 - `UiPage`、`Entry`、`UiPrompt` 和 `UiTheme` 是脱离市场内部状态的快照。物品输入以及 `display()`、`subject()` 返回值都复制；嵌套主题字典和列表只读。
@@ -58,6 +60,7 @@ void open(Player player, UiPage page, UiTheme theme,
           Map<Integer, String> actions, UiCallbacks callbacks);
 void update(Player player, UiPage page, UiTheme theme,
             Map<Integer, String> actions, UiCallbacks callbacks); // default open(...)
+boolean refresh(Player player, UiPage page, UiTheme theme); // default false
 boolean isOpen(Player player);
 boolean prompt(Player player, UiPrompt prompt, UiCallbacks callbacks); // default false
 void close(Player player);
@@ -66,6 +69,8 @@ void close(Player player);
 `unavailable()` 必须核对提供者、客户端与资源状态，`null` 才表示当前页就绪；`isOpen()` 只识别自己的当前视图。玩家关闭页面通过 `closed()` 通知核心，不用该回调关闭其他页面。当前页或输入字段已失效后，不再使用其动作与回调。
 
 `update()` 默认调用 `open()` 打开新视图。原生界面提供者可以覆写它，在当前窗口中替换页面；每次必须一起替换页面身份、全部动作令牌和 `UiCallbacks`，包括当前窗口的关闭回调。只换文字／物品而保留旧回调会使新页面动作被拒绝。主插件先建立新代次再更新，旧窗口迟到的关闭事件不能关闭新页面。原生输入窗口的有效取消通知会返回此前页面；过期窗口不能取消新的输入字段。
+
+`refresh()` 是可选的同页显示刷新，例如更新商品的剩余时间。此时 `token`、`pageVersion` 与动作字典不变，提供者只能更新当前已打开视图中的展示副本，保留原回调，不重开库存、不触发动作。成功更新返回 `true`；不支持或已关闭返回 `false`。默认 `false` 保持既有提供者兼容，主插件不会因此重开窗口，原快照在正常导航或玩家刷新前保持静态。接口实现仍须核对当前页面身份，不能把迟到刷新应用到新页。
 
 完整的 [Java IA 示例](https://github.com/KiteMC/KiteMarket/tree/main/examples/ui-java) 使用 ItemsAdder v4 `TexturedInventoryWrapper` 与市场页面、已登记动作和聊天输入回退。示例适配插件使用 Java 21／厂商 `compileOnly` 依赖；本 SDK 继续是 Java 11，基础 Legacy JAR 不加载此示例。它包含服务注册、整窗点击／拖拽保护、旧库存关闭处理和生命周期卸载；安装 `example-ia-java` 的自有白框资源后可以操作真实市场，无需额外主题授权。实际支持组合见[兼容说明](https://kitemc.com/docs/kitemarket/compatibility/)。只需配置的示例位于公开仓库 [examples/ui](https://github.com/KiteMC/KiteMarket/tree/main/examples/ui)。
 
@@ -93,11 +98,15 @@ Compact home places the three markets in the center with profile, claims, wallet
 
 Use the host's prompt ranges and values: buy quantities depend on available wallet budgets, sales and auctions on actual items, and transfers on external balance, wallet capacity and known receiving limits. Failed quotes are neither zero nor unlimited. The host checks again before confirmation and retains drafts when limits change. `search.query` carries enchantment search; use registered search and paging actions. Receipts show and copy operation IDs on request, while audit and SDK IDs remain queryable. These presentation rules add no transaction or recovery authority.
 
+Sales support partial purchases at a per-item unit price. Their per-order minimum defaults to 1 and can be set between 1 and the listed quantity; if fewer items remain, all remaining items must be bought together. Buy orders allow partial fulfillment at a unit price, and auction starting prices apply to the whole lot. Render host amounts, input limits and descriptions. Remaining, total and traded quantities are separate, and original item properties remain intact. Countdown changes affect display only, never deadlines or final validation.
+
 Pages, items, prompts and nested theme declarations are detached snapshots. Return interactions only through the host's opaque action and input callbacks. Page identities are descriptive; the host's bound callback still validates session, version, permissions and inventory. The SDK exposes no general transaction or asset mutation interface.
 
 Native prompt support is optional; return `false` for KiteMarket's built-in text flow. Follow vendor threading requirements and advertise Folia only where the provider actually supports it. Custom themes do not require official DLC ownership, and `official()` is display metadata rather than authorization evidence.
 
 `update()` defaults to `open()`. A native adapter may replace its current window in place, but must replace the page identity, all action tokens and all callbacks, including close handling, together. Late callbacks from the previous identity cannot control the new page. Closing the current native prompt cancels it and returns to the preceding page; a stale prompt cannot cancel a newer field.
+
+Optional `refresh()` updates display data such as remaining time within the current open view. The page token, version and action map stay the same. Retain existing callbacks, update display clones only, and never reopen an inventory or invoke an action. Return `true` after applying it, or `false` when unsupported or no longer open. The default `false` preserves existing providers; the host keeps their static snapshots until normal navigation or a player refresh rather than reopening them. Check the current page identity before applying a late refresh.
 
 On host disable, callbacks are revoked before views close. Paper closes owned views immediately on its main thread. Folia closes only where the current thread already owns the player; disabled-plugin tasks are not a cleanup guarantee, and global-thread inventory access is forbidden. Forced live hot-unload on Folia is unsupported; stop and restart the server normally. Native providers must also clean up their own views in a valid player context. This lifecycle rule is not Folia runtime certification.
 

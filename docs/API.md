@@ -40,7 +40,8 @@ api.orders(null, null, "", 0, 36).whenComplete((orders, failure) -> {
     // orders 是不可变快照；此回调只记录值。
     // 更新玩家 GUI 或背包时，另行切到正确的玩家／区域调度上下文。
     orders.forEach(order -> getLogger().info(
-        order.getId() + " " + order.getCurrency().display(order.getUnitPrice())));
+        order.getId() + " " +
+        order.getCurrency().display(order.getUnitPrice()).toPlainString()));
 });
 ```
 
@@ -61,6 +62,14 @@ api.orders(null, null, "", 0, 36).whenComplete((orders, failure) -> {
 分页 `offset >= 0`、`1 <= limit <= 100`；搜索最多 256 字符。玩家、订单参数须提供真实 UUID。历史分页按存储的审计行计数，未知内部分类表示为 `OTHER`。
 
 金额全部是 `long` 整数最小单位。`CurrencyView.getPrecision() == 2` 时，`128` 表示 `1.28`；推荐使用 `currency.display(amount).toPlainString()`。时间为 Unix 毫秒，税率单位为万分之一。
+
+### 单价与最低购买量
+
+一口价 `SELL` 和收购 `BUY` 的 `getUnitPrice()` 都是每件单价；拍卖 `AUCTION` 的该字段为整标起价。一口价允许部分购买，成交金额为单价×本次购买数量；计算时必须检查整数溢出，例如使用 `Math.multiplyExact`。
+
+`getMinimumPurchaseQuantity()` 返回发布时固定的一口价最低购买量，默认 `1`，范围为 `1..getQuantity()`。其他订单类型该值为 `1`。实际购买数量须大于零、不超过 `getRemaining()`，并至少为 `min(getMinimumPurchaseQuantity(), getRemaining())`。尾单剩余不足最低量时，只能一次买走全部剩余。例如最低量为16、剩余为2时，购买2件有效，购买1件无效。
+
+原 `OrderView` 构造器签名保持可用，最低量默认为 `1`；新重载在末尾增加 `long minimumPurchaseQuantity`，并校验其范围。SDK 查询是只读快照，核心在最终提交时重新校验数量、资金和订单版本。历史和成交通知的金额始终是**该次真实成交金额**；接口不提供购买或改单能力。
 
 返回值不可变：字段私有且 final，列表／集合／映射复制后只读，嵌套条件也不可变。订单包含安全条件说明与可选样品摘要；精确样品指纹不公开。真实物品摘要只含材质、名称、Lore、附魔及耐久，无法生成或领取原物品。
 

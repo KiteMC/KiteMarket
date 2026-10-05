@@ -11,6 +11,7 @@ public final class OrderView {
   private final CurrencyView currency;
   private final long unitPrice, quantity, remaining, minimumIncrement, highestBid;
   private final long expiresAt, originalExpiresAt, createdAt, revision;
+  private final long minimumPurchaseQuantity;
   private final int taxBasisPoints;
   private final RuleSummary rule;
   private final ItemSummary sample;
@@ -20,6 +21,19 @@ public final class OrderView {
       CurrencyView currency, long unitPrice, long quantity, long remaining,
       long minimumIncrement, long highestBid, long expiresAt, long originalExpiresAt,
       long createdAt, long revision, int taxBasisPoints, RuleSummary rule, ItemSummary sample) {
+    this(
+        id, owner, highestBidder, type, state, currency, unitPrice, quantity, remaining,
+        minimumIncrement, highestBid, expiresAt, originalExpiresAt, createdAt, revision,
+        taxBasisPoints, rule, sample, 1);
+  }
+
+  /** The last argument is a SELL purchase minimum; other order types must use one. */
+  public OrderView(
+      UUID id, UUID owner, UUID highestBidder, OrderType type, OrderState state,
+      CurrencyView currency, long unitPrice, long quantity, long remaining,
+      long minimumIncrement, long highestBid, long expiresAt, long originalExpiresAt,
+      long createdAt, long revision, int taxBasisPoints, RuleSummary rule, ItemSummary sample,
+      long minimumPurchaseQuantity) {
     this.id = Objects.requireNonNull(id, "id");
     this.owner = Objects.requireNonNull(owner, "owner");
     this.highestBidder = highestBidder;
@@ -27,6 +41,11 @@ public final class OrderView {
     this.state = Objects.requireNonNull(state, "state");
     this.currency = Objects.requireNonNull(currency, "currency");
     this.unitPrice = unitPrice;
+    if (minimumPurchaseQuantity < 1
+        || (type == OrderType.SELL ? minimumPurchaseQuantity > quantity
+            : minimumPurchaseQuantity != 1))
+      throw new IllegalArgumentException("INVALID_MINIMUM_PURCHASE_QUANTITY");
+    this.minimumPurchaseQuantity = minimumPurchaseQuantity;
     this.quantity = quantity;
     this.remaining = remaining;
     this.minimumIncrement = minimumIncrement;
@@ -46,7 +65,10 @@ public final class OrderView {
   public OrderType getType() { return type; }
   public OrderState getState() { return state; }
   public CurrencyView getCurrency() { return currency; }
+  /** SELL/BUY price per item, or an auction's starting amount for the entire lot. */
   public long getUnitPrice() { return unitPrice; }
+  /** SELL minimum; when remaining is lower, a buyer must take that entire remainder. */
+  public long getMinimumPurchaseQuantity() { return minimumPurchaseQuantity; }
   public long getQuantity() { return quantity; }
   public long getRemaining() { return remaining; }
   public long getMinimumIncrement() { return minimumIncrement; }

@@ -200,8 +200,8 @@ menus:
 | --- | --- |
 | 各页面 | `ui.preference`、`ui.requested`、`ui.actual`、`ui.theme-requested`、`ui.theme-actual`、`ui.availability` |
 | `browse` | `filter.search`、`filter.currency`、`filter.material`、`filter.sort`、`pagination.offset`、`pagination.limit`、`pagination.has-next` |
-| `editor` | `wizard.step`、`draft.type`、`draft.currency`、`draft.quantity`、`draft.price`、`draft.duration`、`draft.rule.mode` |
-| `order`、`supply-preview` | `order.id`、`order.currency`、`order.quantity`、`order.remaining`、`order.unit-price`、`order.tax-bps` |
+| `editor` | `wizard.step`、`draft.type`、`draft.currency`、`draft.quantity`、`draft.price`、`draft.minimum-purchase-quantity`、`draft.duration`、`draft.rule.mode` |
+| `order`、`supply-preview` | `order.id`、`order.currency`、`order.quantity`、`order.remaining`、`order.unit-price`、`order.minimum-purchase-quantity`（出售）、`order.tax-bps` |
 | `supply-preview` | `supply.requested`、`supply.selected`、`supply.missing`、`supply.gross`、`supply.tax`、`supply.net` |
 | `wallet-currency` | `wallet.currency`、`wallet.available`、`wallet.frozen` |
 | `number` | `number.kind`、`number.currency`、`number.value`、`number.minimum`、`number.maximum` |
@@ -224,6 +224,16 @@ menus:
 | 提现 | 钱包可用余额、币种单次金额上限及后端已知接收容量，取最小值 |
 
 这些是页面报价。应用数量、打开确认及提交前会重查相关余额或物品；条件变化时提示并刷新，不按旧上限静默执行。发布草稿保留，收购预算不足时提供充值入口。金额不得超过币种精度，不向上舍入外部余额。
+
+一口价价格为每件单价，按所选数量部分购买；收购按单价分批供货，拍卖起价是整标总价。出售最低购买量默认1，发布条款页可设为1至发布数量；余量不足最低量时只允许买完全部余量。默认商品 Lore 分商品信息与操作提示，数量单独显示；详情另列总量与已成交，不显示剩余／总量分数；拍卖数量始终显示整个标的。角标展示1..99，超过99以 Lore 的精确数量为准；真实资产及领取时的原堆叠限制不变。
+
+出售条款页的最低购买量按钮是 `editor` 原始槽位16，默认材料 `IRON_NUGGET`；可按其他功能按钮一样配置物品、名称、Lore 和位置。只影响按钮外观，不改变服务端的1至发布数量范围。
+
+购买预览的总额为单价×本次数量；主题应保留服务端已格式化的报价与最低购买量说明，不自行放宽输入范围。缺失字段继续显示 `—`，优先通过 `{default}` 保留格式化报价。
+
+商品信息分别显示上架、到期和动态剩余时间。中文日期为 `yyyy年MM月dd日 HH:mm:ss`，英文为 `yyyy-MM-dd HH:mm:ss`，使用服务器时区。剩余至少一小时显示整小时，至少一分钟显示整分钟，不足一分钟显示秒；正余毫秒向上取秒，不提前显示零。默认样式来自语言键 `order-*`，仍可在 `menus` 中使用 `{default}` 或自己的 Lore。
+
+币种显示使用 `currencies.<id>.display-name` 字符串／中英映射，未指定时读取语言文件 `currency-names.<id>`，仍缺失时回退内部 ID，不重复追加 ID。只改语言名称可 `/km reload`；`currencies` 块修改需重启。显示名称不改变币种身份、精度、钱包或报价。领取空间不足会保留物品在领取箱，腾出空间后再领，不通过显示角标改变堆叠上限。
 
 单币种钱包显示外部经济余额。网关不可用或查询失败时说明原因并停用该币种充提，不显示假零；已有市场钱包余额仍按主授权规则使用。未知的后端接收容量不等于无限，最终充提仍可能被经济插件拒绝。只读余额查询不证明外部副作用已经完成。
 

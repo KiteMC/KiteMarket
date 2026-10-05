@@ -36,6 +36,13 @@ public interface UiProvider {
     open(player, page, theme, actions, callbacks);
   }
 
+  /**
+   * Refresh display data in place, with the same page token, version and action map.
+   * Never reopen the view or retain new callbacks here. Return false if unsupported or no longer
+   * open; existing adapters keep their static snapshot until ordinary navigation or refresh.
+   */
+  default boolean refresh(Player player, UiPage page, UiTheme theme) { return false; }
+
   boolean isOpen(Player player);
 
   /** Return false to keep KiteMarket's built-in text input. Do not retain callbacks when returning false. */

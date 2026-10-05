@@ -39,7 +39,8 @@ api.orders(null, null, "", 0, 36).whenComplete((orders, failure) -> {
     }
     // Immutable values only. Player GUI or inventory work needs the correct entity/region scheduler.
     orders.forEach(order -> getLogger().info(
-        order.getId() + " " + order.getCurrency().display(order.getUnitPrice())));
+        order.getId() + " " +
+        order.getCurrency().display(order.getUnitPrice()).toPlainString()));
 });
 ```
 
@@ -60,6 +61,14 @@ Queries return `CompletableFuture`. Never call `get()` or `join()` on a server, 
 Page bounds are `offset >= 0` and `1 <= limit <= 100`. Search is limited to 256 characters. Player and order arguments require UUIDs. History pagination counts stored audit rows; unknown internal kinds are reported as `OTHER`.
 
 All monetary values use `long` minor units. Precision 2 makes `128` equal `1.28`; use `currency.display(amount).toPlainString()`. Timestamps are Unix milliseconds and tax rates use basis points.
+
+### Unit prices and minimum purchases
+
+For fixed-price `SELL` and procurement `BUY` orders, `getUnitPrice()` is the price per item. For `AUCTION` orders, it is the starting amount for the entire lot. Fixed-price sales allow partial purchases; the amount is the unit price multiplied by the quantity purchased. Check integer overflow, for example with `Math.multiplyExact`.
+
+`getMinimumPurchaseQuantity()` returns the minimum set when a SELL order is published. It defaults to `1` and must be within `1..getQuantity()`; other order types use `1`. A purchase must be positive, no greater than `getRemaining()`, and at least `min(getMinimumPurchaseQuantity(), getRemaining())`. If fewer items remain than the minimum, the buyer must take the entire remainder. With a minimum of 16 and 2 items remaining, buying 2 is valid and buying 1 is rejected.
+
+The original `OrderView` constructor remains available and defaults the minimum to `1`. The new overload appends `long minimumPurchaseQuantity` and validates its bounds. Queries are read-only snapshots; the core rechecks quantity, funds and order revision at submission. History and committed notifications report the **actual amount of that transaction**. The query interface cannot buy or modify orders.
 
 Snapshots are immutable: private final fields, copied unmodifiable collections, and immutable nested condition values. Exact fingerprints are excluded. Item summaries expose material, display name, lore, enchantments, and durability only; they cannot reconstruct or claim an original item.
 

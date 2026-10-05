@@ -115,6 +115,38 @@ final class ItemsAdderProvider implements UiProvider, Listener {
   // UiProvider.update() reopens with a fresh holder, tokens and callbacks as one replacement.
   // UiProvider.prompt() returns false: the host keeps its validated chat input and draft handling.
 
+  public boolean refresh(Player player, UiPage page, UiTheme theme) {
+    View view = views.get(player.getUniqueId());
+    if (view == null || !current(player, view) || !view.pageToken.equals(page.token())
+        || view.pageVersion != page.pageVersion() || !view.actions.equals(page.actions())) return false;
+    for (Map.Entry<Integer, UiPage.Entry> entry : page.entries().entrySet()) {
+      UiPage.Entry content = entry.getValue();
+      ItemStack displayed = content.subject();
+      if (displayed != null) {
+        ItemMeta meta = displayed.getItemMeta();
+        if (meta != null && !content.helpLines().isEmpty()) {
+          List<Component> lore = meta.lore() == null ? new ArrayList<>() : new ArrayList<>(meta.lore());
+          lore.add(helpLine(""));
+          for (String line : content.helpLines()) lore.add(helpLine(line));
+          meta.lore(lore);
+          displayed.setItemMeta(meta);
+        }
+      } else {
+        ItemStack previous = view.inventory.getItem(entry.getKey());
+        if (previous == null) continue;
+        displayed = previous.clone();
+        ItemMeta target = displayed.getItemMeta(), label = content.display().getItemMeta();
+        if (target == null || label == null) continue;
+        target.displayName(label.displayName());
+        target.lore(label.lore());
+        displayed.setItemMeta(target);
+      }
+      if (!displayed.equals(view.inventory.getItem(entry.getKey())))
+        view.inventory.setItem(entry.getKey(), displayed);
+    }
+    return true;
+  }
+
   public boolean isOpen(Player player) {
     View view = views.get(player.getUniqueId());
     return view != null && player.getOpenInventory().getTopInventory().getHolder() == view;
