@@ -18,7 +18,7 @@ gpr.user=YOUR_GITHUB_USERNAME
 gpr.key=YOUR_CLASSIC_PAT
 ```
 
-也可用环境变量 `GITHUB_ACTOR` 和 `GITHUB_TOKEN`。不希望配置 Maven 认证时，从 Release 下载 SDK，继续用 `compileOnly(files("libs/KiteMarket-API-1.0.0.jar"))`。
+也可用环境变量 `GITHUB_ACTOR` 和 `GITHUB_TOKEN`。不希望配置 Maven 认证时，可从 Release 下载 SDK，作为仅供编译的本地依赖。
 
 ## Gradle Kotlin DSL
 

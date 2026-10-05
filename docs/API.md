@@ -4,7 +4,37 @@
 
 ## 获取 SDK
 
-接口源码与示例位于公开仓库 [KiteMC/KiteMarket](https://github.com/KiteMC/KiteMarket)。SDK、运行包及配置包统一从 [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases) 获取。选择与主插件版本匹配的 SDK：
+推荐通过 GitHub Packages 引用 `com.kitemc:kitemarket-api:1.0.0`，选择与主插件匹配的版本。接口源码与示例位于公开仓库 [KiteMC/KiteMarket](https://github.com/KiteMC/KiteMarket)。
+
+第三方插件只需 `compileOnly`，不要打包、shade 或重定位 SDK。运行时主插件提供唯一一套接口类；打包副本可能使 `ServicesManager` 无法识别服务。
+
+公开 Maven 包同样需要认证；将自己的 GitHub 用户名和具有 `read:packages` 的 classic PAT 放在用户级 Gradle 配置的 `gpr.user`／`gpr.key`，或使用 `GITHUB_ACTOR`／`GITHUB_TOKEN` 环境变量。不要提交令牌。完整 Gradle、Maven（`provided`）及 Actions 配置见 [Packages 指南](GITHUB-PACKAGES.md)。引用前确认 [Packages 列表](https://github.com/orgs/KiteMC/packages?repo_name=KiteMarket) 已有目标版本。
+
+```kotlin
+repositories {
+    mavenCentral()
+    maven("https://repo.papermc.io/repository/maven-public/")
+    maven {
+        url = uri("https://maven.pkg.github.com/kitemc/KiteMarket")
+        content { includeGroup("com.kitemc") }
+        credentials {
+            username = providers.gradleProperty("gpr.user")
+                .orElse(providers.environmentVariable("GITHUB_ACTOR")).orNull
+            password = providers.gradleProperty("gpr.key")
+                .orElse(providers.environmentVariable("GITHUB_TOKEN")).orNull
+        }
+    }
+}
+dependencies {
+    compileOnly("com.kitemc:kitemarket-api:1.0.0")
+    compileOnly("com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT")
+}
+tasks.withType<JavaCompile>().configureEach { options.release.set(11) }
+```
+
+### Release 直接下载
+
+不使用 Maven 认证时，也可从 [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases) 下载 SDK，作为仅供编译的本地依赖。运行包及配置包仍从 Release 获取。
 
 | 文件 | 用途 |
 | --- | --- |
@@ -13,18 +43,6 @@
 | `KiteMarket-API-1.0.0-javadoc.jar` | API 参考 |
 | `KiteMarket-Examples-1.0.0.zip` | 可运行 API＋IA 示例、源码与构建脚本 |
 | `KiteMarket-UI-API-1.0.0.jar` | 页面呈现与 IA 自由扩展 SDK，按需使用 |
-
-第三方插件只需 `compileOnly`，不要打包、shade 或重定位 SDK。运行时主插件提供唯一一套接口类；打包副本可能使 `ServicesManager` 无法识别服务。
-
-也可通过 GitHub Packages 引用 `com.kitemc:kitemarket-api:1.0.0`。公开 Maven 包同样需要 GitHub 认证；Gradle、Maven 和 Actions 配置见 [Packages 指南](GITHUB-PACKAGES.md)。下面保留不需要 Maven 仓库认证的 Release 文件引用方式。
-
-```kotlin
-dependencies {
-    compileOnly(files("libs/KiteMarket-API-1.0.0.jar"))
-    compileOnly("com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT")
-}
-tasks.withType<JavaCompile>().configureEach { options.release.set(11) }
-```
 
 `plugin.yml` 加入 `depend: [KiteMarket]`。如果插件在没有市场时也能工作，可以用 `softdepend`，但必须把 API 引用放在确认 KiteMarket 已存在后才加载的适配类里。
 

@@ -18,7 +18,7 @@ gpr.user=YOUR_GITHUB_USERNAME
 gpr.key=YOUR_CLASSIC_PAT
 ```
 
-Alternatively, set `GITHUB_ACTOR` and `GITHUB_TOKEN`. Direct Release downloads need no Maven registry authentication; they still work with `compileOnly(files("libs/KiteMarket-API-1.0.0.jar"))`.
+Alternatively, set `GITHUB_ACTOR` and `GITHUB_TOKEN`. Direct Release downloads need no Maven registry authentication and can be managed as local compile-only dependencies.
 
 ## Gradle Kotlin DSL
 

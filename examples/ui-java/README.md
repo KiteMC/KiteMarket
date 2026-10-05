@@ -4,11 +4,39 @@
 
 本插件使用真实 ItemsAdder v4 `TexturedInventoryWrapper` 呈现 KiteMarket 的全部35个共用页面，包括 `profile` 个人页。金额、订单、物品、报价和动作来自服务端快照，按钮回传服务端登记的不透明令牌，交易仍由 KiteMarket 完成；不生成演示余额、物品或成交结果。原版文本输入及取消／返回流程继续由主插件处理。
 
-## 构建
+## 使用 GitHub Packages 构建
 
-自己的项目可用 `compileOnly("com.kitemc:kitemarket-ui-api:1.0.0")`，仓库和认证配置见 [GitHub Packages 指南](../../docs/GITHUB-PACKAGES.md)。本示例默认保持本地 SDK 文件方式，独立解包时无需 Maven 仓库认证。
+推荐在自己的示例副本中使用 `com.kitemc:kitemarket-ui-api:1.0.0`。认证配置见 [Packages 指南](../../docs/GITHUB-PACKAGES.md)：用户级 `gpr.user`／`gpr.key` 或 `GITHUB_ACTOR`／`GITHUB_TOKEN`，classic PAT 最小权限为 `read:packages`；引用前确认 Packages 列表已有目标版本。安装 JDK 21，SDK 仍为 Java 11，本 IA 示例为 Java 21。
 
-在本机安装 JDK 21；公开 SDK 根构建明确选择 Java 21 工具链，SDK 产物仍为 Java 11，本 IA 示例为 Java 21。下载公开 `KiteMC/KiteMarket` 仓库后，在其根目录用当前 wrapper 执行：
+在自己的 `build.gradle.kts` 中删除 `val sdkJar = ...` 及本地文件检查 `tasks.named<JavaCompile>("compileJava")` 整块；用以下仓库和依赖替换原 `repositories`／`dependencies`，保留其他任务：
+
+```kotlin
+repositories {
+    mavenCentral()
+    maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://jitpack.io")
+    maven {
+        url = uri("https://maven.pkg.github.com/kitemc/KiteMarket")
+        content { includeGroup("com.kitemc") }
+        credentials {
+            username = providers.gradleProperty("gpr.user")
+                .orElse(providers.environmentVariable("GITHUB_ACTOR")).orNull
+            password = providers.gradleProperty("gpr.key")
+                .orElse(providers.environmentVariable("GITHUB_TOKEN")).orNull
+        }
+    }
+}
+dependencies {
+    compileOnly("com.kitemc:kitemarket-ui-api:1.0.0")
+    compileOnly("com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT")
+    compileOnly("beer.devs:itemsadder-api:4.0.18-beta-10")
+    constraints { compileOnly("com.google.code.gson:gson:2.11.0") }
+}
+```
+
+从公开仓库根目录执行 `.\gradlew.bat -p examples/ui-java developerBundle`。独立解包后，在 `ui-java/` 使用自己的 wrapper 或 Gradle 9.6.1 执行同一任务。
+
+未修改的示例脚本仍供本地源码及发行构建使用。需要此方式时，从公开仓库根目录执行：
 
 ```powershell
 .\gradlew.bat :market-ui-api:jar
@@ -55,9 +83,11 @@
 
 This working example uses its own [MIT License](LICENSE). You may modify, distribute or sell it; the license does not apply to the closed-source host or unrelated artwork. Its own `km_example` white-frame font requires no separate KiteMC theme license.
 
-Your own integration can use `compileOnly("com.kitemc:kitemarket-ui-api:1.0.0")`; see the [GitHub Packages guide](../../docs/GITHUB-PACKAGES.en.md) for authentication. The example retains a local SDK file for standalone builds without Maven registry authentication.
+Use GitHub Packages as the primary dependency method in your own example copy: `com.kitemc:kitemarket-ui-api:1.0.0`. See the [Packages guide](../../docs/GITHUB-PACKAGES.en.md) for user-level `gpr.user` / `gpr.key` or `GITHUB_ACTOR` / `GITHUB_TOKEN`; the classic PAT requires `read:packages`. Confirm the version exists in Packages before referencing it.
 
-Install JDK 21 locally; the public SDK root build selects its Java 21 toolchain. SDK artifacts target Java 11 while this IA adapter targets Java 21. From the public `KiteMC/KiteMarket` checkout root, build the SDK first and run the current wrapper with `-p examples/ui-java -PuiApiJar=<absolute SDK path> developerBundle`. The example output is `build/libs/kitemarket-ui-example-1.0.0.jar`. Its local bundle is `build/distributions/KiteMarket-IA-Example-1.0.0.zip`; public release assets combine both examples in `KiteMarket-Examples-1.0.0.zip`, with this one under `ui-java/`. The bundle contains the JAR, `theme.yml`, `itemsadder/` white-frame resource, bilingual README, MIT license, source and build files. Standalone extractions may use their own wrapper or Gradle 9.6.1 from `ui-java/`, passing `-PuiApiJar=<absolute path>`. Paper, the host SDK and `beer.devs:itemsadder-api:4.0.18-beta-10` remain compile-only; no vendor implementation or second SDK is bundled. The example does not support Folia or Java 11 Legacy servers.
+To use the complete Kotlin configuration above, replace your copy's `repositories` / `dependencies`, remove `val sdkJar = ...` and the entire local-file-checking `tasks.named<JavaCompile>("compileJava")` block, and retain the other tasks. The configuration keeps Paper and ItemsAdder's JitPack repository and compile-only dependencies. From the public checkout root, run `.\gradlew.bat -p examples/ui-java developerBundle`, or use your own wrapper / Gradle 9.6.1 inside a standalone extraction.
+
+Install JDK 21; the SDK targets Java 11 while this IA adapter targets Java 21. The example output is `build/libs/kitemarket-ui-example-1.0.0.jar`, and its local bundle is `build/distributions/KiteMarket-IA-Example-1.0.0.zip`. Public Release assets combine both examples in `KiteMarket-Examples-1.0.0.zip`, with this one under `ui-java/`. The bundle contains the JAR, `theme.yml`, `itemsadder/` white-frame resource, bilingual README, MIT license, source and build files. The unchanged script still supports local source builds or direct Release SDK downloads via `-PuiApiJar=<absolute SDK path>`; that alternative needs no Maven registry authentication. Paper, the SDK and `beer.devs:itemsadder-api:4.0.18-beta-10` remain compile-only, without a vendor implementation or second SDK bundled. The example does not support Folia or Java 11 Legacy servers.
 
 Install a compatible legitimate ItemsAdder v4 and a KiteMarket version shipping `itemsAdderUnavailable`. Install the example JAR, copy `theme.yml` to `plugins/KiteMarket/themes/example-ia-java.yml`, and copy the bundle's `itemsadder/` (or the sibling source example's resources) to `plugins/ItemsAdder/contents/km_example/`. Preserve other namespaces. Rebuild and send the actual merged pack using the installed IA instructions; register its lowercase SHA-1 and sent UUID in `gui.itemsadder.pack-sha1`/`pack-id`, or in the theme's `requires`. Changed content requires a new actual sent UUID.
 

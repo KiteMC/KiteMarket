@@ -2,13 +2,21 @@
 
 Java 11 的公开界面 SDK，MIT 授权仅覆盖本模块。内置适配支持 ItemsAdder v4；开发者可自由制作、分发或销售自有主题，无需额外的 KiteMC 主题授权。`GERM`／`DRAGONCORE` 仅保留为旧声明与扩展标识，不提供内置适配或兼容承诺。实际验证范围见[兼容说明](https://kitemc.com/docs/kitemarket/compatibility/)。
 
-SDK、配置示例、Java 示例和配套 MIT 素材位于公开 [KiteMC/KiteMarket](https://github.com/KiteMC/KiteMarket) 仓库；已发布开发包从 [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases) 获取。基础插件不内置 IA 主题，使用自有或第三方资源即可接入。
+SDK、配置示例、Java 示例和配套 MIT 素材位于公开 [KiteMC/KiteMarket](https://github.com/KiteMC/KiteMarket) 仓库。基础插件不内置 IA 主题，使用自有或第三方资源即可接入。
 
-Maven 坐标为 `com.kitemc:kitemarket-ui-api:1.0.0`，通过 GitHub Packages 提供；公开 Maven 包也需要认证。详见 [Packages 配置](../docs/GITHUB-PACKAGES.md)，仍使用 `compileOnly`，不能打包 SDK。
+推荐通过 GitHub Packages 引用 `com.kitemc:kitemarket-ui-api:1.0.0`。公开 Maven 包也需要认证，使用用户级 `gpr.user`／`gpr.key` 或 `GITHUB_ACTOR`／`GITHUB_TOKEN`，classic PAT 最小权限为 `read:packages`。仓库配置、Maven `provided` 和 Actions 说明见 [Packages 指南](../docs/GITHUB-PACKAGES.md)；引用前确认 Packages 列表已有目标版本。无需 Maven 认证的 SDK 直接下载、源码／Javadoc 与示例仍保留在 [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases)。
 
 ## 使用
 
 适配插件将 `KiteMarket-UI-API` 作为 `compileOnly` 依赖，并在 `plugin.yml` 声明依赖 KiteMarket。不要把 SDK 再打包到适配插件中；由 KiteMarket 提供唯一运行时接口，防止不同 ClassLoader 产生同名类型。
+
+按 Packages 指南配置仓库与认证后：
+
+```kotlin
+dependencies {
+    compileOnly("com.kitemc:kitemarket-ui-api:1.0.0")
+}
+```
 
 ```java
 KiteMarketUiApi api =
@@ -82,9 +90,15 @@ IA 库存适配先填充 `TexturedInventoryWrapper.getInternal()` 返回的受�
 
 This Java 11 SDK exposes a shared presentation interface with a built-in ItemsAdder v4 adapter. Developers may use, distribute or sell their own themes without a separate KiteMC theme license. The MIT license covers this module only. `GERM` and `DRAGONCORE` remain as legacy declaration and extension identifiers, with no built-in adapter or compatibility promise. See the [compatibility guide](https://kitemc.com/en/docs/kitemarket/compatibility/).
 
-SDK source, configuration examples, Java examples and their MIT resources are in the public [KiteMC/KiteMarket](https://github.com/KiteMC/KiteMarket) repository. Published packages are distributed through [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases). The base plugin does not bundle an IA theme; supply your own or a third party's resources.
+SDK source, configuration examples, Java examples and their MIT resources are in the public [KiteMC/KiteMarket](https://github.com/KiteMC/KiteMarket) repository. The base plugin does not bundle an IA theme; supply your own or a third party's resources.
 
-Maven coordinates: `com.kitemc:kitemarket-ui-api:1.0.0`, available from GitHub Packages. Public Maven packages also require authentication; see the [Packages guide](../docs/GITHUB-PACKAGES.en.md). Continue using `compileOnly`, never a bundled SDK copy.
+Use GitHub Packages as the primary dependency method: `com.kitemc:kitemarket-ui-api:1.0.0`. Configure user-level `gpr.user` / `gpr.key` or `GITHUB_ACTOR` / `GITHUB_TOKEN`; public Maven packages require a classic PAT with `read:packages`. See the [Packages guide](../docs/GITHUB-PACKAGES.en.md) for repository, Maven `provided` and Actions configuration, and confirm the version exists in Packages before referencing it. Direct SDK, sources/Javadoc and example downloads remain in [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases) without Maven registry authentication.
+
+```kotlin
+dependencies {
+    compileOnly("com.kitemc:kitemarket-ui-api:1.0.0")
+}
+```
 
 Use the SDK as a `compileOnly` dependency and load `KiteMarketUiApi` through Bukkit's `ServicesManager`. Never bundle a second runtime copy. Register an enabled owning plugin, retain the returned handle and close it on disable. Closing is idempotent; owner disable automatically removes its providers.
 

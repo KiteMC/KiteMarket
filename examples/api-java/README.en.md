@@ -2,17 +2,48 @@
 
 This example and the market SDK are MIT licensed and target Java 11. The core plugin remains closed source. The example reads and logs snapshots; it adds no player command and never changes money or inventories.
 
-Your own project can use `compileOnly("com.kitemc:kitemarket-api:1.0.0")`; see the [GitHub Packages guide](../../docs/GITHUB-PACKAGES.en.md) for registry authentication. This example retains a local SDK file by default for standalone extraction and builds without Maven registry authentication.
+## Build using GitHub Packages
 
-1. Download `KiteMarket-API-1.0.0.jar` from the release and use it as a `compileOnly` dependency in your own `libs/` directory. Do not bundle, shade, or relocate the SDK.
-2. Extract `api-java/kitemarket-api-example-1.0.0.jar` from `KiteMarket-Examples-1.0.0.zip` and install it beside KiteMarket in `plugins/`.
-3. Install JDK 21 locally; the public root build selects its Java 21 toolchain. Both SDKs and this API example still target Java 11. Run the current wrapper from the public `KiteMC/KiteMarket` repository root:
-   ```powershell
-   .\gradlew.bat :market-api:jar
-   .\gradlew.bat -p examples/api-java "-PmarketApiJar=$PWD/market-api/build/libs/KiteMarket-API-1.0.0.jar" developerBundle
-   ```
-   A standalone extraction may use your own wrapper or Gradle 9.6.1 from `api-java/`, passing `-PmarketApiJar=<absolute SDK path>`.
-4. After the database connects, the console records the network identity and currency precision. Player joins trigger asynchronous wallet queries, and committed trades produce safe summaries.
+Use `com.kitemc:kitemarket-api:1.0.0` as the primary SDK dependency in your example copy. Configure user-level `gpr.user` / `gpr.key` or `GITHUB_ACTOR` / `GITHUB_TOKEN` using the [Packages guide](../../docs/GITHUB-PACKAGES.en.md). The classic PAT needs only `read:packages`; confirm the requested version exists in Packages first. Install JDK 21; both the SDK and this example still target Java 11.
+
+In your copy's `build.gradle.kts`, replace the local file SDK dependency with Packages: remove `val sdkJar = ...` and the entire local-file-checking `tasks.named<JavaCompile>("compileJava")` block. Replace `repositories` / `dependencies` with the following, retaining the other tasks:
+
+```kotlin
+repositories {
+    mavenCentral()
+    maven("https://repo.papermc.io/repository/maven-public/")
+    maven {
+        url = uri("https://maven.pkg.github.com/kitemc/KiteMarket")
+        content { includeGroup("com.kitemc") }
+        credentials {
+            username = providers.gradleProperty("gpr.user")
+                .orElse(providers.environmentVariable("GITHUB_ACTOR")).orNull
+            password = providers.gradleProperty("gpr.key")
+                .orElse(providers.environmentVariable("GITHUB_TOKEN")).orNull
+        }
+    }
+}
+dependencies {
+    compileOnly("com.kitemc:kitemarket-api:1.0.0")
+    compileOnly("com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT")
+    constraints { compileOnly("com.google.code.gson:gson:2.11.0") }
+}
+```
+
+From the public checkout root, run `.\gradlew.bat -p examples/api-java developerBundle`. Standalone extractions may use their own wrapper or Gradle 9.6.1 from `api-java/` to run `developerBundle`. Never bundle, shade or relocate the SDK.
+
+Alternatively, install the ready-built `api-java/kitemarket-api-example-1.0.0.jar` from the Release asset `KiteMarket-Examples-1.0.0.zip` beside KiteMarket. After the database connects, the console records the network identity and currency precision; player joins trigger asynchronous wallet queries and committed trades produce safe summaries.
+
+## Local source builds and direct downloads
+
+The unchanged example script retains local SDK files for release builds and developers without Maven registry authentication. From the public checkout root:
+
+```powershell
+.\gradlew.bat :market-api:jar
+.\gradlew.bat -p examples/api-java "-PmarketApiJar=$PWD/market-api/build/libs/KiteMarket-API-1.0.0.jar" developerBundle
+```
+
+You may also download the SDK from Releases and pass `-PmarketApiJar=<absolute SDK path>` without Maven registry authentication.
 
 `depend: [KiteMarket]` controls plugin order, not database readiness. This example handles both a null initial `ServicesManager.load()` result and `ServiceRegisterEvent`. A provider replacement or unload invalidates pending callbacks.
 

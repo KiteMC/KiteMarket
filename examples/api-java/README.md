@@ -2,17 +2,48 @@
 
 本示例与市场 API 使用 MIT 许可证，支持 Java 11。核心插件继续闭源。示例只读取并记录结果，没有辅助玩家命令，不扣钱或发物。
 
-自己的项目也可用 `compileOnly("com.kitemc:kitemarket-api:1.0.0")`；认证和仓库配置见 [GitHub Packages 指南](../../docs/GITHUB-PACKAGES.md)。本示例默认保持本地 SDK 文件方式，便于独立解包和无 Maven 认证构建。
+## 使用 GitHub Packages 构建
 
-1. 从正式 Release 下载 `KiteMarket-API-1.0.0.jar`。放进自己的 `libs/`，作为 `compileOnly` 依赖；不要打包、shade 或重定位 SDK。
-2. 示例可直接使用组合发行包 `KiteMarket-Examples-1.0.0.zip` 中的 `api-java/kitemarket-api-example-1.0.0.jar`，与 KiteMarket 一起放进 `plugins/`。
-3. 需要重新构建时，先在本机安装 JDK 21；公开根构建选择 Java 21 工具链，SDK 和本 API 示例仍输出 Java 11 字节码。在公开 `KiteMC/KiteMarket` 仓库根目录使用当前 wrapper：
-   ```powershell
-   .\gradlew.bat :market-api:jar
-   .\gradlew.bat -p examples/api-java "-PmarketApiJar=$PWD/market-api/build/libs/KiteMarket-API-1.0.0.jar" developerBundle
-   ```
-   独立解包没有 wrapper 时，在 `api-java/` 使用自己项目的 wrapper 或 Gradle 9.6.1，并传入 `-PmarketApiJar=<绝对SDK路径>`。
-4. 插件数据库就绪后，示例控制台输出网络 UUID 与币种精度。玩家加入时异步读取钱包；成交后记录安全摘要。
+推荐在自己的示例副本中使用 `com.kitemc:kitemarket-api:1.0.0`。先按 [Packages 指南](../../docs/GITHUB-PACKAGES.md) 设置用户级 `gpr.user`／`gpr.key` 或 `GITHUB_ACTOR`／`GITHUB_TOKEN`；classic PAT 只需 `read:packages`，引用前确认 Packages 列表已有目标版本。安装 JDK 21，SDK 和本例仍输出 Java 11 字节码。
+
+将示例 `build.gradle.kts` 的本地 SDK 文件依赖改为 Packages：删除 `val sdkJar = ...` 及只检查本地文件的 `tasks.named<JavaCompile>("compileJava")` 整块；用下方仓库和依赖替换原 `repositories`／`dependencies`，其余任务保留：
+
+```kotlin
+repositories {
+    mavenCentral()
+    maven("https://repo.papermc.io/repository/maven-public/")
+    maven {
+        url = uri("https://maven.pkg.github.com/kitemc/KiteMarket")
+        content { includeGroup("com.kitemc") }
+        credentials {
+            username = providers.gradleProperty("gpr.user")
+                .orElse(providers.environmentVariable("GITHUB_ACTOR")).orNull
+            password = providers.gradleProperty("gpr.key")
+                .orElse(providers.environmentVariable("GITHUB_TOKEN")).orNull
+        }
+    }
+}
+dependencies {
+    compileOnly("com.kitemc:kitemarket-api:1.0.0")
+    compileOnly("com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT")
+    constraints { compileOnly("com.google.code.gson:gson:2.11.0") }
+}
+```
+
+从公开仓库根目录运行 `.\gradlew.bat -p examples/api-java developerBundle`。独立解包后，在 `api-java/` 使用自己的 wrapper 或 Gradle 9.6.1 执行 `developerBundle`。不要打包、shade 或重定位 SDK。
+
+成品也可直接从 Release 的 `KiteMarket-Examples-1.0.0.zip` 获取，将 `api-java/kitemarket-api-example-1.0.0.jar` 与 KiteMarket 一起放进 `plugins/`。数据库就绪后，控制台输出网络 UUID 与币种精度；玩家加入时异步读取钱包，成交后记录安全摘要。
+
+## 本地源码构建与直接下载
+
+未修改的示例脚本保留本地 SDK 文件方式，供发行构建和不使用 Maven 认证的开发者使用。从公开仓库根目录运行：
+
+```powershell
+.\gradlew.bat :market-api:jar
+.\gradlew.bat -p examples/api-java "-PmarketApiJar=$PWD/market-api/build/libs/KiteMarket-API-1.0.0.jar" developerBundle
+```
+
+也可从 Release 下载 SDK 后传入 `-PmarketApiJar=<绝对SDK路径>`，不需要 Maven 仓库认证。
 
 `depend: [KiteMarket]` 只能保证插件加载顺序，不能保证数据库已经连接。示例同时处理首次 `ServicesManager.load()` 返回 null 和 `ServiceRegisterEvent`。卸载／重新注册后会丢弃旧查询结果。
 

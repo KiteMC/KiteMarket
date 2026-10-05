@@ -4,7 +4,37 @@ Interface version: KiteMarket 1.0.0. The SDK targets Java 11 and is MIT licensed
 
 ## Get the SDK
 
-Interface source and examples are available in the public [KiteMC/KiteMarket](https://github.com/KiteMC/KiteMarket) repository. SDKs, runtime JARs and configuration packages are distributed through [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases). Choose SDK assets matching the installed host version:
+Use GitHub Packages with `com.kitemc:kitemarket-api:1.0.0` as the primary dependency method, selecting a version matching the installed host. Interface source and examples are available in the public [KiteMC/KiteMarket](https://github.com/KiteMC/KiteMarket) repository.
+
+Use `compileOnly`. Never bundle, shade, or relocate either SDK. The main plugin supplies one runtime copy; duplicate interface classes can prevent service discovery.
+
+Public Maven packages require authentication. Configure your GitHub username and a classic PAT with `read:packages` through user-level Gradle properties `gpr.user` / `gpr.key`, or `GITHUB_ACTOR` / `GITHUB_TOKEN` environment variables. Never commit the token. The [Packages guide](GITHUB-PACKAGES.en.md) covers full Gradle, Maven (`provided`) and Actions configuration. Check the [Packages list](https://github.com/orgs/KiteMC/packages?repo_name=KiteMarket) for the version before referencing it.
+
+```kotlin
+repositories {
+    mavenCentral()
+    maven("https://repo.papermc.io/repository/maven-public/")
+    maven {
+        url = uri("https://maven.pkg.github.com/kitemc/KiteMarket")
+        content { includeGroup("com.kitemc") }
+        credentials {
+            username = providers.gradleProperty("gpr.user")
+                .orElse(providers.environmentVariable("GITHUB_ACTOR")).orNull
+            password = providers.gradleProperty("gpr.key")
+                .orElse(providers.environmentVariable("GITHUB_TOKEN")).orNull
+        }
+    }
+}
+dependencies {
+    compileOnly("com.kitemc:kitemarket-api:1.0.0")
+    compileOnly("com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT")
+}
+tasks.withType<JavaCompile>().configureEach { options.release.set(11) }
+```
+
+### Direct Release downloads
+
+Without Maven registry authentication, download the SDK from [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases) and manage it as a local compile-only dependency. Runtime JARs and configuration archives remain Release assets.
 
 | File | Purpose |
 | --- | --- |
@@ -13,18 +43,6 @@ Interface source and examples are available in the public [KiteMC/KiteMarket](ht
 | `KiteMarket-API-1.0.0-javadoc.jar` | API reference |
 | `KiteMarket-Examples-1.0.0.zip` | Runnable API and IA examples, sources, and build scripts |
 | `KiteMarket-UI-API-1.0.0.jar` | Optional presentation and freely developed IA integration SDK |
-
-Use `compileOnly`. Never bundle, shade, or relocate either SDK. The main plugin supplies one runtime copy; duplicate interface classes can prevent service discovery.
-
-GitHub Packages also provides `com.kitemc:kitemarket-api:1.0.0`. Public Maven packages still require GitHub authentication; see the [Packages guide](GITHUB-PACKAGES.en.md) for Gradle, Maven and Actions configuration. Direct Release file dependencies below remain available without Maven registry authentication.
-
-```kotlin
-dependencies {
-    compileOnly(files("libs/KiteMarket-API-1.0.0.jar"))
-    compileOnly("com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT")
-}
-tasks.withType<JavaCompile>().configureEach { options.release.set(11) }
-```
 
 Add `depend: [KiteMarket]` to `plugin.yml`. Optional integrations may use `softdepend`, but classes referencing the SDK must only load after confirming KiteMarket is installed.
 
