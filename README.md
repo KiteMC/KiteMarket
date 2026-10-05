@@ -4,7 +4,7 @@
 
 本仓库存放 SDK 源码、开发示例、文档及 Issues。**1.0.0 运行版本暂未发布。** 已发布的运行 JAR、SDK、源码／Javadoc、示例及语言／配置包统一通过 [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases) 获取。
 
-预定售价：**¥128／USD 19.99，买断**。一份许可证对应一个独立市场网络，网络内不限节点。包含基础插件更新，维护期间提供问题支持，不承诺永久维护服务。第三方经济插件、ItemsAdder 及其资源另行获取。
+预定售价：**¥68／USD 9.99，买断**。一份许可证对应一个独立市场网络，网络内不限节点。包含基础插件更新，维护期间提供问题支持，不承诺永久维护服务。第三方经济插件、ItemsAdder 及其资源另行获取。
 
 - [English](README.en.md) / [中文](README.md)
 - [Website](https://kitemc.com/docs/kitemarket/) / [English docs](https://kitemc.com/en/docs/kitemarket/)

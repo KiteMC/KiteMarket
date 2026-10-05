@@ -4,7 +4,7 @@ A complete Minecraft market with advanced buy orders, fixed-price listings and p
 
 This repository provides SDK source, examples, documentation and issue tracking. **Runtime version 1.0.0 has not been released yet.** Published runtime JARs, SDKs, sources/Javadoc, examples and language/configuration packages are distributed through [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases).
 
-Planned price: **CNY 128 / USD 19.99, lifetime purchase**. One license covers one independent market network with unlimited nodes. Base plugin updates are included; support is provided during active maintenance, without a promise of perpetual maintenance. Economy plugins, ItemsAdder and third-party resources are separate.
+Planned price: **CNY 68 / USD 9.99, lifetime purchase**. One license covers one independent market network with unlimited nodes. Base plugin updates are included; support is provided during active maintenance, without a promise of perpetual maintenance. Economy plugins, ItemsAdder and third-party resources are separate.
 
 - [English](README.en.md) / [中文](README.md)
 - [Website](https://kitemc.com/docs/kitemarket/) / [English docs](https://kitemc.com/en/docs/kitemarket/)

@@ -1,43 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="1024" height="1024" role="img" aria-labelledby="title desc">
-  <title id="title">KiteMarket product icon</title>
-  <desc id="desc">A bold white price tag with a gold exchange coin on a violet and pink gradient tile.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 512 512" fill="none">
+  <title>KiteMarket — 开张的小店</title>
+  <desc>A welcoming market shop drawn with bold rounded lines, a three-panel awning, a window and an open doorway.</desc>
   <defs>
-    <radialGradient id="marketGlow" cx="17%" cy="12%" r="118%">
-      <stop offset="0%" stop-color="#B9A4FF"/>
-      <stop offset="43%" stop-color="#7C3AED"/>
-      <stop offset="100%" stop-color="#BE185D"/>
-    </radialGradient>
-    <linearGradient id="coinGold" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FDE68A"/>
-      <stop offset="45%" stop-color="#FBBF24"/>
-      <stop offset="100%" stop-color="#D97706"/>
+    <linearGradient id="terracotta" x1="56" y1="18" x2="437" y2="509" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#DA784B"/>
+      <stop offset="1" stop-color="#BC4D3C"/>
     </linearGradient>
-    <filter id="symbolShadow" x="-30%" y="-30%" width="160%" height="180%">
-      <feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#4C1D95" flood-opacity=".34"/>
-    </filter>
   </defs>
-
-  <rect width="512" height="512" rx="112" fill="url(#marketGlow)"/>
-  <rect x="22" y="22" width="468" height="468" rx="94" fill="none" stroke="#FFFFFF" stroke-opacity=".14" stroke-width="4"/>
-  <ellipse cx="132" cy="78" rx="150" ry="92" fill="#FFFFFF" fill-opacity=".08"/>
-
-  <g transform="rotate(-6 256 256)" filter="url(#symbolShadow)">
-    <!-- Price-tag silhouette. The large, open shape remains readable at 128px. -->
-    <path d="M116 118H306L408 220V382H116Z" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="8" stroke-linejoin="round"/>
-    <path d="M142 148H294L376 230V352H142Z" fill="#6D28D9" stroke="#5B21B6" stroke-width="4" stroke-linejoin="round"/>
-
-    <!-- Tag hole and a small highlight make the silhouette feel like a product mark. -->
-    <circle cx="165" cy="165" r="18" fill="#4C1D95" stroke="#FFFFFF" stroke-width="8"/>
-    <circle cx="165" cy="165" r="5" fill="#FDE68A"/>
-
-    <!-- Exchange coin. -->
-    <circle cx="256" cy="278" r="78" fill="url(#coinGold)" stroke="#FFFFFF" stroke-width="12"/>
-    <circle cx="256" cy="278" r="61" fill="none" stroke="#FFFFFF" stroke-opacity=".32" stroke-width="4"/>
-    <g fill="none" stroke="#5B21B6" stroke-width="13" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M211 262H299"/>
-      <path d="m277 240 22 22-22 22"/>
-      <path d="M301 298H213"/>
-      <path d="m235 276-22 22 22 22"/>
-    </g>
+  <rect width="512" height="512" rx="112" fill="url(#terracotta)"/>
+  <g transform="rotate(-5 256 256)" stroke="#FFF6DF" stroke-width="28" stroke-linecap="round" stroke-linejoin="round">
+    <path id="walls" d="M142 245V366Q142 391 167 391H353Q378 391 378 366V245"/>
+    <path id="door" d="M277 389V311Q277 296 292 296H318Q333 296 333 311V389"/>
+    <rect id="window" x="183" y="286" width="50" height="49" rx="9" stroke-width="25"/>
+    <path id="awning" d="M117 189L157 117Q162 106 177 106H336Q349 106 355 119L397 191C399 218 377 238 352 238C326 238 305 220 305 194C305 219 285 240 258 240C231 240 211 219 211 194C211 219 190 240 163 240C137 240 113 218 117 189Z"/>
+    <path id="awning-seams" d="M211 108V194M305 108V194"/>
   </g>
 </svg>

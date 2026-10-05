@@ -7,3 +7,5 @@ codex-work/
 CODEX_PROJECT_MEMORY.md
 **/*.pem
 **/*.key
+__pycache__/
+*.py[cod]

@@ -1,17 +1,16 @@
 # KiteMarket product icon
 
-Original artwork: a bold white price-tag silhouette with a gold exchange coin
-on a violet-to-pink gradient tile. The simple tag, coin and bidirectional arrows
-stay readable at small sizes and share the rounded, high-contrast visual family
-of the ArcPass and VerifyMC icons. No lettering, third-party artwork or theme
-assets.
+Original artwork: a welcoming market shop with a three-panel awning, a small
+window and an open doorway. Rounded cream linework and a terracotta background
+keep the storefront clear at small sizes. The icon contains no lettering.
 
 - Editable source: `kitemarket-icon.svg` (512 × 512 vector canvas).
 - RGBA exports: `kitemarket-icon-{1024,512,128}.png`, with transparent outer
   corners and antialiased symbol edges.
-- Re-export: `python branding/export-icon.py` with Python 3.9+ and Pillow. The
-  SVG is the editable source and the exporter mirrors its intentionally simple
-  geometry for deterministic raster output.
+- Re-export: `python branding/export-icon.py` with Python 3.9+, Node.js 20+
+  and `sharp` available to Node's module resolver (local install or `NODE_PATH`).
+  The exporter renders this SVG directly, keeping the PNGs consistent with the
+  editable source. These tools are for artwork maintenance, not plugin runtime.
 - Use the 128 export for small cards; use SVG or the larger exports for websites,
   product pages, and repository branding. Do not stretch into a different ratio.
 - Copyright © 2026 KiteMC. The product icon may be used to identify and link to
