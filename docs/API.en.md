@@ -4,7 +4,7 @@ Interface version: KiteMarket 1.0.0. The SDK targets Java 11 and is MIT licensed
 
 ## Get the SDK
 
-Interface source and examples are available in the public [KiteMC/KiteMarket](https://github.com/KiteMC/KiteMarket) repository. Published SDKs, runtime JARs and configuration packages are distributed through [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases); when no assets have been published, the public source remains available. Choose SDK assets matching the installed host version:
+Interface source and examples are available in the public [KiteMC/KiteMarket](https://github.com/KiteMC/KiteMarket) repository. SDKs, runtime JARs and configuration packages are distributed through [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases). Choose SDK assets matching the installed host version:
 
 | File | Purpose |
 | --- | --- |

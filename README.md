@@ -2,11 +2,12 @@
 
 支持高级收购、一口价出售和公开竞拍的完整 Minecraft 市场插件。内置原版 GUI、钱包、领取箱、历史和管理功能；可选兼容 ItemsAdder v4，开发者可自行制作、免费分发或独立销售自有界面，无需额外的 KiteMC 主题授权。
 
-本仓库存放 SDK 源码、开发示例、文档及 Issues。**1.0.0 运行版本暂未发布。** 已发布的运行 JAR、SDK、源码／Javadoc、示例及语言／配置包统一通过 [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases) 获取。
+本仓库存放 SDK 源码、开发示例、文档及 Issues。运行 JAR、SDK、源码／Javadoc、示例及语言／配置包统一通过 [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases) 获取。
 
-预定售价：**¥68／USD 9.99，买断**。一份许可证对应一个独立市场网络，网络内不限节点。包含基础插件更新，维护期间提供问题支持，不承诺永久维护服务。第三方经济插件、ItemsAdder 及其资源另行获取。
+售价：**¥68／USD 9.99，买断**。一份许可证对应一个独立市场网络，网络内不限节点。包含基础插件更新，维护期间提供问题支持，不承诺永久维护服务。第三方经济插件、ItemsAdder 及其资源另行获取。
 
 - [English](README.en.md) / [中文](README.md)
+- [购买许可证 / Purchase](https://license.kitemc.com/products/kitemarket) / [English store](https://license.kitemc.com/en/products/kitemarket)
 - [Website](https://kitemc.com/docs/kitemarket/) / [English docs](https://kitemc.com/en/docs/kitemarket/)
 - [Read-only API](docs/API.md) / [API English](docs/API.en.md)
 - [UI SDK](market-ui-api/README.md)

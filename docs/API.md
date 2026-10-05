@@ -4,7 +4,7 @@
 
 ## 获取 SDK
 
-接口源码与示例位于公开仓库 [KiteMC/KiteMarket](https://github.com/KiteMC/KiteMarket)。已发布的 SDK、运行包及配置包统一从 [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases) 获取；没有发行文件时，可先阅读公开源码。选择与主插件版本匹配的 SDK：
+接口源码与示例位于公开仓库 [KiteMC/KiteMarket](https://github.com/KiteMC/KiteMarket)。SDK、运行包及配置包统一从 [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases) 获取。选择与主插件版本匹配的 SDK：
 
 | 文件 | 用途 |
 | --- | --- |
