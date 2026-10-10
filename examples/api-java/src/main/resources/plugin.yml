@@ -4,4 +4,4 @@ main: com.kitemc.examples.api.MarketApiExample
 api-version: '1.16'
 depend: [KiteMarket]
 folia-supported: true
-description: MIT example of safe asynchronous read-only KiteMarket integrations.
+description: MIT example of queries, owner-bound extensions and player-confirmed KiteMarket requests.

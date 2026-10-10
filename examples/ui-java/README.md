@@ -2,11 +2,11 @@
 
 独立 [MIT License](LICENSE) 允许修改、分发和销售本示例；不适用于闭源主插件或其他未标明 MIT 的素材。示例使用自有 `km_example` 白框字体，无需额外的 KiteMC 主题授权。
 
-本插件使用真实 ItemsAdder v4 `TexturedInventoryWrapper` 呈现 KiteMarket 的全部35个共用页面，包括 `profile` 个人页。金额、订单、物品、报价和动作来自服务端快照，按钮回传服务端登记的不透明令牌，交易仍由 KiteMarket 完成；不生成演示余额、物品或成交结果。原版文本输入及取消／返回流程继续由主插件处理。
+本插件使用真实 ItemsAdder v4 `TexturedInventoryWrapper` 呈现 KiteMarket 提供的共用页面，包括 `profile`、原35页及1.1新增专题页。金额、订单、物品、报价和动作来自服务端快照，按钮回传服务端登记的不透明令牌，交易仍由 KiteMarket 完成；不生成演示余额、物品或成交结果。原版文本输入及取消／返回流程继续由主插件处理。
 
 ## 使用 GitHub Packages 构建
 
-推荐在自己的示例副本中使用 `com.kitemc:kitemarket-ui-api:1.0.0`。认证配置见 [Packages 指南](../../docs/GITHUB-PACKAGES.md)：用户级 `gpr.user`／`gpr.key` 或 `GITHUB_ACTOR`／`GITHUB_TOKEN`，classic PAT 最小权限为 `read:packages`；引用前确认 Packages 列表已有目标版本。安装 JDK 21，SDK 仍为 Java 11，本 IA 示例为 Java 21。
+推荐在自己的示例副本中使用 `com.kitemc:kitemarket-ui-api:1.1.0`。认证配置见 [Packages 指南](../../docs/GITHUB-PACKAGES.md)：用户级 `gpr.user`／`gpr.key` 或 `GITHUB_ACTOR`／`GITHUB_TOKEN`，classic PAT 最小权限为 `read:packages`；引用前确认 Packages 列表已有目标版本。安装 JDK 21，SDK 仍为 Java 11，本 IA 示例为 Java 21。
 
 在自己的 `build.gradle.kts` 中删除 `val sdkJar = ...` 及本地文件检查 `tasks.named<JavaCompile>("compileJava")` 整块；用以下仓库和依赖替换原 `repositories`／`dependencies`，保留其他任务：
 
@@ -27,7 +27,7 @@ repositories {
     }
 }
 dependencies {
-    compileOnly("com.kitemc:kitemarket-ui-api:1.0.0")
+    compileOnly("com.kitemc:kitemarket-ui-api:1.1.0")
     compileOnly("com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT")
     compileOnly("beer.devs:itemsadder-api:4.0.18-beta-10")
     constraints { compileOnly("com.google.code.gson:gson:2.11.0") }
@@ -40,14 +40,14 @@ dependencies {
 
 ```powershell
 .\gradlew.bat :market-ui-api:jar
-.\gradlew.bat -p examples/ui-java "-PuiApiJar=$PWD/market-ui-api/build/libs/KiteMarket-UI-API-1.0.0.jar" developerBundle
+.\gradlew.bat -p examples/ui-java "-PuiApiJar=$PWD/market-ui-api/build/libs/KiteMarket-UI-API-1.1.0.jar" developerBundle
 ```
 
-示例目录中的成品为 `build/libs/kitemarket-ui-example-1.0.0.jar`。本地 `developerBundle` 任务生成 `build/distributions/KiteMarket-IA-Example-1.0.0.zip`；公开发行时统一合并为 `KiteMarket-Examples-1.0.0.zip`，本例位于 `ui-java/`。内含 JAR、`theme.yml`、`itemsadder/` 白框资源、双语 README、MIT License、源码及构建文件，不含厂商实现、第二份 SDK 或核心代码。独立解包后在 `ui-java/` 使用自己的 wrapper 或 Gradle 9.6.1，传入 `-PuiApiJar=<绝对SDK路径>`。
+示例目录中的成品为 `build/libs/kitemarket-ui-example-1.1.0.jar`。本地 `developerBundle` 任务生成 `build/distributions/KiteMarket-IA-Example-1.1.0.zip`；公开发行时统一合并为 `KiteMarket-Examples-1.1.0.zip`，本例位于 `ui-java/`。内含 JAR、`theme.yml`、`itemsadder/` 白框资源、双语 README、MIT License、源码及构建文件，不含厂商实现、第二份 SDK 或核心代码。消费前确认目标版本已实际发布。独立解包后在 `ui-java/` 使用自己的 wrapper 或 Gradle 9.6.1，传入 `-PuiApiJar=<绝对SDK路径>`。
 
 也可传入 `-PuiApiJar=C:/absolute/path/KiteMarket-UI-API.jar`。SDK、Paper API、ItemsAdder 公共 API 都是 `compileOnly`，不会打进示例包。公共编译依赖固定为 `beer.devs:itemsadder-api:4.0.18-beta-10`，与主插件一致；实际运行必须使用合法且匹配服务器的 ItemsAdder v4。Java 21 厂商适配代码在 `ItemsAdderProvider.java`，公开 SDK 仍为独立 Java 11 模块。
 
-本例不支持 Folia，不安装到 Java 11 Legacy 服务器。适用组合见[官网兼容说明](https://kitemc.com/docs/kitemarket/compatibility/)。
+本例不支持 Folia，不安装到 Java 11 Legacy 服务器。适用组合见[官网兼容说明](https://www.kitemc.com/kitemarket/compatibility)。
 
 ## 安装并操作真实市场
 
@@ -57,7 +57,20 @@ dependencies {
 4. 按实际 IA 指南执行资源重载、重建和下发。将合并资源包的真实小写 SHA-1 和实际下发 UUID 登记到 `gui.itemsadder.pack-sha1`／`pack-id`，或写在主题 `requires` 中；不能填假值、空字符串或只写文件摘要而猜测 UUID。资源内容变化后应使用新的实际下发 UUID。
 5. 正常重启加载示例插件，再执行 `/km reload` 校验主题。玩家通过 `/km ui itemsadder example-ia-java` 选择主题。玩家必须先成功加载对应包，拒绝／失败会显示原因并回到完整原版界面。
 
-主题 `provider: example.itemsadder` 选择本 Java 适配器。配置示例 `example-ia` 使用内置 `kitemarket.itemsadder`，两者可以同时安装，复用同一极简字体资源。`pages.'*'` 覆盖全部35页，`profile` 无需另添配置；可以增添逐页字体和偏移，实际槽位、输入、报价与提交逻辑保持由主插件决定。
+Paper 1.21.11／Java 21／ItemsAdder 4.0.16 的 v1.1 候选验证使用入服后自动下发。在 `plugins/ItemsAdder/config.yml` 中设置：
+
+```yaml
+resource-pack:
+  auto_apply:
+    enabled: true
+    before_join: false
+```
+
+执行 `/iareload` 并等待完成，再让玩家正常重新连接、成功加载资源包。该组合已确认自动下发后的配置主题和 Java 页面；入服前下发尚未确认完整身份关联，不应当作已验证路径。KiteMarket 未确认对应包时保留偏好并回退原版，不需要反复重建资源包。
+
+主题 `provider: example.itemsadder` 选择本 Java 适配器。配置示例 `example-ia` 使用内置 `kitemarket.itemsadder`，两者可以同时安装，复用同一极简字体资源。`pages.'*'` 覆盖主插件的共用页及1.1新增页，`profile` 无需另添配置；可以增添逐页字体和偏移，实际槽位、输入、报价与提交逻辑保持由主插件决定。完整键与槽位见 [GUI 指南](../../docs/GUI-CONFIGURATION.md)。
+
+整包按真实总价和内容展示；批量是逐单人工确认和独立结果，待核对停止后续，不由呈现器重试。容器预览只读，详情不提供取物动作。费用和报价直接使用主插件给出的值，不以主题配置重新计算。
 
 默认精简首页、旧首页兼容和个人页均使用服务器本次提供的物理槽位。数量和金额上限使用 `UiPrompt`／页面数据，外部查询失败显示原因并回退相应操作，不能显示假零或宣称无限容量。附魔搜索、分页和收据编号查看／复制通过已有动作完成；草稿、最终重查及幂等仍由主插件管理。
 
@@ -83,19 +96,23 @@ dependencies {
 
 This working example uses its own [MIT License](LICENSE). You may modify, distribute or sell it; the license does not apply to the closed-source host or unrelated artwork. Its own `km_example` white-frame font requires no separate KiteMC theme license.
 
-Use GitHub Packages as the primary dependency method in your own example copy: `com.kitemc:kitemarket-ui-api:1.0.0`. See the [Packages guide](../../docs/GITHUB-PACKAGES.en.md) for user-level `gpr.user` / `gpr.key` or `GITHUB_ACTOR` / `GITHUB_TOKEN`; the classic PAT requires `read:packages`. Confirm the version exists in Packages before referencing it.
+Use GitHub Packages as the primary dependency method in your own example copy: `com.kitemc:kitemarket-ui-api:1.1.0`. See the [Packages guide](../../docs/GITHUB-PACKAGES.en.md) for user-level `gpr.user` / `gpr.key` or `GITHUB_ACTOR` / `GITHUB_TOKEN`; the classic PAT requires `read:packages`. Confirm the version exists in Packages before referencing it.
 
 To use the complete Kotlin configuration above, replace your copy's `repositories` / `dependencies`, remove `val sdkJar = ...` and the entire local-file-checking `tasks.named<JavaCompile>("compileJava")` block, and retain the other tasks. The configuration keeps Paper and ItemsAdder's JitPack repository and compile-only dependencies. From the public checkout root, run `.\gradlew.bat -p examples/ui-java developerBundle`, or use your own wrapper / Gradle 9.6.1 inside a standalone extraction.
 
-Install JDK 21; the SDK targets Java 11 while this IA adapter targets Java 21. The example output is `build/libs/kitemarket-ui-example-1.0.0.jar`, and its local bundle is `build/distributions/KiteMarket-IA-Example-1.0.0.zip`. Public Release assets combine both examples in `KiteMarket-Examples-1.0.0.zip`, with this one under `ui-java/`. The bundle contains the JAR, `theme.yml`, `itemsadder/` white-frame resource, bilingual README, MIT license, source and build files. The unchanged script still supports local source builds or direct Release SDK downloads via `-PuiApiJar=<absolute SDK path>`; that alternative needs no Maven registry authentication. Paper, the SDK and `beer.devs:itemsadder-api:4.0.18-beta-10` remain compile-only, without a vendor implementation or second SDK bundled. The example does not support Folia or Java 11 Legacy servers.
+Install JDK 21; the SDK targets Java 11 while this IA adapter targets Java 21. The example output is `build/libs/kitemarket-ui-example-1.1.0.jar`, and its local bundle is `build/distributions/KiteMarket-IA-Example-1.1.0.zip`. Public Release assets combine both examples in `KiteMarket-Examples-1.1.0.zip`, with this one under `ui-java/`; confirm the target release exists before consumption. The bundle contains the JAR, `theme.yml`, `itemsadder/` white-frame resource, bilingual README, MIT license, source and build files. The unchanged script still supports local source builds or direct Release SDK downloads via `-PuiApiJar=<absolute SDK path>`; that alternative needs no Maven registry authentication. Paper, the SDK and `beer.devs:itemsadder-api:4.0.18-beta-10` remain compile-only, without a vendor implementation or second SDK bundled. The example does not support Folia or Java 11 Legacy servers.
 
 Install a compatible legitimate ItemsAdder v4 and a KiteMarket version shipping `itemsAdderUnavailable`. Install the example JAR, copy `theme.yml` to `plugins/KiteMarket/themes/example-ia-java.yml`, and copy the bundle's `itemsadder/` (or the sibling source example's resources) to `plugins/ItemsAdder/contents/km_example/`. Preserve other namespaces. Rebuild and send the actual merged pack using the installed IA instructions; register its lowercase SHA-1 and sent UUID in `gui.itemsadder.pack-sha1`/`pack-id`, or in the theme's `requires`. Changed content requires a new actual sent UUID.
+
+The v1.1 candidate check on Paper 1.21.11 / Java 21 / ItemsAdder 4.0.16 uses the YAML above in `plugins/ItemsAdder/config.yml`: `resource-pack.auto_apply.enabled: true` and `resource-pack.auto_apply.before_join: false`. Run `/iareload`, wait for completion, then reconnect normally and successfully load the pack. Automatic delivery after joining has opened the real configuration theme and Java page in this combination; delivery before joining has not yet passed full identity correlation. An unconfirmed pack preserves the preference and falls back to vanilla, without requiring repeated pack rebuilds.
 
 Restart normally to load the Java provider, validate the theme using `/km reload`, then select the theme with `/km ui itemsadder example-ia-java`. A matching successfully loaded pack is required; rejection or failure produces an explanation and vanilla fallback. Selection does not submit a trade, install resources or query an official DLC.
 
 The `example.itemsadder` provider renders real market pages using `TexturedInventoryWrapper`. It receives real detached items, amounts and host-generated opaque actions; it never invents balances, items or successful transactions. Real confirmation buttons perform the requested transaction through KiteMarket, so use an isolated character and test orders during development.
 
-Its wildcard theme covers all 35 current pages, including `profile` without a separate declaration. Compact and legacy home use the current snapshot's physical slots. Display host prompt/page limits and quote errors; unknown external balances are not zero or unlimited capacity. Enchantment search, paging and receipt ID/copy actions use registered callbacks, while draft preservation, final checks and idempotency remain in the host.
+Its wildcard theme covers the original 35 pages and new 1.1 pages, including `profile` without a separate declaration. See the [GUI guide](../../docs/GUI-CONFIGURATION.en.md) for exact keys and slots. Compact and legacy home use the current snapshot's physical slots. Display host prompt/page limits and quote errors; unknown external balances are not zero or unlimited capacity. Enchantment search, paging and receipt ID/copy actions use registered callbacks, while draft preservation, final checks and idempotency remain in the host.
+
+Bundles display their real whole-lot price and contents. Batch listings retain separate player confirmations and results; uncertainty stops subsequent submissions rather than being retried by the renderer. Container previews are read-only and expose no extraction action. Use host-provided fee/quote values without recalculating them from theme configuration.
 
 Optional `resources.item-icons` maps vanilla `Material` names to your own registered IA item IDs, such as this bundle's `BOOK: km_example:book_button`. Optional `pages.<template>.slot-icons` uses quoted physical slots `'0'` to `'53'` to override that page, for example `'49': 'my_theme:back_button'`. An exact page does not merge with `'*'`. The bundle includes an original 16×16 MIT book icon, registered using modern `material: PAPER` and `graphics.texture: items/book_button` for IA4.0.16/MC1.21.11. Install and rebuild this resource; no unrelated IDs are assumed to exist. From the public checkout root, the editable drawing code can regenerate it using `python examples/ui/generate_ia_background.py --icons-only`. `UiItemIcons.resolve(page, theme)` returns only existing functional entries; real `subject()` items are never replaced. The custom icon retains the original display name, Lore, amount and host action. Missing registered icons return `IA_RESOURCES_PENDING` and fall back to vanilla. Resolving icon metadata neither checks nor grants an official DLC entitlement.
 
@@ -105,4 +122,4 @@ The adapter clones the original subject, retains its names/enchantments and orig
 
 Resource readiness comes from the host's read-only `itemsAdderUnavailable(player, page, theme)`. Genuine IA and resource-pack events notify the host through `changed(owner)`; sending or accepting a pack is never claimed to mean it is loaded. No official entitlement is checked. Input falls back to the host's validated chat flow, preserving drafts and cancellation. State backgrounds use the server's `result.status` with optional page/resource `state-font-images`; absent mappings use the page background. Presentation states are `SUCCESS`, `PENDING`, `FAILED` and `UNCONFIRMED`, distinct from ledger operation states or transaction result codes.
 
-On disable the plugin unregisters, cancels its tasks and closes only its own views on Paper's main thread. Unavailability or unload falls back through the host without changing saved preferences or duplicating a submission. This code uses only the public SDK and vendor API. See the [compatibility guide](https://kitemc.com/en/docs/kitemarket/compatibility/) for supported runtime combinations.
+On disable the plugin unregisters, cancels its tasks and closes only its own views on Paper's main thread. Unavailability or unload falls back through the host without changing saved preferences or duplicating a submission. This code uses only the public SDK and vendor API. See the [compatibility guide](https://www.kitemc.com/en/kitemarket/compatibility) for supported runtime combinations.

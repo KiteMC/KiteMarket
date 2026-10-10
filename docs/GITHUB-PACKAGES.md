@@ -4,10 +4,12 @@ KiteMarket 的两套独立 Java 11／MIT SDK 提供 Maven 依赖；闭源主插�
 
 | 开发包 | Maven 坐标 |
 | --- | --- |
-| 只读查询与成交通知 | `com.kitemc:kitemarket-api:1.0.0` |
-| 页面呈现与 IA 界面扩展 | `com.kitemc:kitemarket-ui-api:1.0.0` |
+| 不可变查询、窄扩展与玩家确认请求 | `com.kitemc:kitemarket-api:1.1.0` |
+| 页面呈现与 IA 界面扩展 | `com.kitemc:kitemarket-ui-api:1.1.0` |
 
-仓库地址为 `https://maven.pkg.github.com/kitemc/KiteMarket`。两个开发包都附带 sources、Javadoc 和 MIT 许可证，选择与主插件匹配的版本。运行包、语言／配置包、可运行示例和 SDK 直接下载仍保留在 [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases)。
+仓库地址为 `https://maven.pkg.github.com/kitemc/KiteMarket`。两个开发包都附带 sources、Javadoc 和 MIT 许可证，选择与主插件匹配的版本；本页使用 1.1.0 示例，消费前确认目标版本已实际发布。运行包、语言／配置包、可运行示例和 SDK 直接下载仍保留在 [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases)。
+
+1.1 的 `KiteMarketApi` 继续提供兼容的只读查询；`KiteMarketExtensions` 和 `KiteMarketRequests` 是独立服务。扩展登记真实启用的拥有者，交易请求必须经过主插件玩家确认，没有公开 commit、金融补发或管理员修复入口。完整合同见 [SDK 指南](API.md)。
 
 ## 认证
 
@@ -39,9 +41,9 @@ repositories {
     }
 }
 dependencies {
-    compileOnly("com.kitemc:kitemarket-api:1.0.0")
+    compileOnly("com.kitemc:kitemarket-api:1.1.0")
     // 需要界面扩展时再加入：
-    compileOnly("com.kitemc:kitemarket-ui-api:1.0.0")
+    compileOnly("com.kitemc:kitemarket-ui-api:1.1.0")
     compileOnly("com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT")
 }
 ```
@@ -59,7 +61,7 @@ dependencies {
 <dependency>
   <groupId>com.kitemc</groupId>
   <artifactId>kitemarket-api</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
   <scope>provided</scope>
 </dependency>
 ```
@@ -80,7 +82,7 @@ Actions 使用 `GITHUB_TOKEN` 下载时需要 `packages: read`，并且该工作
 
 ## KiteMC 发行
 
-公开仓库的 `Publish SDKs to GitHub Packages` 工作流在正式 Release 发布时自动运行，也可从 [Actions](https://github.com/KiteMC/KiteMarket/actions/workflows/packages.yml) 手动运行，输入已存在的公开标签，如 `v1.0.0`。工作流检出该标签，使用自带 `GITHUB_TOKEN` 的 `contents: read`／`packages: write`，无需另配跨仓库发包 PAT。
+公开仓库的 `Publish SDKs to GitHub Packages` 工作流在正式 Release 发布时自动运行，也可从 [Actions](https://github.com/KiteMC/KiteMarket/actions/workflows/packages.yml) 手动运行，输入已存在的公开标签，如 `v1.1.0`。示例标签必须先实际存在，不能把工作流默认值当作已发布。工作流检出该标签，使用自带 `GITHUB_TOKEN` 的 `contents: read`／`packages: write`，无需另配跨仓库发包 PAT。
 
 发布前检查两套 SDK 的 Java 11 字节码、公开类范围、POM 坐标和 MIT 许可。已有版本内容完全相同则跳过，内容不同则拒绝覆盖；上传中断留下部分版本时停止并提示管理员核对。新版本需要同步公开 SDK 源码和版本，再创建对应标签；不要用同一个版本名替换已有内容。
 

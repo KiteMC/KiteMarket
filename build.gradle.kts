@@ -1,5 +1,5 @@
 allprojects {
-    group = "com.kitemc"; version = "1.0.0"
+    group = "com.kitemc"; version = "1.1.0"
     repositories { mavenCentral(); maven("https://repo.papermc.io/repository/maven-public/") }
 }
 subprojects {

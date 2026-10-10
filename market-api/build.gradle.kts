@@ -2,6 +2,7 @@ plugins { `java-library`; `maven-publish` }
 
 dependencies {
     compileOnly("com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT")
+    testImplementation("com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT")
 }
 
 java {
@@ -26,8 +27,8 @@ publishing {
             from(components["java"])
             artifactId = "kitemarket-api"
             pom {
-                name.set("KiteMarket read-only market API")
-                description.set("Java 11 SDK for read-only queries and committed-trade notifications.")
+                name.set("KiteMarket market extension SDK")
+                description.set("Java 11 SDK for immutable queries, owner-bound extensions and player-confirmed requests.")
                 url.set("https://github.com/KiteMC/KiteMarket")
                 licenses {
                     license {

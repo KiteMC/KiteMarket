@@ -4,10 +4,12 @@ The two independent Java 11, MIT-licensed SDKs are available as Maven dependenci
 
 | SDK | Maven coordinates |
 | --- | --- |
-| Read-only queries and committed-trade notifications | `com.kitemc:kitemarket-api:1.0.0` |
-| Page rendering and freely developed IA interfaces | `com.kitemc:kitemarket-ui-api:1.0.0` |
+| Immutable queries, narrow extensions and player-confirmed requests | `com.kitemc:kitemarket-api:1.1.0` |
+| Page rendering and freely developed IA interfaces | `com.kitemc:kitemarket-ui-api:1.1.0` |
 
-Registry: `https://maven.pkg.github.com/kitemc/KiteMarket`. Both SDKs include sources, Javadoc and their MIT license. Select a version matching the installed host. Runtime JARs, language/configuration archives, working examples and direct SDK downloads remain in [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases).
+Registry: `https://maven.pkg.github.com/kitemc/KiteMarket`. Both SDKs include sources, Javadoc and their MIT license. Select a version matching the installed host; this guide uses 1.1.0 examples, so verify that version is published before consumption. Runtime JARs, language/configuration archives, working examples and direct SDK downloads remain in [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases).
+
+The 1.1 `KiteMarketApi` keeps its compatible read-only queries. `KiteMarketExtensions` and `KiteMarketRequests` are separate services. Extensions register their actual enabled owner; requests require host player confirmation and expose no commit, financial replay or administrator recovery entry. See the [SDK guide](API.en.md) for the complete contract.
 
 ## Authentication
 
@@ -39,9 +41,9 @@ repositories {
     }
 }
 dependencies {
-    compileOnly("com.kitemc:kitemarket-api:1.0.0")
+    compileOnly("com.kitemc:kitemarket-api:1.1.0")
     // Add only when extending presentation:
-    compileOnly("com.kitemc:kitemarket-ui-api:1.0.0")
+    compileOnly("com.kitemc:kitemarket-ui-api:1.1.0")
     compileOnly("com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT")
 }
 ```
@@ -59,7 +61,7 @@ Use `compileOnly`. Never bundle, shade or relocate SDK classes into a third-part
 <dependency>
   <groupId>com.kitemc</groupId>
   <artifactId>kitemarket-api</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
   <scope>provided</scope>
 </dependency>
 ```
@@ -80,7 +82,7 @@ Downloading with a workflow's `GITHUB_TOKEN` requires `packages: read` and acces
 
 ## KiteMC publication
 
-The public repository's `Publish SDKs to GitHub Packages` workflow runs when a stable Release is published. It can also be dispatched from [Actions](https://github.com/KiteMC/KiteMarket/actions/workflows/packages.yml), using an existing public tag such as `v1.0.0`. It checks out that tag and uses its own `GITHUB_TOKEN` with `contents: read` and `packages: write`; no cross-repository publishing PAT is required.
+The public repository's `Publish SDKs to GitHub Packages` workflow runs when a stable Release is published. It can also be dispatched from [Actions](https://github.com/KiteMC/KiteMarket/actions/workflows/packages.yml), using an existing public tag such as `v1.1.0`. The example tag must actually exist; a workflow default is not publication evidence. It checks out that tag and uses its own `GITHUB_TOKEN` with `contents: read` and `packages: write`; no cross-repository publishing PAT is required.
 
 Before uploading, it verifies Java 11 bytecode, public class boundaries, Maven coordinates and MIT licensing. An existing byte-identical version is skipped; changed content is rejected. A partially uploaded version stops the workflow for administrator review. Synchronize public SDK source and version before creating a new tag; do not replace an existing version's contents.
 

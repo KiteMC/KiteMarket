@@ -22,7 +22,11 @@ The sample files belong in `plugins/KiteMarket/themes/` under distinct names. Us
 3. 示例的 `requires: {}` 继承节点登记的资源包身份；如果主题另用一个包，添加实际资源包的小写 SHA-1 和 Minecraft 下发 UUID 为 `requires.pack-sha1`、`requires.pack-id`。不要写空字符串，这会导致候选校验失败。重建后的内容摘要变化必须对应新的实际下发 UUID。
 4. 用 `/km reload` 校验加载声明及配置，再选择 `/km ui itemsadder example-ia`；也可从界面设置中的主题列表选择。第三方主题不需要官方主题权益；仍需正常主插件与正确资源包。
 
-This example uses a transparent 176×222 image with a plain white frame. It demonstrates referencing your own registered font image. Check the [compatibility guide](https://kitemc.com/en/docs/kitemarket/compatibility/) for supported runtime combinations.
+Paper 1.21.11／Java 21／ItemsAdder 4.0.16 的 v1.1 候选使用 `plugins/ItemsAdder/config.yml` 中的 `resource-pack.auto_apply.enabled: true` 和 `resource-pack.auto_apply.before_join: false`，在入服后自动下发。修改后 `/iareload`，等待完成，再正常重新连接并成功加载包。入服前下发的完整身份关联尚未确认；未确认时保留偏好并回退原版。
+
+For the v1.1 candidate on Paper 1.21.11 / Java 21 / ItemsAdder 4.0.16, set `resource-pack.auto_apply.enabled: true` and `resource-pack.auto_apply.before_join: false` in `plugins/ItemsAdder/config.yml`. Reload IA, wait for completion, then reconnect normally and successfully load the pack. Full identity correlation for delivery before joining remains unverified; an unconfirmed pack preserves the preference and falls back to vanilla.
+
+This example uses a transparent 176×222 image with a plain white frame. It demonstrates referencing your own registered font image. Check the [compatibility guide](https://www.kitemc.com/en/kitemarket/compatibility) for supported runtime combinations.
 
 在公开 `KiteMC/KiteMarket` 仓库根目录重新生成图源：
 
@@ -47,7 +51,7 @@ pages:
   '*': {}
 ```
 
-`pages.'*'` 是默认页面定义，覆盖全部35个共用页面，包括个人页 `profile`；具体页面可以覆盖 `font-image`、`title-offset` 和 `texture-offset`。金额、真实物品和动作由服务器提供，主题配置不能改写账本逻辑。
+`pages.'*'` 是默认页面定义，覆盖主插件提供的共用页面，包括原35页和1.1新增整包/批量、容器、社区、自动化、风险及管理页。具体页面可以覆盖 `font-image`、`title-offset` 和 `texture-offset`。金额、真实物品和动作由服务器提供，主题配置不能改写账本逻辑。
 
 结果页可使用 `state-font-images`，以服务器给出的 `result.status` 选择背景；没有状态映射时使用本页背景。运行字段为 `SUCCESS`、`PENDING`、`FAILED`、`UNCONFIRMED`；它们是呈现状态，不是账本操作状态。下例是最小声明，换成新图片前应先将该图片注册到实际资源包中：
 
@@ -61,7 +65,7 @@ pages:
 
 State backgrounds are optional. `state-font-images` selects a registered font image using the server's `result.status`; a missing status mapping uses the page background. This declaration cannot change transaction results.
 
-当前 35 个 `menus` 页面键如下；这是 `UiPage.key()`，不全部等于主题 `pages` 使用的 `UiPage.template()`：
+保留的 v1.0 `35` 个 `menus` 页面键如下；这是 `UiPage.key()`，不全部等于主题 `pages` 使用的 `UiPage.template()`：
 
 `home`、`profile`、`browse`、`browse-filters`、`order`、`editor`、`number`、`materials`、`durability`、`text-condition`、`enchantments`、`enchantment-range`、`preview`、`supply-preview`、`confirm`、`details`、`insufficient`、`wallet`、`wallet-currency`、`assets`、`history`、`receipt`、`admin`、`admin-player`、`admin-wallet`、`admin-assets`、`admin-orders`、`admin-player-history`、`resolve-source`、`doctor`、`inspect`、`evidence`、`ui`、`themes`、`result`。
 
@@ -90,7 +94,9 @@ Theme `pages` entries use `UiPage.template()`, while vanilla `menus` entries use
 `pages.supply`, not `pages.supply-preview`; its vanilla configuration still uses
 `menus.supply-preview`. An exact template replaces `'*'` rather than merging with it.
 
-There are 35 current page keys, including `profile` with an identical template ID. The wildcard covers it automatically. Compact home opens the profile from the player's head; existing `menus.home` settings retain legacy home under `gui.home-layout: auto`. Render the supplied physical slots and registered actions so both layouts work.
+The original 35 page keys remain, including `profile` with an identical template ID. The wildcard also covers the host's new 1.1 lot/batch, container, community, automation, risk and administration pages. See the [GUI guide](../../docs/GUI-CONFIGURATION.en.md) for their exact keys and slots. Compact home opens the profile from the player's head; existing `menus.home` settings retain legacy home under `gui.home-layout: auto`. Render the supplied physical slots and registered actions so both layouts work.
+
+1.1 的完整新页面键和源槽位见 [GUI 指南](../../docs/GUI-CONFIGURATION.md)。呈现器读取的是最终物理槽位：整包显示总价与实物内容，批量按每单结果和人工确认继续，UNKNOWN 不自动重试；容器预览只读。不能从主题静态按钮推断交易动作。
 
 数量、金额、外部余额及失败原因都使用快照或输入提示中的服务端值；不要把未知余额显示为零，或给玩家高于服务端范围的“最大值”。附魔搜索和分页沿用已登记动作，草稿由主插件保留；操作编号按收据动作请求查看、复制，不自行新增核对或交易入口。
 
@@ -129,6 +135,6 @@ Fill the protected inventory from `TexturedInventoryWrapper.getInternal()`, regi
 
 ## 获取开发包
 
-配置示例与 Java 示例源码位于公开 [KiteMC/KiteMarket](https://github.com/KiteMC/KiteMarket) 仓库。已发布 SDK、源码／Javadoc、`KiteMarket-Examples-1.0.0.zip` 和双语配置包统一通过 [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases) 下载。
+配置示例与 Java 示例源码位于公开 [KiteMC/KiteMarket](https://github.com/KiteMC/KiteMarket) 仓库。SDK、源码／Javadoc、对应 `KiteMarket-Examples-1.1.0.zip` 和双语配置包通过 [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases) 下载，消费前确认目标版本已实际发布。
 
-Configuration and Java example source is in the public [KiteMC/KiteMarket](https://github.com/KiteMC/KiteMarket) repository. Published SDKs, sources/Javadoc, `KiteMarket-Examples-1.0.0.zip` and bilingual configuration packages are distributed through [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases).
+Configuration and Java example source is in the public [KiteMC/KiteMarket](https://github.com/KiteMC/KiteMarket) repository. Matching SDKs, sources/Javadoc, `KiteMarket-Examples-1.1.0.zip` and bilingual configuration packages are distributed through [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases); confirm that the target version is published before consumption.

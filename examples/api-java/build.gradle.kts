@@ -1,7 +1,7 @@
 plugins { java }
 
 group = "com.kitemc.examples"
-version = "1.0.0"
+version = "1.1.0"
 
 repositories {
     mavenCentral()
@@ -9,7 +9,7 @@ repositories {
 }
 
 val sdkJar = providers.gradleProperty("marketApiJar")
-    .orElse("../../market-api/build/libs/KiteMarket-API-1.0.0.jar")
+    .orElse("../../market-api/build/libs/KiteMarket-API-1.1.0.jar")
 dependencies {
     compileOnly(files(sdkJar.get()))
     compileOnly("com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT")

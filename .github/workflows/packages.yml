@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Existing public SDK tag (for example v1.0.0)"
+        description: "Existing public SDK tag (for example v1.1.0)"
         required: true
-        default: v1.0.0
+        default: v1.1.0
         type: string
   release:
     types: [published]
@@ -34,7 +34,7 @@ jobs:
           import os, re
           tag = os.environ["SDK_TAG"]
           if not re.fullmatch(r"v\d+\.\d+\.\d+", tag):
-              raise SystemExit("Use a stable public SDK tag such as v1.0.0.")
+              raise SystemExit("Use a stable public SDK tag such as v1.1.0.")
           with open(os.environ["GITHUB_OUTPUT"], "a") as output:
               output.write(f"tag={tag}\nversion={tag[1:]}\n")
           PY

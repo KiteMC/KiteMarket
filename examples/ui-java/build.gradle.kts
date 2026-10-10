@@ -1,7 +1,7 @@
 plugins { java }
 
 group = "com.kitemc.examples"
-version = "1.0.0"
+version = "1.1.0"
 
 repositories {
     mavenCentral()
@@ -10,7 +10,7 @@ repositories {
 }
 
 val sdkJar = providers.gradleProperty("uiApiJar")
-    .orElse("../../market-ui-api/build/libs/KiteMarket-UI-API-1.0.0.jar")
+    .orElse("../../market-ui-api/build/libs/KiteMarket-UI-API-1.1.0.jar")
 
 dependencies {
     compileOnly(files(sdkJar.get()))

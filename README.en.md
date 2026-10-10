@@ -2,24 +2,28 @@
 
 A complete Minecraft market with advanced buy orders, fixed-price listings and public auctions. It includes the vanilla GUI, wallet, claims, history, and administration. Optional ItemsAdder v4 support lets developers build and sell their own interfaces without a separate KiteMC theme license.
 
+The `main` branch currently contains the **1.1.0 development candidate**; the current released runtime is **v1.0.0**. The `1.1.0` dependency coordinates and asset names below may be used from Packages or Releases only after that version is actually published. Public SDK source does not mean its Maven artifacts have been published.
+
 This repository provides SDK source, examples, documentation and issue tracking. Use [GitHub Packages](https://github.com/orgs/KiteMC/packages?repo_name=KiteMarket) as the primary dependency method for the two SDKs, checking that the requested version exists first. Runtime JARs, direct SDK downloads, sources/Javadoc, examples and language/configuration packages remain in [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases).
 
 Price: **CNY 68 / USD 9.99, lifetime purchase**. One license covers one independent market network with unlimited nodes. Base plugin updates are included; support is provided during active maintenance, without a promise of perpetual maintenance. Economy plugins, ItemsAdder and third-party resources are separate.
 
 - [English](README.en.md) / [中文](README.md)
 - [购买许可证 / Purchase](https://license.kitemc.com/products/kitemarket) / [English store](https://license.kitemc.com/en/products/kitemarket)
-- [Website](https://kitemc.com/docs/kitemarket/) / [English docs](https://kitemc.com/en/docs/kitemarket/)
-- [Read-only API](docs/API.md) / [API English](docs/API.en.md)
+- [Website](https://www.kitemc.com/kitemarket/index) / [English docs](https://www.kitemc.com/en/kitemarket/index)
+- [Market SDK](docs/API.md) / [SDK English](docs/API.en.md)
 - [UI SDK](market-ui-api/README.md)
 - [GitHub Packages](docs/GITHUB-PACKAGES.md) / [Packages English](docs/GITHUB-PACKAGES.en.md)
 - [API example](examples/api-java/README.md) / [IA example](examples/ui-java/README.md)
 - [GUI configuration](docs/GUI-CONFIGURATION.md)
+- [v1.1 candidate guide](docs/V1.1-USER-GUIDE.md) / [Guide English](docs/V1.1-USER-GUIDE.en.md)
+- [导入与迁移](docs/IMPORTING.md) / [Import and migration](docs/IMPORTING.en.md)
 - [Releases](https://github.com/KiteMC/KiteMarket/releases)
 
 ## Maven packages / Maven 开发包
 
-- `com.kitemc:kitemarket-api:1.0.0` — read-only market API / 只读市场 API
-- `com.kitemc:kitemarket-ui-api:1.0.0` — renderer SDK / 界面 SDK
+- `com.kitemc:kitemarket-api:1.1.0` — immutable queries, extensions and player-confirmed requests / 不可变查询、扩展与玩家确认请求
+- `com.kitemc:kitemarket-ui-api:1.1.0` — renderer SDK / 界面 SDK
 
 Repository: `https://maven.pkg.github.com/kitemc/KiteMarket`. GitHub requires authentication even for public Maven packages. Local consumers use a classic PAT with `read:packages`; [setup examples](docs/GITHUB-PACKAGES.en.md) explain Gradle, Maven and Actions. / GitHub 的公开 Maven 包也需要认证；本地使用具有 `read:packages` 的 classic PAT，见[配置指南](docs/GITHUB-PACKAGES.md)。The existing Release JAR downloads remain available without Maven registry authentication. / 也可继续从 Release 下载 SDK JAR，无需 Maven 仓库认证。
 
@@ -27,10 +31,12 @@ After configuring the registry and credentials from the guide, use: / 按指南�
 
 ```kotlin
 dependencies {
-    compileOnly("com.kitemc:kitemarket-api:1.0.0")
-    compileOnly("com.kitemc:kitemarket-ui-api:1.0.0") // optional / 按需
+    compileOnly("com.kitemc:kitemarket-api:1.1.0")
+    compileOnly("com.kitemc:kitemarket-ui-api:1.1.0") // optional / 按需
 }
 ```
+
+The 1.0 query service and DTO constructors remain compatible. The separate 1.1 extension and request services register enabled owners and require host player confirmation; they grant no arbitrary wallet, inventory or recovery access. / 保留1.0查询服务与DTO构造器；1.1独立扩展和请求服务登记启用中的拥有者，交易仍需主插件玩家确认，不授予任意钱包、背包或恢复权限。
 
 SDK dependencies must be **compileOnly** (Maven: **provided**). Never bundle, shade or relocate either SDK. KiteMarket supplies the only runtime copy. / SDK 必须以 **compileOnly** 引用（Maven 为 **provided**），不得打包、shade 或重定位。Follow each example's README to use Packages in your own example copy. / 示例 README 提供将自己的副本改为 Packages 构建的步骤。
 
@@ -42,8 +48,8 @@ The unchanged example scripts support source and release builds with local SDK f
 
 ```powershell
 .\gradlew.bat :market-api:jar :market-ui-api:jar
-.\gradlew.bat -p examples/api-java -PmarketApiJar=$PWD/market-api/build/libs/KiteMarket-API-1.0.0.jar developerBundle
-.\gradlew.bat -p examples/ui-java -PuiApiJar=$PWD/market-ui-api/build/libs/KiteMarket-UI-API-1.0.0.jar developerBundle
+.\gradlew.bat -p examples/api-java -PmarketApiJar=$PWD/market-api/build/libs/KiteMarket-API-1.1.0.jar developerBundle
+.\gradlew.bat -p examples/ui-java -PuiApiJar=$PWD/market-ui-api/build/libs/KiteMarket-UI-API-1.1.0.jar developerBundle
 ```
 
 ## License / 许可
