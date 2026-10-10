@@ -2,7 +2,7 @@
 
 支持高级收购、一口价出售和公开竞拍的完整 Minecraft 市场插件。内置原版 GUI、钱包、领取箱、历史和管理功能；可选兼容 ItemsAdder v4，开发者可自行制作、免费分发或独立销售自有界面，无需额外的 KiteMC 主题授权。
 
-当前 `main` 为 **1.1.0 开发候选**，已正式发布的运行版本为 **v1.0.0**。下文的 `1.1.0` 依赖坐标与资产文件名，需要该版本在 Packages／Releases 实际发布后才能使用；SDK 源码公开不代表 Maven 成品已经发布。
+本文档对应 **KiteMarket v1.1.0**。运行 JAR、SDK、示例及语言／配置包按下文准确文件名从对应的 GitHub Release 或 Packages 条目获取，使用前请先确认该版本资产已存在；公开 SDK 源码与已发布的 Maven 成品分别说明如下。
 
 本仓库存放 SDK 源码、开发示例、文档及 Issues。推荐通过 [GitHub Packages](https://github.com/orgs/KiteMC/packages?repo_name=KiteMarket) 引用两套 SDK，使用前确认已有目标版本。运行 JAR、SDK 直接下载、源码／Javadoc、示例及语言／配置包仍从 [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases) 获取。
 
@@ -16,7 +16,7 @@
 - [GitHub Packages](docs/GITHUB-PACKAGES.md) / [Packages English](docs/GITHUB-PACKAGES.en.md)
 - [API example](examples/api-java/README.md) / [IA example](examples/ui-java/README.md)
 - [GUI configuration](docs/GUI-CONFIGURATION.md)
-- [v1.1 candidate guide](docs/V1.1-USER-GUIDE.md) / [Guide English](docs/V1.1-USER-GUIDE.en.md)
+- [v1.1 user guide](docs/V1.1-USER-GUIDE.md) / [Guide English](docs/V1.1-USER-GUIDE.en.md)
 - [导入与迁移](docs/IMPORTING.md) / [Import and migration](docs/IMPORTING.en.md)
 - [Releases](https://github.com/KiteMC/KiteMarket/releases)
 

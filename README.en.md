@@ -2,7 +2,7 @@
 
 A complete Minecraft market with advanced buy orders, fixed-price listings and public auctions. It includes the vanilla GUI, wallet, claims, history, and administration. Optional ItemsAdder v4 support lets developers build and sell their own interfaces without a separate KiteMC theme license.
 
-The `main` branch currently contains the **1.1.0 development candidate**; the current released runtime is **v1.0.0**. The `1.1.0` dependency coordinates and asset names below may be used from Packages or Releases only after that version is actually published. Public SDK source does not mean its Maven artifacts have been published.
+This repository documents **KiteMarket v1.1.0**. Runtime JARs, SDKs, examples and configuration packages are distributed under the exact filenames shown in the corresponding GitHub Release or Packages entry; check that entry before using a version. Public SDK source and released Maven artifacts are described separately below.
 
 This repository provides SDK source, examples, documentation and issue tracking. Use [GitHub Packages](https://github.com/orgs/KiteMC/packages?repo_name=KiteMarket) as the primary dependency method for the two SDKs, checking that the requested version exists first. Runtime JARs, direct SDK downloads, sources/Javadoc, examples and language/configuration packages remain in [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases).
 
@@ -16,7 +16,7 @@ Price: **CNY 68 / USD 9.99, lifetime purchase**. One license covers one independ
 - [GitHub Packages](docs/GITHUB-PACKAGES.md) / [Packages English](docs/GITHUB-PACKAGES.en.md)
 - [API example](examples/api-java/README.md) / [IA example](examples/ui-java/README.md)
 - [GUI configuration](docs/GUI-CONFIGURATION.md)
-- [v1.1 candidate guide](docs/V1.1-USER-GUIDE.md) / [Guide English](docs/V1.1-USER-GUIDE.en.md)
+- [v1.1 user guide](docs/V1.1-USER-GUIDE.md) / [Guide English](docs/V1.1-USER-GUIDE.en.md)
 - [导入与迁移](docs/IMPORTING.md) / [Import and migration](docs/IMPORTING.en.md)
 - [Releases](https://github.com/KiteMC/KiteMarket/releases)
 

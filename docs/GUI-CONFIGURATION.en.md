@@ -205,7 +205,7 @@ Common read-only fields:
 | All pages | `ui.preference`, `ui.requested`, `ui.actual`, `ui.theme-requested`, `ui.theme-actual`, `ui.availability` |
 | `browse` | `filter.search`, `filter.currency`, `filter.material`, `filter.sort`, `pagination.offset`, `pagination.limit`, `pagination.has-next` |
 | `editor` | `wizard.step`, `draft.type`, `draft.currency`, `draft.quantity`, `draft.price`, `draft.minimum-purchase-quantity`, `draft.duration`, `draft.rule.mode` |
-| `lot-editor`, `lot-batch-item` (v1.1 candidate) | `lot.policy.maximum-quantity`, `lot.policy.minimum-price`, `lot.policy.maximum-price`, `lot.policy.maximum-duration` |
+| `lot-editor`, `lot-batch-item` (v1.1) | `lot.policy.maximum-quantity`, `lot.policy.minimum-price`, `lot.policy.maximum-price`, `lot.policy.maximum-duration` |
 | `order`, `supply-preview` | `order.id`, `order.currency`, `order.quantity`, `order.remaining`, `order.unit-price`, `order.minimum-purchase-quantity` (sales), `order.tax-bps` |
 | `supply-preview` | `supply.requested`, `supply.selected`, `supply.missing`, `supply.gross`, `supply.tax`, `supply.net` |
 | `wallet-currency` | `wallet.currency`, `wallet.available`, `wallet.frozen` |
@@ -256,7 +256,7 @@ Real items can be relocated and their additional market help can be customized. 
 
 ## All configurable pages
 
-v1.0 provides the following `35` pages. The v1.1 candidate retains them and adds the pages below. Keys below `menus` are page IDs, not translation keys, window titles, or IA template aliases.
+v1.1 retains the original `35` pages and adds the pages below. Keys below `menus` are page IDs, not translation keys, window titles, or IA template aliases.
 
 | Page ID | Purpose |
 | --- | --- |
@@ -298,9 +298,9 @@ v1.0 provides the following `35` pages. The v1.1 candidate retains them and adds
 
 For example, IA template IDs `detail`, `claims`, `supply`, `orders`, `wizard-type`, and `wizard-confirm` are not `menus` page keys. Use `order`, `assets`, `supply-preview`, `browse`, `editor`, and `confirm`, respectively.
 
-## v1.1 candidate pages and source slots
+## v1.1 pages and source slots
 
-These tables describe candidate source code, without implying a published artifact or complete live verification. New pages use the same `menus` configuration and protected actions. Appearance cannot add permissions, scripts or penalties.
+These tables describe the v1.1 pages and source code. Compatibility and live verification conclusions follow the pinned artifact records; unlisted combinations are not certified. New pages use the same `menus` configuration and protected actions. Appearance cannot add permissions, scripts or penalties.
 
 All numbers below are **source slots**. List sources `0..35` become physical `9..44` in the default warm layout; `37/46/47/48/50/51/52` become `5/0/1/7/2/3/4`. Other pages retain their source positions. Existing custom placement follows the compatibility rules above. Source `22` commonly holds a placeholder only when data is absent.
 
@@ -408,9 +408,9 @@ Money, grants and listings use real existing assets. Export retention handles on
 
 ### Added entrances on existing pages
 
-Candidate `profile` adds `29` community, `33` automation and `35` risk (audit permission); `20/22/24/31/49` remain. `order` adds `20` favorite, `24` seller and `22` bundle contents or a verified single-container preview. `admin` adds `52` tools (management permission). `browse` adds `37` save search, mapped to physical `5` in the warm layout; `browse-filters` uses `33` to save current conditions.
+V1.1 `profile` adds `29` community, `33` automation and `35` risk (audit permission); `20/22/24/31/49` remain. `order` adds `20` favorite, `24` seller and `22` bundle contents or a verified single-container preview. `admin` adds `52` tools (management permission). `browse` adds `37` save search, mapped to physical `5` in the warm layout; `browse-filters` uses `33` to save current conditions.
 
-The host determines real controls and permissions before applying appearance. Check positions for new controls in custom legacy layouts. See [V1.1-USER-GUIDE.en.md](V1.1-USER-GUIDE.en.md) for candidate behavior.
+The host determines real controls and permissions before applying appearance. Check positions for new controls in custom legacy layouts. See [V1.1-USER-GUIDE.en.md](V1.1-USER-GUIDE.en.md) for complete v1.1 behavior.
 
 ## Troubleshooting
 

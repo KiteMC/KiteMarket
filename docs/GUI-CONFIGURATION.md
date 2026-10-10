@@ -205,7 +205,7 @@ menus:
 | 各页面 | `ui.preference`、`ui.requested`、`ui.actual`、`ui.theme-requested`、`ui.theme-actual`、`ui.availability` |
 | `browse` | `filter.search`、`filter.currency`、`filter.material`、`filter.sort`、`pagination.offset`、`pagination.limit`、`pagination.has-next` |
 | `editor` | `wizard.step`、`draft.type`、`draft.currency`、`draft.quantity`、`draft.price`、`draft.minimum-purchase-quantity`、`draft.duration`、`draft.rule.mode` |
-| `lot-editor`、`lot-batch-item`（v1.1 候选） | `lot.policy.maximum-quantity`、`lot.policy.minimum-price`、`lot.policy.maximum-price`、`lot.policy.maximum-duration` |
+| `lot-editor`、`lot-batch-item`（v1.1） | `lot.policy.maximum-quantity`、`lot.policy.minimum-price`、`lot.policy.maximum-price`、`lot.policy.maximum-duration` |
 | `order`、`supply-preview` | `order.id`、`order.currency`、`order.quantity`、`order.remaining`、`order.unit-price`、`order.minimum-purchase-quantity`（出售）、`order.tax-bps` |
 | `supply-preview` | `supply.requested`、`supply.selected`、`supply.missing`、`supply.gross`、`supply.tax`、`supply.net` |
 | `wallet-currency` | `wallet.currency`、`wallet.available`、`wallet.frozen` |
@@ -256,7 +256,7 @@ menus:
 
 ## 全部配置页
 
-v1.0 提供以下 `35` 个配置页；v1.1 候选保留这些页，并增加后面的专题页。`menus` 的键是页面 ID，不是语言键、窗口标题或 IA 模板别名。
+v1.1 保留原有 `35` 个配置页，并增加后面的专题页。`menus` 的键是页面 ID，不是语言键、窗口标题或 IA 模板别名。
 
 | 页面 ID | 用途 |
 | --- | --- |
@@ -298,9 +298,9 @@ v1.0 提供以下 `35` 个配置页；v1.1 候选保留这些页，并增加后�
 
 例如 IA 的 `detail`、`claims`、`supply`、`orders`、`wizard-type`、`wizard-confirm` 是模板标识，不能直接作为 `menus` 页面键。应分别使用 `order`、`assets`、`supply-preview`、`browse`、`editor`、`confirm`。
 
-## v1.1 候选页面与真实源槽位
+## v1.1 页面与真实源槽位
 
-以下说明对应 v1.1 候选源码，不代表正式构件已发布或全部界面完成实服验收。新页继续使用同一 `menus` 配置与真实按钮动作；不能通过外观配置添加权限、交易脚本或处罚。
+以下说明对应 v1.1 页面与真实源代码。兼容范围和实际验证结论以固定构件记录为准，未列出的组合不视为认证。新页继续使用同一 `menus` 配置与真实按钮动作；不能通过外观配置添加权限、交易脚本或处罚。
 
 表内均为**源槽位**。列表页的 `0..35` 在默认暖布局中显示为 `9..44`，`37/46/47/48/50/51/52` 分别显示为 `5/0/1/7/2/3/4`；非列表页不会执行这个移位。保留的自定义位置仍按前述兼容规则处理。源槽位 `22` 常用于无数据占位，只有数据为空时出现。
 
@@ -408,9 +408,9 @@ v1.0 提供以下 `35` 个配置页；v1.1 候选保留这些页，并增加后�
 
 ### 原有页面新增入口
 
-v1.1 候选在原 `profile` 的源 `29` 增加社区、`33`增加自动化、`35`增加风险（按审计权限）；原 `20/22/24/31/49`仍保持。`order` 源 `20`增加收藏、`24`增加卖家，源 `22`按标的打开整包内容或已验证单容器预览；原 `admin` 源 `52`增加管理工具（按管理权限）。`browse` 源 `37`增加保存搜索，在暖布局显示为物理槽 `5`；筛选页 `browse-filters` 使用源 `33`保存当前条件，不覆盖真实商品列表。
+v1.1 在原 `profile` 的源 `29` 增加社区、`33`增加自动化、`35`增加风险（按审计权限）；原 `20/22/24/31/49`仍保持。`order` 源 `20`增加收藏、`24`增加卖家，源 `22`按标的打开整包内容或已验证单容器预览；原 `admin` 源 `52`增加管理工具（按管理权限）。`browse` 源 `37`增加保存搜索，在暖布局显示为物理槽 `5`；筛选页 `browse-filters` 使用源 `33`保存当前条件，不覆盖真实商品列表。
 
-源槽和真实权限先由插件决定，再应用显示配置。自定义旧布局时确认新控件仍有位置，不只对照旧截图。完整候选行为见 [V1.1-USER-GUIDE.md](V1.1-USER-GUIDE.md)。
+源槽和真实权限先由插件决定，再应用显示配置。自定义旧布局时确认新控件仍有位置，不只对照旧截图。完整 v1.1 行为见 [V1.1-USER-GUIDE.md](V1.1-USER-GUIDE.md)。
 
 ## 错误定位
 

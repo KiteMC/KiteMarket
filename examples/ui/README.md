@@ -19,12 +19,12 @@ The sample files belong in `plugins/KiteMarket/themes/` under distinct names. Us
 
 1. 安装合法且匹配目标服务器版本的 ItemsAdder v4，复制示例 `itemsadder/` 内容到 `contents/km_example/`。
 2. 按实际 ItemsAdder 文档手动执行 `/iareload`、`/iazip` 并下发合并后的资源包；不覆盖其他命名空间。
-3. 示例的 `requires: {}` 继承节点登记的资源包身份；如果主题另用一个包，添加实际资源包的小写 SHA-1 和 Minecraft 下发 UUID 为 `requires.pack-sha1`、`requires.pack-id`。不要写空字符串，这会导致候选校验失败。重建后的内容摘要变化必须对应新的实际下发 UUID。
+3. 示例的 `requires: {}` 继承节点登记的资源包身份；如果主题另用一个包，添加实际资源包的小写 SHA-1 和 Minecraft 下发 UUID 为 `requires.pack-sha1`、`requires.pack-id`。不要写空字符串，这会导致配置校验失败。重建后的内容摘要变化必须对应新的实际下发 UUID。
 4. 用 `/km reload` 校验加载声明及配置，再选择 `/km ui itemsadder example-ia`；也可从界面设置中的主题列表选择。第三方主题不需要官方主题权益；仍需正常主插件与正确资源包。
 
-Paper 1.21.11／Java 21／ItemsAdder 4.0.16 的 v1.1 候选使用 `plugins/ItemsAdder/config.yml` 中的 `resource-pack.auto_apply.enabled: true` 和 `resource-pack.auto_apply.before_join: false`，在入服后自动下发。修改后 `/iareload`，等待完成，再正常重新连接并成功加载包。入服前下发的完整身份关联尚未确认；未确认时保留偏好并回退原版。
+Paper 1.21.11／Java 21／ItemsAdder 4.0.16 的 v1.1 使用 `plugins/ItemsAdder/config.yml` 中的 `resource-pack.auto_apply.enabled: true` 和 `resource-pack.auto_apply.before_join: false`，在入服后自动下发。修改后 `/iareload`，等待完成，再正常重新连接并成功加载包。入服前下发的完整身份关联尚未确认；未确认时保留偏好并回退原版。
 
-For the v1.1 candidate on Paper 1.21.11 / Java 21 / ItemsAdder 4.0.16, set `resource-pack.auto_apply.enabled: true` and `resource-pack.auto_apply.before_join: false` in `plugins/ItemsAdder/config.yml`. Reload IA, wait for completion, then reconnect normally and successfully load the pack. Full identity correlation for delivery before joining remains unverified; an unconfirmed pack preserves the preference and falls back to vanilla.
+For v1.1 on Paper 1.21.11 / Java 21 / ItemsAdder 4.0.16, set `resource-pack.auto_apply.enabled: true` and `resource-pack.auto_apply.before_join: false` in `plugins/ItemsAdder/config.yml`. Reload IA, wait for completion, then reconnect normally and successfully load the pack. Full identity correlation for delivery before joining remains unverified; an unconfirmed pack preserves the preference and falls back to vanilla.
 
 This example uses a transparent 176×222 image with a plain white frame. It demonstrates referencing your own registered font image. Check the [compatibility guide](https://www.kitemc.com/en/kitemarket/compatibility) for supported runtime combinations.
 

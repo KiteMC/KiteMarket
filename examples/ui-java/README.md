@@ -57,7 +57,7 @@ dependencies {
 4. 按实际 IA 指南执行资源重载、重建和下发。将合并资源包的真实小写 SHA-1 和实际下发 UUID 登记到 `gui.itemsadder.pack-sha1`／`pack-id`，或写在主题 `requires` 中；不能填假值、空字符串或只写文件摘要而猜测 UUID。资源内容变化后应使用新的实际下发 UUID。
 5. 正常重启加载示例插件，再执行 `/km reload` 校验主题。玩家通过 `/km ui itemsadder example-ia-java` 选择主题。玩家必须先成功加载对应包，拒绝／失败会显示原因并回到完整原版界面。
 
-Paper 1.21.11／Java 21／ItemsAdder 4.0.16 的 v1.1 候选验证使用入服后自动下发。在 `plugins/ItemsAdder/config.yml` 中设置：
+Paper 1.21.11／Java 21／ItemsAdder 4.0.16 的 v1.1 验证使用入服后自动下发。在 `plugins/ItemsAdder/config.yml` 中设置：
 
 ```yaml
 resource-pack:
@@ -88,7 +88,7 @@ resource-pack:
 - 显示刷新：`refresh()` 只在 token、pageVersion 和动作字典与当前 holder 一致时更新显示副本，保留全部回调及库存窗口，不重复提交动作。它可刷新订单倒计时；旧页或已关闭库存返回 `false`，不会重开页面。
 - 状态背景：按 `UiPage.textData().get("result.status")` 选择本页／`resources` 中的 `state-font-images`；字段由服务端给出，缺少映射使用该页背景。运行字段 `SUCCESS`、`PENDING`、`FAILED`、`UNCONFIRMED` 对应完成、待核对、拒绝、尚不能确认结果。它们是呈现状态，不能与账本操作状态或交易结果码混用。
 
-模板候选出错时主插件保留上一有效目录。提供者故障、卸载或资源失效会按主插件规则回退；回退不改原偏好，不重复提交操作。
+模板校验出错时主插件保留上一有效目录。提供者故障、卸载或资源失效会按主插件规则回退；回退不改原偏好，不重复提交操作。
 
 完整页面／动作合同与线程说明见[公开 SDK](https://github.com/KiteMC/KiteMarket/tree/main/market-ui-api)和[配置主题示例](../ui/README.md)。本例仅依赖公开 SDK 和 ItemsAdder 公共接口。
 
@@ -104,7 +104,7 @@ Install JDK 21; the SDK targets Java 11 while this IA adapter targets Java 21. T
 
 Install a compatible legitimate ItemsAdder v4 and a KiteMarket version shipping `itemsAdderUnavailable`. Install the example JAR, copy `theme.yml` to `plugins/KiteMarket/themes/example-ia-java.yml`, and copy the bundle's `itemsadder/` (or the sibling source example's resources) to `plugins/ItemsAdder/contents/km_example/`. Preserve other namespaces. Rebuild and send the actual merged pack using the installed IA instructions; register its lowercase SHA-1 and sent UUID in `gui.itemsadder.pack-sha1`/`pack-id`, or in the theme's `requires`. Changed content requires a new actual sent UUID.
 
-The v1.1 candidate check on Paper 1.21.11 / Java 21 / ItemsAdder 4.0.16 uses the YAML above in `plugins/ItemsAdder/config.yml`: `resource-pack.auto_apply.enabled: true` and `resource-pack.auto_apply.before_join: false`. Run `/iareload`, wait for completion, then reconnect normally and successfully load the pack. Automatic delivery after joining has opened the real configuration theme and Java page in this combination; delivery before joining has not yet passed full identity correlation. An unconfirmed pack preserves the preference and falls back to vanilla, without requiring repeated pack rebuilds.
+The v1.1 check on Paper 1.21.11 / Java 21 / ItemsAdder 4.0.16 uses the YAML above in `plugins/ItemsAdder/config.yml`: `resource-pack.auto_apply.enabled: true` and `resource-pack.auto_apply.before_join: false`. Run `/iareload`, wait for completion, then reconnect normally and successfully load the pack. Automatic delivery after joining has opened the real configuration theme and Java page in this combination; delivery before joining has not yet passed full identity correlation. An unconfirmed pack preserves the preference and falls back to vanilla, without requiring repeated pack rebuilds.
 
 Restart normally to load the Java provider, validate the theme using `/km reload`, then select the theme with `/km ui itemsadder example-ia-java`. A matching successfully loaded pack is required; rejection or failure produces an explanation and vanilla fallback. Selection does not submit a trade, install resources or query an official DLC.
 
