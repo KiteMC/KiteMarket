@@ -1,10 +1,12 @@
 # 外部市场导入与 SQLite 迁移
 
+本文适用于 **v1.1 候选**。v1.1 运行包及 `KiteMarket-Examples-1.1.0.zip` 尚未正式发布；执行迁移需先取得匹配的 v1.1 运行包和工具。公开工具源码不能代替运行包，v1.0.0 运行包不适用本文命令。
+
 导入只读取已经正常停服的来源副本，不连接第三方活库。先预检并审核报告，再使用报告 SHA-256 明确执行。保留原来源及 origin 身份文件，完成验收后再决定是否停用原市场。
 
 ## 获取工具
 
-从与你的运行包同版本的 [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases) 下载 `KiteMarket-Examples-1.1.0.zip`，核对该发行的 `SHA256SUMS.txt` 后解压。该包同时包含：
+对应版本实际发布后，从与你的运行包同版本的 [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases) 下载 `KiteMarket-Examples-1.1.0.zip`，核对该发行的 `SHA256SUMS.txt` 后解压。该包同时包含：
 
 - `tools/importing/prepare_zah_copy.py`：准备已停服的 zAuctionHouse 来源副本。
 - `tools/importing/sqlite-to-shared.ps1`：启动 KiteMarket 运行包内的离线迁移工具。

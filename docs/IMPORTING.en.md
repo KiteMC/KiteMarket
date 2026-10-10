@@ -1,10 +1,12 @@
 # External imports and SQLite migration
 
+This guide applies to the **v1.1 candidate**. The v1.1 runtime and `KiteMarket-Examples-1.1.0.zip` have not been formally released. Migration requires matching v1.1 runtime and tools; public tool source does not replace the runtime, and the v1.0.0 runtime cannot run these commands.
+
 Import reads stopped source copies, never a live third-party database. Review a dry-run report before applying its exact SHA-256. Retain the original source and installation origin file until migration is verified.
 
 ## Get the tools
 
-Download `KiteMarket-Examples-1.1.0.zip` from the [GitHub Release](https://github.com/KiteMC/KiteMarket/releases) matching your runtime version, check its `SHA256SUMS.txt`, and extract it. The archive includes:
+Once the matching version is published, download `KiteMarket-Examples-1.1.0.zip` from its [GitHub Release](https://github.com/KiteMC/KiteMarket/releases), check its `SHA256SUMS.txt`, and extract it. The archive includes:
 
 - `tools/importing/prepare_zah_copy.py`: prepares a stopped zAuctionHouse source copy.
 - `tools/importing/sqlite-to-shared.ps1`: launches the offline migration tool in the KiteMarket runtime JAR.
