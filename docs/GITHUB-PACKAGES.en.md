@@ -7,7 +7,7 @@ The two independent Java 11, MIT-licensed SDKs are available as Maven dependenci
 | Immutable queries, narrow extensions and player-confirmed requests | `com.kitemc:kitemarket-api:1.1.0` |
 | Page rendering and freely developed IA interfaces | `com.kitemc:kitemarket-ui-api:1.1.0` |
 
-Registry: `https://maven.pkg.github.com/kitemc/KiteMarket`. Both SDKs include sources, Javadoc and their MIT license. Select a version matching the installed host; this guide uses 1.1.0 examples, so verify that version is published before consumption. Runtime JARs, language/configuration archives, working examples and direct SDK downloads remain in [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases).
+Registry: `https://maven.pkg.github.com/kitemc/KiteMarket`. Both SDKs include sources, Javadoc and their MIT license. Select a version matching the installed host; this guide uses 1.1.0 examples. Runtime JARs, language/configuration archives, working examples and direct SDK downloads are distributed through [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases).
 
 The 1.1 `KiteMarketApi` keeps its compatible read-only queries. `KiteMarketExtensions` and `KiteMarketRequests` are separate services. Extensions register their actual enabled owner; requests require host player confirmation and expose no commit, financial replay or administrator recovery entry. See the [SDK guide](API.en.md) for the complete contract.
 

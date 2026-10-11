@@ -1,6 +1,6 @@
 # 市场 API 与扩展 SDK
 
-适用接口：KiteMarket 1.1.0。SDK 使用 Java 11、MIT 许可证，核心实现不公开。接口通过 Bukkit `ServicesManager` 提供，不依赖闭源 `market-core`。原 `KiteMarketApi` 查询签名、旧 DTO 构造器和 `MarketCommittedEvent` 保留；扩展和受限请求使用两个独立服务，不给旧接口增加抽象方法。消费前确认对应版本已经实际发布。
+适用接口：KiteMarket 1.1.0。SDK 使用 Java 11、MIT 许可证，核心实现不公开。接口通过 Bukkit `ServicesManager` 提供，不依赖闭源 `market-core`。原 `KiteMarketApi` 查询签名、旧 DTO 构造器和 `MarketCommittedEvent` 保留；扩展和受限请求使用两个独立服务，不给旧接口增加抽象方法。
 
 ## 获取 SDK
 
@@ -8,7 +8,7 @@
 
 第三方插件只需 `compileOnly`，不要打包、shade 或重定位 SDK。运行时主插件提供唯一一套接口类；打包副本可能使 `ServicesManager` 无法识别服务。
 
-公开 Maven 包同样需要认证；将自己的 GitHub 用户名和具有 `read:packages` 的 classic PAT 放在用户级 Gradle 配置的 `gpr.user`／`gpr.key`，或使用 `GITHUB_ACTOR`／`GITHUB_TOKEN` 环境变量。不要提交令牌。完整 Gradle、Maven（`provided`）及 Actions 配置见 [Packages 指南](GITHUB-PACKAGES.md)。引用前确认 [Packages 列表](https://github.com/orgs/KiteMC/packages?repo_name=KiteMarket) 已有目标版本。
+公开 Maven 包同样需要认证；将自己的 GitHub 用户名和具有 `read:packages` 的 classic PAT 放在用户级 Gradle 配置的 `gpr.user`／`gpr.key`，或使用 `GITHUB_ACTOR`／`GITHUB_TOKEN` 环境变量。不要提交令牌。完整 Gradle、Maven（`provided`）及 Actions 配置见 [Packages 指南](GITHUB-PACKAGES.md)，可用版本见 [Packages 列表](https://github.com/orgs/KiteMC/packages?repo_name=KiteMarket)。
 
 ```kotlin
 repositories {

@@ -2,9 +2,9 @@
 
 A complete Minecraft market with advanced buy orders, fixed-price listings and public auctions. It includes the vanilla GUI, wallet, claims, history, and administration. Optional ItemsAdder v4 support lets developers build and sell their own interfaces without a separate KiteMC theme license.
 
-This repository documents **KiteMarket v1.1.0**. Runtime JARs, SDKs, examples and configuration packages are distributed under the exact filenames shown in the corresponding GitHub Release or Packages entry; check that entry before using a version. Public SDK source and released Maven artifacts are described separately below.
+This repository documents **KiteMarket v1.1.0**. Select runtime JARs, SDKs, examples and configuration packages by their matching version and exact filename.
 
-This repository provides SDK source, examples, documentation and issue tracking. Use [GitHub Packages](https://github.com/orgs/KiteMC/packages?repo_name=KiteMarket) as the primary dependency method for the two SDKs, checking that the requested version exists first. Runtime JARs, direct SDK downloads, sources/Javadoc, examples and language/configuration packages remain in [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases).
+This repository provides SDK source, examples, documentation and issue tracking. Use [GitHub Packages](https://github.com/orgs/KiteMC/packages?repo_name=KiteMarket) as the primary dependency method for the two SDKs. Runtime JARs, direct SDK downloads, sources/Javadoc, examples and language/configuration packages are distributed through [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases).
 
 Price: **CNY 68 / USD 9.99, lifetime purchase**. One license covers one independent market network with unlimited nodes. Base plugin updates are included; support is provided during active maintenance, without a promise of perpetual maintenance. Economy plugins, ItemsAdder and third-party resources are separate.
 
@@ -19,6 +19,17 @@ Price: **CNY 68 / USD 9.99, lifetime purchase**. One license covers one independ
 - [v1.1 user guide](docs/V1.1-USER-GUIDE.md) / [Guide English](docs/V1.1-USER-GUIDE.en.md)
 - [导入与迁移](docs/IMPORTING.md) / [Import and migration](docs/IMPORTING.en.md)
 - [Releases](https://github.com/KiteMC/KiteMarket/releases)
+
+## v1.1 feature overview
+
+- **More listing and claim options**: indivisible bundle sales and auctions, individually confirmed batch listings, read-only container previews and categorized batch claims.
+- **Richer conditions and server rules**: business item IDs, tags and allowlisted field conditions; configurable trading modes, fees, permissions and item restrictions.
+- **Wallet and personal automation**: experience points or levels, physical item currencies, shortfall deposits, automatic claims and withdrawal settings.
+- **Discovery and community**: favorites, saved searches, subscriptions and persistent notifications; seller profiles, rankings and comparable same-currency trade prices.
+- **Administration and extensions**: explicitly confirmed asset operations, evidence exports, manual risk review and optional cloud suggestions; public SDKs offer owner-bound extensions and player-confirmed requests.
+- **Deployment and optional integrations**: persistent SQLite for one node, shared MySQL/MariaDB for multiple nodes, source-copy import tools, and display or entry-point integrations with PlaceholderAPI, Citizens and LuckPerms.
+
+See the [v1.1 user guide](docs/V1.1-USER-GUIDE.en.md) for workflows, configuration and feature boundaries.
 
 ## Maven packages / Maven 开发包
 

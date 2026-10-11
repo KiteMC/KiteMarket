@@ -4,7 +4,7 @@ Java 11 的公开界面 SDK，MIT 授权仅覆盖本模块。内置适配支持 
 
 SDK、配置示例、Java 示例和配套 MIT 素材位于公开 [KiteMC/KiteMarket](https://github.com/KiteMC/KiteMarket) 仓库。基础插件不内置 IA 主题，使用自有或第三方资源即可接入。
 
-推荐通过 GitHub Packages 引用 `com.kitemc:kitemarket-ui-api:1.1.0`，选择与主插件匹配的版本。公开 Maven 包也需要认证，使用用户级 `gpr.user`／`gpr.key` 或 `GITHUB_ACTOR`／`GITHUB_TOKEN`，classic PAT 最小权限为 `read:packages`。仓库配置、Maven `provided` 和 Actions 说明见 [Packages 指南](../docs/GITHUB-PACKAGES.md)；引用前确认 Packages 列表已有目标版本。无需 Maven 认证的 SDK 直接下载、源码／Javadoc 与示例仍保留在 [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases)。
+推荐通过 GitHub Packages 引用 `com.kitemc:kitemarket-ui-api:1.1.0`，选择与主插件匹配的版本。公开 Maven 包也需要认证，使用用户级 `gpr.user`／`gpr.key` 或 `GITHUB_ACTOR`／`GITHUB_TOKEN`，classic PAT 最小权限为 `read:packages`。仓库配置、Maven `provided` 和 Actions 说明见 [Packages 指南](../docs/GITHUB-PACKAGES.md)。无需 Maven 认证的 SDK 直接下载、源码／Javadoc 与示例通过 [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases) 获取。
 
 ## 使用
 
@@ -92,7 +92,7 @@ This Java 11 SDK exposes a shared presentation interface with a built-in ItemsAd
 
 SDK source, configuration examples, Java examples and their MIT resources are in the public [KiteMC/KiteMarket](https://github.com/KiteMC/KiteMarket) repository. The base plugin does not bundle an IA theme; supply your own or a third party's resources.
 
-Use GitHub Packages as the primary dependency method: `com.kitemc:kitemarket-ui-api:1.1.0`, matching the installed host. Configure user-level `gpr.user` / `gpr.key` or `GITHUB_ACTOR` / `GITHUB_TOKEN`; public Maven packages require a classic PAT with `read:packages`. See the [Packages guide](../docs/GITHUB-PACKAGES.en.md) for repository, Maven `provided` and Actions configuration, and confirm the version exists in Packages before referencing it. Direct SDK, sources/Javadoc and example downloads remain in [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases) without Maven registry authentication.
+Use GitHub Packages as the primary dependency method: `com.kitemc:kitemarket-ui-api:1.1.0`, matching the installed host. Configure user-level `gpr.user` / `gpr.key` or `GITHUB_ACTOR` / `GITHUB_TOKEN`; public Maven packages require a classic PAT with `read:packages`. See the [Packages guide](../docs/GITHUB-PACKAGES.en.md) for repository, Maven `provided` and Actions configuration. Direct SDK, sources/Javadoc and example downloads are distributed through [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases) without Maven registry authentication.
 
 ```kotlin
 dependencies {

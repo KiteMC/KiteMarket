@@ -135,6 +135,6 @@ Fill the protected inventory from `TexturedInventoryWrapper.getInternal()`, regi
 
 ## 获取开发包
 
-配置示例与 Java 示例源码位于公开 [KiteMC/KiteMarket](https://github.com/KiteMC/KiteMarket) 仓库。SDK、源码／Javadoc、对应 `KiteMarket-Examples-1.1.0.zip` 和双语配置包通过 [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases) 下载，消费前确认目标版本已实际发布。
+配置示例与 Java 示例源码位于公开 [KiteMC/KiteMarket](https://github.com/KiteMC/KiteMarket) 仓库。SDK、源码／Javadoc、对应 `KiteMarket-Examples-1.1.0.zip` 和双语配置包通过 [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases) 下载，选择与主插件匹配的版本。
 
-Configuration and Java example source is in the public [KiteMC/KiteMarket](https://github.com/KiteMC/KiteMarket) repository. Matching SDKs, sources/Javadoc, `KiteMarket-Examples-1.1.0.zip` and bilingual configuration packages are distributed through [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases); confirm that the target version is published before consumption.
+Configuration and Java example source is in the public [KiteMC/KiteMarket](https://github.com/KiteMC/KiteMarket) repository. Select matching SDKs, sources/Javadoc, `KiteMarket-Examples-1.1.0.zip` and bilingual configuration packages from [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases).

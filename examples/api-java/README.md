@@ -4,7 +4,7 @@
 
 ## 使用 GitHub Packages 构建
 
-推荐在自己的示例副本中使用 `com.kitemc:kitemarket-api:1.1.0`。先按 [Packages 指南](../../docs/GITHUB-PACKAGES.md) 设置用户级 `gpr.user`／`gpr.key` 或 `GITHUB_ACTOR`／`GITHUB_TOKEN`；classic PAT 只需 `read:packages`，引用前确认 Packages 列表已有目标版本。安装 JDK 21，SDK 和本例仍输出 Java 11 字节码。
+推荐在自己的示例副本中使用 `com.kitemc:kitemarket-api:1.1.0`。先按 [Packages 指南](../../docs/GITHUB-PACKAGES.md) 设置用户级 `gpr.user`／`gpr.key` 或 `GITHUB_ACTOR`／`GITHUB_TOKEN`；classic PAT 只需 `read:packages`。安装 JDK 21，SDK 和本例仍输出 Java 11 字节码。
 
 将示例 `build.gradle.kts` 的本地 SDK 文件依赖改为 Packages：删除 `val sdkJar = ...` 及只检查本地文件的 `tasks.named<JavaCompile>("compileJava")` 整块；用下方仓库和依赖替换原 `repositories`／`dependencies`，其余任务保留：
 
@@ -32,7 +32,7 @@ dependencies {
 
 从公开仓库根目录运行 `.\gradlew.bat -p examples/api-java developerBundle`。独立解包后，在 `api-java/` 使用自己的 wrapper 或 Gradle 9.6.1 执行 `developerBundle`。不要打包、shade 或重定位 SDK。
 
-成品也可从对应 Release 的 `KiteMarket-Examples-1.1.0.zip` 获取，将 `api-java/kitemarket-api-example-1.1.0.jar` 与 KiteMarket 一起放进 `plugins/`。消费前确认该版本已发布。数据库就绪后，控制台输出网络 UUID 与币种精度；玩家加入时异步读取钱包，成交后记录安全摘要。扩展服务就绪后登记规则；服务替换与插件停用时关闭拥有者 handle。
+成品也可从对应 Release 的 `KiteMarket-Examples-1.1.0.zip` 获取，将 `api-java/kitemarket-api-example-1.1.0.jar` 与 KiteMarket 一起放进 `plugins/`。数据库就绪后，控制台输出网络 UUID 与币种精度；玩家加入时异步读取钱包，成交后记录安全摘要。扩展服务就绪后登记规则；服务替换与插件停用时关闭拥有者 handle。
 
 ## 本地源码构建与直接下载
 

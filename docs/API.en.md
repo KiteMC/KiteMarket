@@ -1,6 +1,6 @@
 # Market API and extension SDK
 
-Interface version: KiteMarket 1.1.0. The SDK targets Java 11 and is MIT licensed; the implementation remains closed source. Bukkit's `ServicesManager` supplies the services without exposing `market-core`. The original `KiteMarketApi` signatures, DTO constructors and `MarketCommittedEvent` remain compatible; new registration and request services do not add abstract methods to the old interface. Check actual release availability before consumption.
+Interface version: KiteMarket 1.1.0. The SDK targets Java 11 and is MIT licensed; the implementation remains closed source. Bukkit's `ServicesManager` supplies the services without exposing `market-core`. The original `KiteMarketApi` signatures, DTO constructors and `MarketCommittedEvent` remain compatible; new registration and request services do not add abstract methods to the old interface.
 
 ## Get the SDK
 
@@ -8,7 +8,7 @@ Use GitHub Packages with `com.kitemc:kitemarket-api:1.1.0` as the primary depend
 
 Use `compileOnly`. Never bundle, shade, or relocate either SDK. The main plugin supplies one runtime copy; duplicate interface classes can prevent service discovery.
 
-Public Maven packages require authentication. Configure your GitHub username and a classic PAT with `read:packages` through user-level Gradle properties `gpr.user` / `gpr.key`, or `GITHUB_ACTOR` / `GITHUB_TOKEN` environment variables. Never commit the token. The [Packages guide](GITHUB-PACKAGES.en.md) covers full Gradle, Maven (`provided`) and Actions configuration. Check the [Packages list](https://github.com/orgs/KiteMC/packages?repo_name=KiteMarket) for the version before referencing it.
+Public Maven packages require authentication. Configure your GitHub username and a classic PAT with `read:packages` through user-level Gradle properties `gpr.user` / `gpr.key`, or `GITHUB_ACTOR` / `GITHUB_TOKEN` environment variables. Never commit the token. The [Packages guide](GITHUB-PACKAGES.en.md) covers full Gradle, Maven (`provided`) and Actions configuration; available versions are listed in [Packages](https://github.com/orgs/KiteMC/packages?repo_name=KiteMarket).
 
 ```kotlin
 repositories {

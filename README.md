@@ -2,9 +2,9 @@
 
 支持高级收购、一口价出售和公开竞拍的完整 Minecraft 市场插件。内置原版 GUI、钱包、领取箱、历史和管理功能；可选兼容 ItemsAdder v4，开发者可自行制作、免费分发或独立销售自有界面，无需额外的 KiteMC 主题授权。
 
-本文档对应 **KiteMarket v1.1.0**。运行 JAR、SDK、示例及语言／配置包按下文准确文件名从对应的 GitHub Release 或 Packages 条目获取，使用前请先确认该版本资产已存在；公开 SDK 源码与已发布的 Maven 成品分别说明如下。
+本文档对应 **KiteMarket v1.1.0**。下载时按对应版本和准确文件名选择运行 JAR、SDK、示例及语言／配置包。
 
-本仓库存放 SDK 源码、开发示例、文档及 Issues。推荐通过 [GitHub Packages](https://github.com/orgs/KiteMC/packages?repo_name=KiteMarket) 引用两套 SDK，使用前确认已有目标版本。运行 JAR、SDK 直接下载、源码／Javadoc、示例及语言／配置包仍从 [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases) 获取。
+本仓库存放 SDK 源码、开发示例、文档及 Issues。推荐通过 [GitHub Packages](https://github.com/orgs/KiteMC/packages?repo_name=KiteMarket) 引用两套 SDK。运行 JAR、SDK 直接下载、源码／Javadoc、示例及语言／配置包从 [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases) 获取。
 
 售价：**¥68／USD 9.99，买断**。一份许可证对应一个独立市场网络，网络内不限节点。包含基础插件更新，维护期间提供问题支持，不承诺永久维护服务。第三方经济插件、ItemsAdder 及其资源另行获取。
 
@@ -19,6 +19,17 @@
 - [v1.1 user guide](docs/V1.1-USER-GUIDE.md) / [Guide English](docs/V1.1-USER-GUIDE.en.md)
 - [导入与迁移](docs/IMPORTING.md) / [Import and migration](docs/IMPORTING.en.md)
 - [Releases](https://github.com/KiteMC/KiteMarket/releases)
+
+## v1.1 功能概览
+
+- **多种上架与领取方式**：不可拆整包出售／竞拍、逐单确认的批量上架、容器只读预览与分类批量领取。
+- **更完整的条件与服主规则**：业务物品 ID、标签与白名单字段条件；配置交易模式、费用、权限和物品限制。
+- **钱包与个人自动化**：经验点／等级和真实物品币、缺口补款、自动领取与提现设置。
+- **发现与社区**：收藏、保存搜索、订阅与持久通知；卖家资料、排行和同币种成交价参考。
+- **管理与开发扩展**：明确确认的资产操作、证据导出、人工风险复核与可选云端建议；公开 SDK 提供拥有者登记的扩展和玩家确认请求。
+- **部署与可选集成**：单服使用持久 SQLite，多服共享 MySQL／MariaDB；提供来源副本导入工具，以及 PlaceholderAPI、Citizens 和 LuckPerms 显示／入口集成。
+
+具体操作、配置与功能边界见 [v1.1 用户指南](docs/V1.1-USER-GUIDE.md)。
 
 ## Maven packages / Maven 开发包
 

@@ -7,7 +7,7 @@ KiteMarket 的两套独立 Java 11／MIT SDK 提供 Maven 依赖；闭源主插�
 | 不可变查询、窄扩展与玩家确认请求 | `com.kitemc:kitemarket-api:1.1.0` |
 | 页面呈现与 IA 界面扩展 | `com.kitemc:kitemarket-ui-api:1.1.0` |
 
-仓库地址为 `https://maven.pkg.github.com/kitemc/KiteMarket`。两个开发包都附带 sources、Javadoc 和 MIT 许可证，选择与主插件匹配的版本；本页使用 1.1.0 示例，消费前确认目标版本已实际发布。运行包、语言／配置包、可运行示例和 SDK 直接下载仍保留在 [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases)。
+仓库地址为 `https://maven.pkg.github.com/kitemc/KiteMarket`。两个开发包都附带 sources、Javadoc 和 MIT 许可证，选择与主插件匹配的版本；本页使用 1.1.0 示例。运行包、语言／配置包、可运行示例和 SDK 直接下载通过 [GitHub Releases](https://github.com/KiteMC/KiteMarket/releases) 获取。
 
 1.1 的 `KiteMarketApi` 继续提供兼容的只读查询；`KiteMarketExtensions` 和 `KiteMarketRequests` 是独立服务。扩展登记真实启用的拥有者，交易请求必须经过主插件玩家确认，没有公开 commit、金融补发或管理员修复入口。完整合同见 [SDK 指南](API.md)。
 

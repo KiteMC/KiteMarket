@@ -4,7 +4,7 @@ This example and the market SDK are MIT licensed and target Java 11 for KiteMark
 
 ## Build using GitHub Packages
 
-Use `com.kitemc:kitemarket-api:1.1.0` as the primary SDK dependency in your example copy. Configure user-level `gpr.user` / `gpr.key` or `GITHUB_ACTOR` / `GITHUB_TOKEN` using the [Packages guide](../../docs/GITHUB-PACKAGES.en.md). The classic PAT needs only `read:packages`; confirm the requested version exists in Packages first. Install JDK 21; both the SDK and this example still target Java 11.
+Use `com.kitemc:kitemarket-api:1.1.0` as the primary SDK dependency in your example copy. Configure user-level `gpr.user` / `gpr.key` or `GITHUB_ACTOR` / `GITHUB_TOKEN` using the [Packages guide](../../docs/GITHUB-PACKAGES.en.md). The classic PAT needs only `read:packages`. Install JDK 21; both the SDK and this example still target Java 11.
 
 In your copy's `build.gradle.kts`, replace the local file SDK dependency with Packages: remove `val sdkJar = ...` and the entire local-file-checking `tasks.named<JavaCompile>("compileJava")` block. Replace `repositories` / `dependencies` with the following, retaining the other tasks:
 
@@ -32,7 +32,7 @@ dependencies {
 
 From the public checkout root, run `.\gradlew.bat -p examples/api-java developerBundle`. Standalone extractions may use their own wrapper or Gradle 9.6.1 from `api-java/` to run `developerBundle`. Never bundle, shade or relocate the SDK.
 
-Alternatively, install `api-java/kitemarket-api-example-1.1.0.jar` from the matching Release asset `KiteMarket-Examples-1.1.0.zip` beside KiteMarket after confirming it is published. After the database connects, the console records the network identity and currency precision; player joins query wallets and committed trades produce safe summaries. When the extension service becomes ready, the owner-bound observer registers; replacement or disable closes its handle.
+Alternatively, install `api-java/kitemarket-api-example-1.1.0.jar` from the matching Release asset `KiteMarket-Examples-1.1.0.zip` beside KiteMarket. After the database connects, the console records the network identity and currency precision; player joins query wallets and committed trades produce safe summaries. When the extension service becomes ready, the owner-bound observer registers; replacement or disable closes its handle.
 
 ## Local source builds and direct downloads
 
